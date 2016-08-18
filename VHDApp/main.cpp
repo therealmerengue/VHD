@@ -5,13 +5,15 @@
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-#define ID_EDIT_CHOOSE_DISK 1
+#define ID_EDIT 1
 #define ID_BUTTON_OPEN_FILE 2
 #define ID_BUTTON_OPEN_FOLDER 3
-#define ID_EDIT_DISK_NAME 4
-#define ID_LABEL_DISK_NAME 5
+#define ID_BUTTON_CREATE_AND_MOUNT 4
+#define ID_BUTTON_MOUNT 5
+#define ID_LABEL 6
 
 HINSTANCE g_hinst;
+HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void CenterWindow(HWND hwnd);
@@ -39,7 +41,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	RegisterClassW(&wc);
 	hwnd = CreateWindowW(wc.lpszClassName, L"Window",
-		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+		WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU,
 		100, 100, 800, 600, NULL, NULL, hInstance, NULL);
 
 	ShowWindow(hwnd, nCmdShow);
@@ -55,8 +57,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	static HWND hwndEditChooseDisk, hwndCombo, hwndEditDiskName;
-	HWND hwndButtonOpenFile, hwndButtonOpenFolder;
+	static HWND hwndEditChooseDisk, hwndCombo, hwndEditDiskName, hwndEditDiskFolder, hwndEditDiskSize;
+	HWND hwndButtonOpenFile, hwndButtonBrowseFolders, hwndButtonCreateAndMount, hwndButtonMount;
 
 	switch (msg) {
 
@@ -64,39 +66,80 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		CenterWindow(hwnd);
 
-		CreateWindowW(L"Button", L"Choose disk file",
+		//Create disk groupbox - left top
+
+		CreateWindowW(L"Button", L"Create disk",
 			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
-			10, 210, 320, 200, hwnd, (HMENU)0, g_hinst, NULL);
+			10, 10, 210, 135, hwnd, (HMENU)0, g_hinst, NULL);
+
+		hwndEditDiskName = CreateWindowW(L"Edit", NULL,
+			WS_CHILD | WS_VISIBLE | WS_BORDER,
+			55, 30, 150, 20, hwnd, (HMENU)ID_EDIT,
+			NULL, NULL);
+
+		CreateWindowW(L"static", L"Name:",
+			WS_CHILD | WS_VISIBLE, 20, 32, 35, 25, hwnd,
+			(HMENU)ID_LABEL, NULL, NULL);
+
+		hwndEditDiskSize = CreateWindowW(L"Edit", NULL,
+			WS_CHILD | WS_VISIBLE | WS_BORDER,
+			55, 55, 150, 20, hwnd, (HMENU)ID_EDIT,
+			NULL, NULL);
+
+		CreateWindowW(L"static", L"Size:",
+			WS_CHILD | WS_VISIBLE, 20, 57, 35, 25, hwnd, 
+			(HMENU)ID_LABEL, NULL, NULL);
+
+		hwndEditDiskFolder = CreateWindowW(L"Edit", NULL,
+			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL | ES_READONLY,
+			55, 80, 150, 20, hwnd, (HMENU)ID_EDIT,
+			NULL, NULL);
+
+		CreateWindowW(L"static", L"Folder:",
+			WS_CHILD | WS_VISIBLE, 20, 82, 35, 25, hwnd,
+			(HMENU)ID_LABEL, NULL, NULL);
+
+		hwndButtonBrowseFolders = CreateWindowW(L"button", L"Browse",
+			WS_VISIBLE | WS_CHILD, 20, 105, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_OPEN_FOLDER, NULL, NULL);
+
+		hwndButtonCreateAndMount = CreateWindowW(L"button", L"Create and mount",
+			WS_VISIBLE | WS_CHILD, 115, 105, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_CREATE_AND_MOUNT, NULL, NULL);
+
+		//Mount disk groupbox - left bottom
+
+		CreateWindowW(L"Button", L"Mount disk",
+			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+			10, 150, 210, 90, hwnd, (HMENU)0, g_hinst, NULL);
+
+		CreateWindowW(L"static", L"File:",
+			WS_CHILD | WS_VISIBLE, 20, 172, 35, 25, hwnd,
+			(HMENU)ID_LABEL, NULL, NULL);
+
+		hwndEditChooseDisk = CreateWindowW(L"Edit", NULL,
+			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL | ES_READONLY,
+			55, 170, 150, 20, hwnd, (HMENU)ID_EDIT,
+			NULL, NULL);
+
+		hwndButtonOpenFile = CreateWindowW(L"button", L"Browse",
+			WS_VISIBLE | WS_CHILD, 20, 195, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_OPEN_FILE, NULL, NULL);
+
+		hwndButtonMount = CreateWindowW(L"button", L"Mount",
+			WS_VISIBLE | WS_CHILD, 115, 195, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_MOUNT, NULL, NULL);
+
+		/////////////////////
 
 		hwndCombo = CreateWindowW(L"Combobox", NULL,
 			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
 			150, 300, 120, 110, hwnd, NULL, g_hinst, NULL);
 
-		hwndEditChooseDisk = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY,
-			50, 250, 250, 20, hwnd, (HMENU)ID_EDIT_CHOOSE_DISK,
+		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
+			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
+			400, 170, 150, 20, hwnd, (HMENU)ID_EDIT,
 			NULL, NULL);
-
-		hwndButtonOpenFile = CreateWindowW(L"button", L"Open file",
-			WS_VISIBLE | WS_CHILD, 50, 300, 80, 25,
-			hwnd, (HMENU)ID_BUTTON_OPEN_FILE, NULL, NULL);
-
-		hwndButtonOpenFolder = CreateWindowW(L"button", L"Open folder",
-			WS_VISIBLE | WS_CHILD, 50, 330, 80, 25,
-			hwnd, (HMENU)ID_BUTTON_OPEN_FOLDER, NULL, NULL);
-
-		CreateWindowW(L"Button", L"Create disk",
-			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
-			10, 10, 320, 200, hwnd, (HMENU)0, g_hinst, NULL);
-
-		hwndEditDiskName = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER,
-			110, 50, 150, 20, hwnd, (HMENU)ID_EDIT_DISK_NAME,
-			NULL, NULL);
-
-		CreateWindowW(L"static", L"Disk name:",
-			WS_CHILD | WS_VISIBLE | WS_BORDER, 20, 50, 90, 20, hwnd, 
-			(HMENU)ID_LABEL_DISK_NAME, NULL, NULL);
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
@@ -109,9 +152,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		}
 
 		if (LOWORD(wParam) == ID_BUTTON_OPEN_FOLDER) {
-			OpenFolderDialog(hwndEditChooseDisk);
+			OpenFolderDialog(hwndEditDiskFolder);
 		}
 
+		if (LOWORD(wParam) == ID_BUTTON_CREATE_AND_MOUNT) {
+			//create and mount
+		}
+
+		if (LOWORD(wParam) == ID_BUTTON_MOUNT) {
+			//mount
+		}
+
+		break;
+
+	case WM_SETFOCUS:
+		SetWindowText(hwndDebug, L"Focus");
+		break;
+
+	case WM_KILLFOCUS:
+		SetWindowText(hwndDebug, L"Focus killed");
 		break;
 
 	case WM_KEYDOWN:
@@ -122,7 +181,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				L"Message", MB_OKCANCEL);
 
 			if (ret == IDOK) {
-
 				SendMessage(hwnd, WM_CLOSE, 0, 0);
 			}
 
@@ -162,7 +220,7 @@ bool CALLBACK SetFont(HWND child, LPARAM font) {
 
 void OpenFolderDialog(HWND hwnd) {
 	BROWSEINFO bi;
-	char folderPath[MAX_PATH + 1];
+	wchar_t folderPath[MAX_PATH + 1];
 
 	int iImage = 0;
 
