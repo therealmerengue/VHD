@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VHDApp", "VHDApp.vcxproj", "{98FA58B1-9DF7-4F71-A29D-0A421B9DBD0C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VHD", "C:\Studia\PNPZ\VHD\VHD.vcxproj", "{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{98FA58B1-9DF7-4F71-A29D-0A421B9DBD0C}.Release|x64.Build.0 = Release|x64
 		{98FA58B1-9DF7-4F71-A29D-0A421B9DBD0C}.Release|x86.ActiveCfg = Release|Win32
 		{98FA58B1-9DF7-4F71-A29D-0A421B9DBD0C}.Release|x86.Build.0 = Release|Win32
+		{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}.Debug|x64.ActiveCfg = Debug|x64
+		{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}.Debug|x64.Build.0 = Debug|x64
+		{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}.Debug|x86.ActiveCfg = Debug|Win32
+		{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}.Debug|x86.Build.0 = Debug|Win32
+		{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}.Release|x64.ActiveCfg = Release|x64
+		{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}.Release|x64.Build.0 = Release|x64
+		{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}.Release|x86.ActiveCfg = Release|Win32
+		{997EB50D-4EB8-4287-B7F0-2EA37CD1FDA4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
