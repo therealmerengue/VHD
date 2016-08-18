@@ -4,6 +4,7 @@
 #include <initguid.h>
 #include <virtdisk.h>
 #include <commctrl.h>
+#include <comdef.h>
 
 #include <set>
 #include <string>
@@ -904,6 +905,31 @@ void sortuj(std::vector<std::string> pliki, std::string sciezkaDoDysku, std::str
 			}
 		}
 	}
+}
+
+std::vector<string> getDriveLetters(int& size)
+{
+	DWORD dwSize = MAX_PATH;
+	wchar_t szLogicalDrives[MAX_PATH] = { 0 };
+	DWORD dwResult = GetLogicalDriveStrings(dwSize, szLogicalDrives);
+	std::vector<string> driveLetters;
+	size = 0;
+
+	if (dwResult > 0 && dwResult <= MAX_PATH)
+	{
+		wchar_t* szSingleDrive = szLogicalDrives;
+		while (*szSingleDrive)
+		{
+			size++;
+			//printf("Drive: %s\n", szSingleDrive);
+			wstring wstr(szSingleDrive);
+			driveLetters.push_back(string(wstr.begin(), wstr.end()));
+			// get the next drive
+			szSingleDrive += wcslen(szSingleDrive) + 1;
+		}
+	}
+
+	return driveLetters;
 }
 
 //nie dziala xD

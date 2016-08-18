@@ -1,6 +1,8 @@
 #include <windows.h>
 #include <ShlObj.h>
 
+#include "VHD.h"
+
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -20,6 +22,7 @@ void CenterWindow(HWND hwnd);
 void OpenFileDialog(HWND hwnd);
 void OpenFolderDialog(HWND hwnd);
 bool CALLBACK SetFont(HWND child, LPARAM font);
+void AddItemsToCombobox(HWND combobox, std::vector<std::string> items);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) {
@@ -59,6 +62,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	static HWND hwndEditChooseDisk, hwndCombo, hwndEditDiskName, hwndEditDiskFolder, hwndEditDiskSize;
 	HWND hwndButtonOpenFile, hwndButtonBrowseFolders, hwndButtonCreateAndMount, hwndButtonMount;
+
+	int size = 0;
+	std::vector<string> driveLetters = getDriveLetters(size);;
 
 	switch (msg) {
 
@@ -135,7 +141,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		hwndCombo = CreateWindowW(L"Combobox", NULL,
 			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
 			150, 300, 120, 110, hwnd, NULL, g_hinst, NULL);
-
+		
+		AddItemsToCombobox(hwndCombo, driveLetters);
+		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
 			400, 170, 150, 20, hwnd, (HMENU)ID_EDIT,
@@ -216,6 +224,15 @@ void CenterWindow(HWND hwnd) {
 bool CALLBACK SetFont(HWND child, LPARAM font) {
 	SendMessage(child, WM_SETFONT, font, true);
 	return true;
+}
+
+void AddItemsToCombobox(HWND combobox, std::vector<std::string> items)
+{
+	for (size_t i = 0; i < items.size(); i++)
+	{
+		std::wstring wdl = std::wstring(items[i].begin(), items[i].end());
+		SendMessage(combobox, (UINT)CB_ADDSTRING, (WPARAM)0, (LPARAM)wdl.c_str());
+	}
 }
 
 void OpenFolderDialog(HWND hwnd) {
