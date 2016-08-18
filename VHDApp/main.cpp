@@ -13,6 +13,7 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_BUTTON_CREATE_AND_MOUNT 4
 #define ID_BUTTON_MOUNT 5
 #define ID_LABEL 6
+#define ID_TREEVIEW 7
 
 HINSTANCE g_hinst;
 HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
@@ -23,6 +24,14 @@ void OpenFileDialog(HWND hwnd);
 void OpenFolderDialog(HWND hwnd);
 bool CALLBACK SetFont(HWND child, LPARAM font);
 void AddItemsToCombobox(HWND combobox, std::vector<std::string> items);
+HWND CreateATreeView(HWND hwndParent, int x = 0, int y = 0, int width = 100, int height = 100);
+HTREEITEM AddItemToTree(HWND hwndTV, LPTSTR lpszItem, int nLevel);
+HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel);
+void AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent);
+
+HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText);
+HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText);
+std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) {
@@ -60,7 +69,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	static HWND hwndEditChooseDisk, hwndCombo, hwndEditDiskName, hwndEditDiskFolder, hwndEditDiskSize;
+	static HWND hwndEditChooseDisk, hwndCombo, hwndEditDiskName, hwndEditDiskFolder, hwndEditDiskSize, hwndTreeView;
 	HWND hwndButtonOpenFile, hwndButtonBrowseFolders, hwndButtonCreateAndMount, hwndButtonMount;
 
 	int size = 0;
@@ -149,6 +158,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			400, 170, 150, 20, hwnd, (HMENU)ID_EDIT,
 			NULL, NULL);
 
+		hwndTreeView = CreateATreeView(hwnd, 350, 10);
+		AddItemToTreeView(hwndTreeView, L"swag", 1);
+		AddItemToTreeView(hwndTreeView, L"more swag", 2);
+		AddItemToTreeView(hwndTreeView, L"more swag", 1);
+		AddItemToTreeView(hwndTreeView, L"more swag", 2);
+
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
 		break;
@@ -221,11 +236,6 @@ void CenterWindow(HWND hwnd) {
 		(screen_h - win_h) / 2, 0, 0, SWP_NOSIZE);
 }
 
-bool CALLBACK SetFont(HWND child, LPARAM font) {
-	SendMessage(child, WM_SETFONT, font, true);
-	return true;
-}
-
 void AddItemsToCombobox(HWND combobox, std::vector<std::string> items)
 {
 	for (size_t i = 0; i < items.size(); i++)
@@ -276,3 +286,232 @@ void OpenFileDialog(HWND hwnd) {
 	if (GetOpenFileName(&ofn))
 		SetWindowText(hwnd, ofn.lpstrFile);
 }
+
+bool CALLBACK SetFont(HWND child, LPARAM font) {
+	SendMessage(child, WM_SETFONT, font, true);
+	return true;
+}
+
+HWND CreateATreeView(HWND hwndParent, int x, int y, int width, int height)
+{
+	RECT rcClient;  // dimensions of client area 
+	HWND hwndTV;    // handle to tree-view control 
+
+					// Ensure that the common control DLL is loaded. 
+
+					// Get the dimensions of the parent window's client area, and create 
+					// the tree-view control. 
+	GetClientRect(hwndParent, &rcClient);
+	hwndTV = CreateWindowEx(0,
+		WC_TREEVIEW,
+		TEXT("Tree View"),
+		WS_VISIBLE | WS_CHILD | WS_BORDER | TVS_HASLINES,
+		x,
+		y,
+		width,
+		height,
+		hwndParent,
+		(HMENU)ID_TREEVIEW,
+		g_hinst,
+		NULL);
+
+	return hwndTV;
+}
+
+HTREEITEM AddItemToTree(HWND hwndTV, LPTSTR lpszItem, int nLevel)
+{
+	TVITEM tvi;
+	TVINSERTSTRUCT tvins;
+	static HTREEITEM hPrev = (HTREEITEM)TVI_FIRST;
+	static HTREEITEM hPrevRootItem = NULL;
+	static HTREEITEM hPrevLev2Item = NULL;
+	HTREEITEM hti;
+
+	tvi.mask = TVIF_TEXT | TVIF_IMAGE
+		| TVIF_SELECTEDIMAGE | TVIF_PARAM;
+
+	// Set the text of the item. 
+	tvi.pszText = lpszItem;
+	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
+
+	// Assume the item is not a parent item, so give it a 
+	// document image. 
+	//tvi.iImage = g_nDocument;
+	//tvi.iSelectedImage = g_nDocument;
+
+	// Save the heading level in the item's application-defined 
+	// data area. 
+	tvi.lParam = (LPARAM)nLevel;
+	tvins.item = tvi;
+	tvins.hInsertAfter = hPrev;
+
+	// Set the parent item based on the specified level. 
+	if (nLevel == 1)
+		tvins.hParent = TVI_ROOT;
+	else if (nLevel == 2)
+		tvins.hParent = hPrevRootItem;
+	else
+		tvins.hParent = hPrevLev2Item;
+
+	// Add the item to the tree-view control. 
+	hPrev = (HTREEITEM)SendMessage(hwndTV, TVM_INSERTITEM,
+		0, (LPARAM)(LPTVINSERTSTRUCT)&tvins);
+
+	if (hPrev == NULL)
+		return NULL;
+
+	// Save the handle to the item. 
+	if (nLevel == 1)
+		hPrevRootItem = hPrev;
+	else if (nLevel == 2)
+		hPrevLev2Item = hPrev;
+
+	// The new item is a child item. Give the parent item a 
+	// closed folder bitmap to indicate it now has child items. 
+	if (nLevel > 1)
+	{
+		hti = TreeView_GetParent(hwndTV, hPrev);
+		tvi.mask = TVIF_IMAGE | TVIF_SELECTEDIMAGE;
+		tvi.hItem = hti;
+		//tvi.iImage = g_nClosed;
+		//tvi.iSelectedImage = g_nClosed;
+		TreeView_SetItem(hwndTV, &tvi);
+	}
+
+	return hPrev;
+}
+
+void AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent)
+{
+	TVITEM tvi;
+	TVINSERTSTRUCT tvins;
+	static HTREEITEM hPrev = (HTREEITEM)TVI_FIRST;
+	static HTREEITEM hRootItem = NULL;
+	//tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_PARAM;
+	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK;
+	//tvi.iImage = AddIconToTree(hwndTree, text);
+	//tvi.iSelectedImage = tvi.iImage;
+	tvi.pszText = text;
+	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
+	tvins.hInsertAfter = hPrev;
+	tvins.item = tvi;
+	tvins.hParent = parent;
+}
+
+HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText)
+{
+	HTREEITEM htiRoot = TreeView_GetRoot(hwndTV);
+	return FindItemDepthFirstImpl(hwndTV, htiRoot, itemText);
+}
+
+HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText)
+{
+	HTREEITEM htItemMatch = NULL;
+
+	HTREEITEM htItemCurrent = htStart;
+	// Iterate over items until there are no more items or we found a match
+	while (htItemCurrent != NULL && htItemMatch == NULL)
+	{
+		if (GetItemText(hwndTV, htItemCurrent) == itemText)
+		{
+			htItemMatch = htItemCurrent;
+		}
+		else
+		{
+			// Traverse into child items
+			htItemMatch = FindItemDepthFirstImpl(hwndTV, TreeView_GetChild(hwndTV, htItemCurrent), itemText);
+		}
+		htItemCurrent = TreeView_GetNextSibling(hwndTV, htItemCurrent);
+	}
+
+	return htItemMatch;
+}
+
+std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem)
+{
+	static const size_t maxLen = 128;
+	WCHAR buffer[maxLen + 1];
+
+	TVITEMW tvi = { 0 };
+	tvi.hItem = htItem;         // Treeview item to query
+	tvi.mask = TVIF_TEXT;       // Request text only
+	tvi.cchTextMax = maxLen;
+	tvi.pszText = &buffer[0];
+	if (TreeView_GetItem(hwndTV, &tvi))
+	{
+		return std::wstring(tvi.pszText);
+	}
+	else
+	{
+		return std::wstring();
+	}
+}
+
+HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel)
+{
+	TVITEM tvi;
+	TVINSERTSTRUCT tvins;
+	static HTREEITEM hPrev = (HTREEITEM)TVI_FIRST;
+	static HTREEITEM hRootItem = NULL;
+	//tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_PARAM;
+	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK;
+	//tvi.iImage = AddIconToTree(hwndTree, text);
+	//tvi.iSelectedImage = tvi.iImage;
+	tvi.pszText = text;
+	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
+	tvins.hInsertAfter = hPrev;
+	tvins.item = tvi;
+
+	if (nLevel == 1)
+	{
+		tvins.hParent = TVI_ROOT;
+	}
+	else if (nLevel == 2)
+	{
+		tvins.hParent = hRootItem;
+	}
+	else
+	{
+		TVITEM tviSetup;
+		tviSetup.hItem = hPrev;
+		tviSetup.mask = TVIF_PARAM;
+		TVITEM * tviLocal = &tviSetup;
+		TreeView_GetItem(hwndTree, tviLocal);
+
+		if (nLevel > tviLocal->lParam)
+		{
+			tvins.hParent = hPrev;
+		}
+		else
+		{
+			HTREEITEM hPrevLocal = TreeView_GetParent(hwndTree, hPrev);
+			tviLocal->hItem = hPrevLocal;
+			TreeView_GetItem(hwndTree, tviLocal);
+			for (int i = nLevel; i <= tviLocal->lParam;)
+			{
+				HTREEITEM hPrevLocalTemp = TreeView_GetParent(hwndTree, hPrevLocal);
+				hPrevLocal = hPrevLocalTemp;
+				tviLocal->hItem = hPrevLocal;
+				TreeView_GetItem(hwndTree, tviLocal);
+			}
+			tviLocal->mask = TVIF_TEXT;
+			TreeView_GetItem(hwndTree, tviLocal);
+			tvins.hParent = hPrevLocal;
+
+		}
+	}
+
+	hPrev = (HTREEITEM)SendMessage(hwndTree, TVM_INSERTITEM, 0, (LPARAM)(LPTVINSERTSTRUCT)&tvins);
+
+	if (hPrev == 0)
+	{
+		return false;
+	}
+	if (nLevel == 1)
+	{
+		hRootItem = hPrev;
+	}
+
+	return hPrev;
+}
+
