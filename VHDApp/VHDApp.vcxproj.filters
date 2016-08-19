@@ -26,5 +26,8 @@
     <ClInclude Include="VHD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Treeview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
