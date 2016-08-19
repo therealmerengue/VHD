@@ -213,12 +213,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		if (pntv->hdr.code == TVN_SELCHANGED)
 		{
-			switch (pntv->itemNew.lParam) {
+			/*if (pntv->itemNew.lParam == 10)
+				SetWindowText(hwndDebug, L"fuck u");*/
+			//FindItem(hwndTreeView, pntv->itemNew.pszText); //pszText - nullptr
+			TVITEM item;
+			WCHAR buffer[129];
+			item.hItem = pntv->itemNew.hItem;
+			item.mask = TVIF_TEXT;
+			item.pszText = &buffer[0];// allocate buffer
+			item.cchTextMax = 128;  // length of buffer
+			SendMessage(hwnd, TVM_GETITEM, 0, (LPARAM)&item);
+			TreeView_GetItem(hwndTreeView, &item);
 
-			case 10:
-				SetWindowText(hwndDebug, (LPCWSTR)pntv->itemNew.pszText);
-				break;
-			}
+				MessageBox(hwnd, item.pszText, L"", MB_OK);
+			
+			
 		}
 		return 0;
 	}
@@ -342,19 +351,20 @@ HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent)
 {
 	TVITEM tvi;
 	TVINSERTSTRUCT tvins;
-	static HTREEITEM hPrev = (HTREEITEM)TVI_FIRST;
 	static HTREEITEM hRootItem = NULL;
 	//tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_PARAM;
-	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK | TVIF_PARAM;
+	tvi.mask = TVIF_TEXT | TVIF_IMAGE |
+		TVIF_SELECTEDIMAGE | TVIF_PARAM;
 	//tvi.iImage = AddIconToTree(hwndTree, text);
 	//tvi.iSelectedImage = tvi.iImage;
 	tvi.pszText = text;
 	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
 	tvi.lParam = 10;
-	tvins.hInsertAfter = hPrev;
+	tvins.hInsertAfter = TVI_LAST;
 	tvins.item = tvi;
 	tvins.hParent = parent;
 	return (HTREEITEM)SendMessage(hwndTree, TVM_INSERTITEM, 0, (LPARAM)(LPTVINSERTSTRUCT)&tvins);
+	/*return TreeView_InsertItem(hwndTree, &tvins);*/
 }
 
 HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText)
@@ -418,7 +428,7 @@ HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel)
 	//tvi.iSelectedImage = tvi.iImage;
 	tvi.pszText = text;
 	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
-	tvi.lParam = (LPARAM)nLevel;
+	tvi.lParam = 10;
 	tvins.hInsertAfter = hPrev;
 	tvins.item = tvi;
 
