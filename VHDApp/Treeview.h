@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #define ID_TREEVIEW 7
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x = 0, int y = 0, int width = 100, int height = 100);
@@ -7,6 +9,7 @@ HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent);
 HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText);
 HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText);
 std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem);
+void addItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level = 1);
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width, int height)
 {
@@ -170,4 +173,13 @@ HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel)
 	}
 
 	return hPrev;
+}
+
+void addItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level)
+{
+	for (size_t i = 0; i < items.size(); i++)
+	{
+		std::wstring wdl = std::wstring(items[i].begin(), items[i].end());
+		AddItemToTreeView(hwndTreeView, &wdl[0], level);
+	}
 }

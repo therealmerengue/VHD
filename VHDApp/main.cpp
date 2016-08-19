@@ -26,8 +26,6 @@ void OpenFolderDialog(HWND hwnd);
 bool CALLBACK SetFont(HWND child, LPARAM font);
 void AddItemsToCombobox(HWND combobox, const std::vector<std::string>& items);
 
-
-
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) {
 
@@ -163,13 +161,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		//File treeview - center
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 225, 16, 400, 250);
-		AddItemToTreeView(hwndTreeView, L"l1", 1);
+		/*AddItemToTreeView(hwndTreeView, L"l1", 1);
 		AddItemToTreeView(hwndTreeView, L"l2", 2);
 		AddItemToTreeView(hwndTreeView, L"l1", 1);
-		AddItemToTreeView(hwndTreeView, L"l2", 2);
+		AddItemToTreeView(hwndTreeView, L"l2", 2);*/
+		addItemsToTreeView(driveLetters, hwndTreeView);
 
 		static HTREEITEM item = FindItem(hwndTreeView, L"l1");
-		AddItemToParent(hwndTreeView, L"l3", item);
+		//AddItemToParent(hwndTreeView, L"l3", item);
 		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
