@@ -23,12 +23,11 @@ void CenterWindow(HWND hwnd);
 void OpenFileDialog(HWND hwnd);
 void OpenFolderDialog(HWND hwnd);
 bool CALLBACK SetFont(HWND child, LPARAM font);
-void AddItemsToCombobox(HWND combobox, std::vector<std::string> items);
-HWND CreateATreeView(HWND hwndParent, int x = 0, int y = 0, int width = 100, int height = 100);
-HTREEITEM AddItemToTree(HWND hwndTV, LPTSTR lpszItem, int nLevel);
-HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel);
-void AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent);
+void AddItemsToCombobox(HWND combobox, const std::vector<std::string>& items);
 
+HWND CreateATreeView(HWND hwndParent, int x = 0, int y = 0, int width = 100, int height = 100);
+HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel);
+HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent);
 HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText);
 HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText);
 std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem);
@@ -152,17 +151,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			150, 300, 120, 110, hwnd, NULL, g_hinst, NULL);
 		
 		AddItemsToCombobox(hwndCombo, driveLetters);
+
+		hwndTreeView = CreateATreeView(hwnd, 225, 16, 400, 250);
+		AddItemToTreeView(hwndTreeView, L"l1", 1);
+		AddItemToTreeView(hwndTreeView, L"l2", 2);
+		AddItemToTreeView(hwndTreeView, L"l1", 1);
+		AddItemToTreeView(hwndTreeView, L"l2", 2);
+
+		static HTREEITEM item = FindItem(hwndTreeView, L"l1");
+		AddItemToParent(hwndTreeView, L"l3", item);
 		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
-			400, 170, 150, 20, hwnd, (HMENU)ID_EDIT,
+			400, 600, 150, 20, hwnd, (HMENU)ID_EDIT,
 			NULL, NULL);
-
-		hwndTreeView = CreateATreeView(hwnd, 350, 10);
-		AddItemToTreeView(hwndTreeView, L"swag", 1);
-		AddItemToTreeView(hwndTreeView, L"more swag", 2);
-		AddItemToTreeView(hwndTreeView, L"more swag", 1);
-		AddItemToTreeView(hwndTreeView, L"more swag", 2);
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
@@ -236,7 +238,7 @@ void CenterWindow(HWND hwnd) {
 		(screen_h - win_h) / 2, 0, 0, SWP_NOSIZE);
 }
 
-void AddItemsToCombobox(HWND combobox, std::vector<std::string> items)
+void AddItemsToCombobox(HWND combobox, const std::vector<std::string>& items)
 {
 	for (size_t i = 0; i < items.size(); i++)
 	{
@@ -318,70 +320,7 @@ HWND CreateATreeView(HWND hwndParent, int x, int y, int width, int height)
 	return hwndTV;
 }
 
-HTREEITEM AddItemToTree(HWND hwndTV, LPTSTR lpszItem, int nLevel)
-{
-	TVITEM tvi;
-	TVINSERTSTRUCT tvins;
-	static HTREEITEM hPrev = (HTREEITEM)TVI_FIRST;
-	static HTREEITEM hPrevRootItem = NULL;
-	static HTREEITEM hPrevLev2Item = NULL;
-	HTREEITEM hti;
-
-	tvi.mask = TVIF_TEXT | TVIF_IMAGE
-		| TVIF_SELECTEDIMAGE | TVIF_PARAM;
-
-	// Set the text of the item. 
-	tvi.pszText = lpszItem;
-	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
-
-	// Assume the item is not a parent item, so give it a 
-	// document image. 
-	//tvi.iImage = g_nDocument;
-	//tvi.iSelectedImage = g_nDocument;
-
-	// Save the heading level in the item's application-defined 
-	// data area. 
-	tvi.lParam = (LPARAM)nLevel;
-	tvins.item = tvi;
-	tvins.hInsertAfter = hPrev;
-
-	// Set the parent item based on the specified level. 
-	if (nLevel == 1)
-		tvins.hParent = TVI_ROOT;
-	else if (nLevel == 2)
-		tvins.hParent = hPrevRootItem;
-	else
-		tvins.hParent = hPrevLev2Item;
-
-	// Add the item to the tree-view control. 
-	hPrev = (HTREEITEM)SendMessage(hwndTV, TVM_INSERTITEM,
-		0, (LPARAM)(LPTVINSERTSTRUCT)&tvins);
-
-	if (hPrev == NULL)
-		return NULL;
-
-	// Save the handle to the item. 
-	if (nLevel == 1)
-		hPrevRootItem = hPrev;
-	else if (nLevel == 2)
-		hPrevLev2Item = hPrev;
-
-	// The new item is a child item. Give the parent item a 
-	// closed folder bitmap to indicate it now has child items. 
-	if (nLevel > 1)
-	{
-		hti = TreeView_GetParent(hwndTV, hPrev);
-		tvi.mask = TVIF_IMAGE | TVIF_SELECTEDIMAGE;
-		tvi.hItem = hti;
-		//tvi.iImage = g_nClosed;
-		//tvi.iSelectedImage = g_nClosed;
-		TreeView_SetItem(hwndTV, &tvi);
-	}
-
-	return hPrev;
-}
-
-void AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent)
+HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent)
 {
 	TVITEM tvi;
 	TVINSERTSTRUCT tvins;
@@ -396,6 +335,7 @@ void AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent)
 	tvins.hInsertAfter = hPrev;
 	tvins.item = tvi;
 	tvins.hParent = parent;
+	return (HTREEITEM)SendMessage(hwndTree, TVM_INSERTITEM, 0, (LPARAM)(LPTVINSERTSTRUCT)&tvins);
 }
 
 HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText)
