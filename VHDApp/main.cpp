@@ -12,6 +12,7 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_BUTTON_OPEN_FOLDER 3
 #define ID_BUTTON_CREATE_AND_MOUNT 4
 #define ID_BUTTON_MOUNT 5
+#define ID_BUTTON_CHOOSE_DISK 8
 #define ID_LABEL 6
 #define ID_TREEVIEW 7
 
@@ -69,7 +70,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	static HWND hwndEditChooseDisk, hwndCombo, hwndEditDiskName, hwndEditDiskFolder, hwndEditDiskSize, hwndTreeView;
-	HWND hwndButtonOpenFile, hwndButtonBrowseFolders, hwndButtonCreateAndMount, hwndButtonMount;
+	HWND hwndButtonOpenFile, hwndButtonBrowseFolders, hwndButtonCreateAndMount, hwndButtonMount, hwndButtonChooseDisk;
 
 	int size = 0;
 	std::vector<string> driveLetters = getDriveLetters(size);;
@@ -121,7 +122,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			WS_VISIBLE | WS_CHILD, 115, 105, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_CREATE_AND_MOUNT, NULL, NULL);
 
-		//Mount disk groupbox - left bottom
+		//Mount disk groupbox - left center
 
 		CreateWindowW(L"Button", L"Mount disk",
 			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
@@ -144,13 +145,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			WS_VISIBLE | WS_CHILD, 115, 195, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_MOUNT, NULL, NULL);
 
-		/////////////////////
+		//Choose disk groupbox - left bottom
+
+		CreateWindowW(L"Button", L"Choose disk",
+			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+			10, 245, 210, 65, hwnd, (HMENU)0, g_hinst, NULL);
+
+		CreateWindowW(L"static", L"Disk:",
+			WS_CHILD | WS_VISIBLE, 20, 267, 35, 25, hwnd,
+			(HMENU)ID_LABEL, NULL, NULL);
 
 		hwndCombo = CreateWindowW(L"Combobox", NULL,
 			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
-			150, 300, 120, 110, hwnd, NULL, g_hinst, NULL);
+			55, 265, 50, 65, hwnd, NULL, g_hinst, NULL);
+
+		hwndButtonChooseDisk = CreateWindowW(L"button", L"Show files",
+			WS_VISIBLE | WS_CHILD, 115, 263, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
 		
 		AddItemsToCombobox(hwndCombo, driveLetters);
+
+		//File treeview - center
 
 		hwndTreeView = CreateATreeView(hwnd, 225, 16, 400, 250);
 		AddItemToTreeView(hwndTreeView, L"l1", 1);
