@@ -885,7 +885,7 @@ bool getFilesInDirectory(const char* path, std::vector<std::string>& files)
 	}
 }
 
-void sortuj(std::vector<std::string> pliki, std::string sciezkaDoDysku, std::string folderDoPosortowania)
+void sortuj(std::vector<std::string>& pliki, std::string& sciezkaDoDysku, std::string& folderDoPosortowania)
 {
 	std::string nowyFolder;
 	std::set<std::string> rozszerzenia;

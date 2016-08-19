@@ -178,7 +178,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
-			400, 600, 150, 20, hwnd, (HMENU)ID_EDIT,
+			400, 500, 150, 20, hwnd, (HMENU)ID_EDIT,
 			NULL, NULL);
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
@@ -205,27 +205,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		break;
 
+	case WM_NOTIFY:
+	{
+		HTREEITEM hitem;
+
+		LPNM_TREEVIEW pntv = (LPNM_TREEVIEW)lParam;
+
+		if (pntv->hdr.code == TVN_SELCHANGED)
+		{
+			switch (pntv->itemNew.lParam) {
+
+			case 10:
+				SetWindowText(hwndDebug, (LPCWSTR)pntv->itemNew.pszText);
+				break;
+			}
+		}
+		return 0;
+	}
+
 	case WM_SETFOCUS:
-		SetWindowText(hwndDebug, L"Focus");
+		//SetWindowText(hwndDebug, L"Focus");
 		break;
 
 	case WM_KILLFOCUS:
-		SetWindowText(hwndDebug, L"Focus killed");
-		break;
-
-	case WM_KEYDOWN:
-
-		if (wParam == VK_ESCAPE) {
-
-			int ret = MessageBoxW(hwnd, L"Are you sure to quit?",
-				L"Message", MB_OKCANCEL);
-
-			if (ret == IDOK) {
-				SendMessage(hwnd, WM_CLOSE, 0, 0);
-			}
-
-		}
-
+		//SetWindowText(hwndDebug, L"Focus killed");
 		break;
 
 	case WM_DESTROY:
@@ -342,11 +345,12 @@ HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent)
 	static HTREEITEM hPrev = (HTREEITEM)TVI_FIRST;
 	static HTREEITEM hRootItem = NULL;
 	//tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_PARAM;
-	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK;
+	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK | TVIF_PARAM;
 	//tvi.iImage = AddIconToTree(hwndTree, text);
 	//tvi.iSelectedImage = tvi.iImage;
 	tvi.pszText = text;
 	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
+	tvi.lParam = 10;
 	tvins.hInsertAfter = hPrev;
 	tvins.item = tvi;
 	tvins.hParent = parent;
@@ -409,11 +413,12 @@ HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel)
 	static HTREEITEM hPrev = (HTREEITEM)TVI_FIRST;
 	static HTREEITEM hRootItem = NULL;
 	//tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_PARAM;
-	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK;
+	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK | TVIF_PARAM;
 	//tvi.iImage = AddIconToTree(hwndTree, text);
 	//tvi.iSelectedImage = tvi.iImage;
 	tvi.pszText = text;
 	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
+	tvi.lParam = (LPARAM)nLevel;
 	tvins.hInsertAfter = hPrev;
 	tvins.item = tvi;
 
