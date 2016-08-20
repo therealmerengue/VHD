@@ -10,6 +10,8 @@ HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText);
 HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText);
 std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem);
 void addItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level = 1);
+std::string GetFullNodePath(HWND hwndTV, HTREEITEM htItem);
+TVITEM GetSelectedNode(HWND hwndWindow, HWND hwndTV, LPNM_TREEVIEW& pntv, WCHAR* buffer);
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width, int height)
 {
@@ -182,4 +184,25 @@ void addItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level)
 		std::wstring wdl = std::wstring(items[i].begin(), items[i].end());
 		AddItemToTreeView(hwndTreeView, &wdl[0], level);
 	}
+}
+
+TVITEM GetSelectedNode(HWND hwndWindow, HWND hwndTV, LPNM_TREEVIEW& pntv, WCHAR* buffer)
+{
+	TVITEM item;
+	item.hItem = pntv->itemNew.hItem;
+	item.mask = TVIF_TEXT;
+	item.pszText = &buffer[0];// allocate buffer
+	item.cchTextMax = 128;  // length of buffer
+	SendMessage(hwndWindow, TVM_GETITEM, 0, (LPARAM)&item);
+	TreeView_GetItem(hwndTV, &item);
+	return item;
+}
+
+std::string GetFullNodePath(HWND hwndTV, HTREEITEM htItem)
+{
+	while (TreeView_GetParent(hwndTV, htItem))
+	{
+
+	}
+	return std::string();
 }

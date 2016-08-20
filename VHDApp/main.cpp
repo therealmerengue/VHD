@@ -207,14 +207,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		if (pntv->hdr.code == TVN_SELCHANGED)
 		{
-			TVITEM item;
-			WCHAR buffer[129];
-			item.hItem = pntv->itemNew.hItem;
-			item.mask = TVIF_TEXT;
-			item.pszText = &buffer[0];// allocate buffer
-			item.cchTextMax = 128;  // length of buffer
-			SendMessage(hwnd, TVM_GETITEM, 0, (LPARAM)&item);
-			TreeView_GetItem(hwndTreeView, &item);
+			WCHAR buffer[128];
+			TVITEM item = GetSelectedNode(hwnd, hwndTreeView, pntv, buffer);
+
 			SetWindowText(hwndDebug, item.pszText);
 		}
 		return 0;

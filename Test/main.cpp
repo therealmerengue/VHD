@@ -2,42 +2,21 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <stdlib.h>
+#include <stdio.h>
+#include "dirent.h"
+#include "VHD.h"
 
 using namespace std;
 
-std::vector<string> getDriveLetters(int& size)
-{
-	DWORD dwSize = MAX_PATH;
-	wchar_t szLogicalDrives[MAX_PATH] = { 0 };
-	DWORD dwResult = GetLogicalDriveStrings(dwSize, szLogicalDrives);
-	std::vector<string> driveLetters;
-	size = 0;
-
-	if (dwResult > 0 && dwResult <= MAX_PATH)
-	{
-		wchar_t* szSingleDrive = szLogicalDrives;
-		while (*szSingleDrive)
-		{
-			size++;
-			//printf("Drive: %s\n", szSingleDrive);
-			wstring wstr(szSingleDrive);
-			driveLetters.push_back(string(wstr.begin(), wstr.end()));
-			// get the next drive
-			szSingleDrive += wcslen(szSingleDrive) + 1;
-		}
-	}
-
-	return driveLetters;
-}
-
 int main()
 {
-	int i = 0;
-	vector<string> dls = getDriveLetters(i);
-	for (size_t i = 0; i < dls.size(); i++)
+	std::vector<string> files;
+	getFilesInDirectory("D:\\", files);
+	cout << files.size() << endl;
+	for each (string file in files)
 	{
-		cout << dls[i] << endl;
+		cout << file << "\t" << endl;
 	}
-
 	return 0;
 }
