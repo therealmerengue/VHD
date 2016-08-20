@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <Windows.h>
 
 #define ID_TREEVIEW 7
 

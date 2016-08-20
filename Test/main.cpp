@@ -12,7 +12,7 @@ using namespace std;
 int main()
 {
 	std::vector<string> files;
-	getFilesInDirectory("D:\\", files);
+	getFilesInDirectory("C:\\", files);
 	cout << files.size() << endl;
 	for each (string file in files)
 	{

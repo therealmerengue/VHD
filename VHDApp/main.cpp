@@ -67,6 +67,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	int size = 0;
 	std::vector<string> driveLetters = getDriveLetters(size);
+	std::vector<string> files;
 
 	switch (msg) {
 
@@ -167,10 +168,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		AddItemToTreeView(hwndTreeView, L"l2", 2);*/
 		addItemsToTreeView(driveLetters, hwndTreeView);
 
-		static HTREEITEM item = FindItem(hwndTreeView, L"C:\\");
+		/*static HTREEITEM item = FindItem(hwndTreeView, L"C:\\");
 		AddItemToParent(hwndTreeView, L"l3", item);
 		static HTREEITEM item2 = FindItem(hwndTreeView, L"l3");
-		AddItemToParent(hwndTreeView, L"l4", item2);
+		AddItemToParent(hwndTreeView, L"l4", item2);*/
 		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
@@ -212,9 +213,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			WCHAR buffer[128];
 			TVITEM item = GetSelectedNode(hwnd, hwndTreeView, pntv, buffer);
 			std::string fullNodePath = GetFullNodePath(hwndTreeView, item);
-			wstring wstr = wstring(fullNodePath.begin(), fullNodePath.end());
+			files.clear();
+			getFilesInDirectory(fullNodePath.c_str(), files);
+			
+			//wstring wstr = wstring(fullNodePath.begin(), fullNodePath.end());
+			for (size_t i = 0; i < files.size(); i++)
+			{
+				wstring wstr = wstring(files[i].begin(), files[i].end());
+				AddItemToParent(hwndTreeView, &wstr[0], item.hItem);
+			}
 			//SetWindowText(hwndDebug, item.pszText);
-			SetWindowText(hwndDebug, &wstr[0]);
+			//SetWindowText(hwndDebug, &wstr[0]);
 		}
 		return 0;
 	}
