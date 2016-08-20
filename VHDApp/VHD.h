@@ -169,6 +169,11 @@ std::wstring s2ws(const std::string& s)  // wstring ze stringa
 	return r;
 }
 
+std::string toString(const std::wstring& wstr)
+{
+	return std::string(wstr.begin(), wstr.end());
+}
+
 void PrintErrorMessage(ULONG ErrorId)
 {
 	PVOID Message = NULL;
