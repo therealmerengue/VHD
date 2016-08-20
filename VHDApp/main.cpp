@@ -215,7 +215,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			std::string fullNodePath = GetFullNodePath(hwndTreeView, item);
 			files.clear();
 			getFilesInDirectory(fullNodePath.c_str(), files);
-			
+			RemoveNodeChildren(hwndTreeView, item.hItem);
 			//wstring wstr = wstring(fullNodePath.begin(), fullNodePath.end());
 			for (size_t i = 0; i < files.size(); i++)
 			{
