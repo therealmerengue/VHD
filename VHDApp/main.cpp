@@ -216,14 +216,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			files.clear();
 			getFilesInDirectory(fullNodePath.c_str(), files);
 			RemoveNodeChildren(hwndTreeView, item.hItem);
-			//wstring wstr = wstring(fullNodePath.begin(), fullNodePath.end());
+
 			for (size_t i = 0; i < files.size(); i++)
 			{
 				wstring wstr = wstring(files[i].begin(), files[i].end());
 				AddItemToParent(hwndTreeView, &wstr[0], item.hItem);
 			}
-			//SetWindowText(hwndDebug, item.pszText);
-			//SetWindowText(hwndDebug, &wstr[0]);
+
+			// TODO: Remove unnecessary nodes like recycle bin and dot folders to go up
 		}
 		return 0;
 	}
