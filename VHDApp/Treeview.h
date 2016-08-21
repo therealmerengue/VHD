@@ -6,7 +6,7 @@
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x = 0, int y = 0, int width = 100, int height = 100);
 HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel);
-HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent);
+HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent, int image = 1, int selectedImage = 1);
 HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText);
 HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText);
 std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem);
@@ -14,6 +14,7 @@ void addItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level 
 std::string GetFullNodePath(HWND hwndTV, TVITEM item);
 TVITEM GetSelectedNode(HWND hwndWindow, HWND hwndTV, LPNM_TREEVIEW& pntv, WCHAR* buffer);
 void RemoveNodeChildren(HWND hwndTV, HTREEITEM hItem);
+int AddIconToTree(HWND hwndTree, char *strPath);
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width, int height)
 {
@@ -41,16 +42,15 @@ HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width
 	return hwndTV;
 }
 
-HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent)
+HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent, int image, int selectedImage)
 {
 	TVITEM tvi;
 	TVINSERTSTRUCT tvins;
 	static HTREEITEM hRootItem = NULL;
-	//tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_PARAM;
 	tvi.mask = TVIF_TEXT | TVIF_IMAGE |
 		TVIF_SELECTEDIMAGE | TVIF_PARAM;
-	//tvi.iImage = AddIconToTree(hwndTree, text);
-	//tvi.iSelectedImage = tvi.iImage;
+	tvi.iImage = image;
+	tvi.iSelectedImage = selectedImage;
 	tvi.pszText = text;
 	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
 	tvi.lParam = 10;
@@ -58,7 +58,6 @@ HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent)
 	tvins.item = tvi;
 	tvins.hParent = parent;
 	return (HTREEITEM)SendMessage(hwndTree, TVM_INSERTITEM, 0, (LPARAM)(LPTVINSERTSTRUCT)&tvins);
-	/*return TreeView_InsertItem(hwndTree, &tvins);*/
 }
 
 HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText)
@@ -130,8 +129,8 @@ HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel)
 	static HTREEITEM hRootItem = NULL;
 	//tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_PARAM;
 	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK | TVIF_PARAM;
-	//tvi.iImage = AddIconToTree(hwndTree, text);
-	//tvi.iSelectedImage = tvi.iImage;
+	tvi.iImage = 7;
+	tvi.iSelectedImage = tvi.iImage;
 	tvi.pszText = text;
 	tvi.cchTextMax = sizeof(tvi.pszText) / sizeof(tvi.pszText[0]);
 	tvi.lParam = 10;
@@ -228,4 +227,16 @@ std::string GetFullNodePath(HWND hwndTV, TVITEM item)
 	fullPath = fullPath.erase(0, 1); //slashes suck
 
 	return isVolume ? fullPath : fullPath.erase(2, 1); //really bad
+}
+
+int AddIconToTree(HWND hwndTree, char *strPath)
+{
+	SHFILEINFO sfi;
+	memset(&sfi, 0, sizeof(sfi));
+	string str = string(strPath);
+
+	// SHGFI_SYSICONINDEX will return the icon's index within the shell image list
+	SHGetFileInfo(&toWString(str)[0], FILE_ATTRIBUTE_NORMAL, &sfi, sizeof(sfi),
+		SHGFI_SYSICONINDEX | SHGFI_USEFILEATTRIBUTES);
+	return sfi.iIcon;
 }

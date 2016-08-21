@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <ShlObj.h>
+#include <commoncontrols.h>
 
 #include "VHD.h"
 #include "Treeview.h"
@@ -68,6 +69,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	int size = 0;
 	std::vector<string> driveLetters = getDriveLetters(size);
 	std::vector<string> files;
+	std::vector<string> dirs;
 
 	switch (msg) {
 
@@ -163,6 +165,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 225, 16, 400, 250);
 		addItemsToTreeView(driveLetters, hwndTreeView);
+		HIMAGELIST himg;
+		if (SUCCEEDED(SHGetImageList(SHIL_SMALL, IID_IImageList, reinterpret_cast<void**>(&himg))))
+			SendMessage(hwndTreeView, TVM_SETIMAGELIST, (WPARAM)TVSIL_NORMAL, (LPARAM)himg);
 		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
@@ -205,13 +210,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			TVITEM item = GetSelectedNode(hwnd, hwndTreeView, pntv, buffer);
 			std::string fullNodePath = GetFullNodePath(hwndTreeView, item);
 			files.clear();
-			getFilesInDirectory(fullNodePath.c_str(), files);
+			dirs.clear();
+			getFilesInDirectory(fullNodePath.c_str(), files, dirs);
 			RemoveNodeChildren(hwndTreeView, item.hItem);
 
 			for (size_t i = 0; i < files.size(); i++)
 			{
-				wstring wstr = wstring(files[i].begin(), files[i].end());
+				wstring wstr = toWString(files[i]);
 				AddItemToParent(hwndTreeView, &wstr[0], item.hItem);
+			}
+
+			for (size_t i = 0; i < dirs.size(); i++)
+			{
+				wstring wstr = toWString(dirs[i]);
+				AddItemToParent(hwndTreeView, &wstr[0], item.hItem, 3, 4);
 			}
 		}
 		return 0;

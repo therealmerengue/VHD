@@ -174,6 +174,11 @@ std::string toString(const std::wstring& wstr)
 	return std::string(wstr.begin(), wstr.end());
 }
 
+std::wstring toWString(const std::string& str)
+{
+	return std::wstring(str.begin(), str.end());
+}
+
 void PrintErrorMessage(ULONG ErrorId)
 {
 	PVOID Message = NULL;
@@ -870,14 +875,16 @@ BOOL OpenAndGetPhysVHD(PCWSTR pszVhdPath, PWSTR pszPhysicalDiskPath)
 }
 
 //Wyświetlnie plików w folderze
-bool getFilesInDirectory(const char* path, std::vector<std::string>& files) 
+bool getFilesInDirectory(const char* path, std::vector<std::string>& files, std::vector<std::string>& dirs) 
 {
 	DIR *dir;
 	struct dirent *ent;
 	if ((dir = opendir(path)) != NULL) {
 		/* print all the files and directories within directory */
 		while ((ent = readdir(dir)) != NULL) {
-			if (ent->d_name[0] != '.' && ent->d_name[0] != '$')
+			if (ent->d_type == DT_DIR && ent->d_name[0] != '.' && ent->d_name[0] != '$')
+				dirs.push_back(ent->d_name);
+			else if (ent->d_type == DT_REG && ent->d_name[0] != '.' && ent->d_name[0] != '$')
 				files.push_back(ent->d_name);
 		}
 		closedir(dir);
