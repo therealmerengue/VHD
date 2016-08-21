@@ -162,16 +162,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		//File treeview - center
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 225, 16, 400, 250);
-		/*AddItemToTreeView(hwndTreeView, L"l1", 1);
-		AddItemToTreeView(hwndTreeView, L"l2", 2);
-		AddItemToTreeView(hwndTreeView, L"l1", 1);
-		AddItemToTreeView(hwndTreeView, L"l2", 2);*/
 		addItemsToTreeView(driveLetters, hwndTreeView);
-
-		/*static HTREEITEM item = FindItem(hwndTreeView, L"C:\\");
-		AddItemToParent(hwndTreeView, L"l3", item);
-		static HTREEITEM item2 = FindItem(hwndTreeView, L"l3");
-		AddItemToParent(hwndTreeView, L"l4", item2);*/
 		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
@@ -222,18 +213,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				wstring wstr = wstring(files[i].begin(), files[i].end());
 				AddItemToParent(hwndTreeView, &wstr[0], item.hItem);
 			}
-
-			// TODO: Remove unnecessary nodes like recycle bin and dot folders to go up
 		}
 		return 0;
 	}
 
 	case WM_SETFOCUS:
-		//SetWindowText(hwndDebug, L"Focus");
 		break;
 
 	case WM_KILLFOCUS:
-		//SetWindowText(hwndDebug, L"Focus killed");
 		break;
 
 	case WM_DESTROY:

@@ -877,7 +877,6 @@ bool getFilesInDirectory(const char* path, std::vector<std::string>& files)
 	if ((dir = opendir(path)) != NULL) {
 		/* print all the files and directories within directory */
 		while ((ent = readdir(dir)) != NULL) {
-			//printf("%s\n", ent->d_name);
 			if (ent->d_name[0] != '.' && ent->d_name[0] != '$')
 				files.push_back(ent->d_name);
 		}
