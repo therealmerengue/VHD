@@ -209,21 +209,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			WCHAR buffer[128];
 			TVITEM item = GetSelectedNode(hwnd, hwndTreeView, pntv, buffer);
 			std::string fullNodePath = GetFullNodePath(hwndTreeView, item);
-			files.clear();
-			dirs.clear();
-			getFilesInDirectory(fullNodePath.c_str(), files, dirs);
-			RemoveNodeChildren(hwndTreeView, item.hItem);
-
-			for (size_t i = 0; i < files.size(); i++)
+			
+			if (!TreeView_GetChild(hwndTreeView, item.hItem))
 			{
-				wstring wstr = toWString(files[i]);
-				AddItemToParent(hwndTreeView, &wstr[0], item.hItem);
-			}
+				files.clear();
+				dirs.clear();
+				getFilesInDirectory(fullNodePath.c_str(), files, dirs);
 
-			for (size_t i = 0; i < dirs.size(); i++)
-			{
-				wstring wstr = toWString(dirs[i]);
-				AddItemToParent(hwndTreeView, &wstr[0], item.hItem, 3, 4);
+				for (size_t i = 0; i < files.size(); i++)
+				{
+					wstring wstr = toWString(files[i]);
+					AddItemToParent(hwndTreeView, &wstr[0], item.hItem);
+				}
+
+				for (size_t i = 0; i < dirs.size(); i++)
+				{
+					wstring wstr = toWString(dirs[i]);
+					AddItemToParent(hwndTreeView, &wstr[0], item.hItem, 3, 4);
+				}
 			}
 		}
 		return 0;
