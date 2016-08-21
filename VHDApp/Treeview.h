@@ -28,7 +28,7 @@ HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width
 	hwndTV = CreateWindowEx(0,
 		WC_TREEVIEW,
 		TEXT("Tree View"),
-		WS_VISIBLE | WS_CHILD | WS_BORDER | TVS_HASLINES,
+		WS_VISIBLE | WS_CHILD | WS_BORDER | TVS_HASLINES | WS_HSCROLL | WS_VSCROLL,
 		x,
 		y,
 		width,
