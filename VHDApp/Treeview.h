@@ -10,7 +10,7 @@ HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent, int imag
 HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText);
 HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText);
 std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem);
-void addItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level = 1);
+void AddItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level = 1);
 std::string GetFullNodePath(HWND hwndTV, TVITEM item);
 TVITEM GetSelectedNode(HWND hwndWindow, HWND hwndTV, LPNM_TREEVIEW& pntv, WCHAR* buffer);
 void RemoveNodeChildren(HWND hwndTV, HTREEITEM hItem);
@@ -93,7 +93,6 @@ void RemoveNodeChildren(HWND hwndTV, HTREEITEM hItem)
 {
 	HTREEITEM hChild = TreeView_GetChild(hwndTV, hItem);
 	HTREEITEM hSibling = TreeView_GetNextSibling(hwndTV, hChild);
-	//TreeView_DeleteItem(hwndTV, hChild);
 	while (hSibling != NULL)
 	{
 		TreeView_DeleteItem(hwndTV, hSibling);
@@ -190,7 +189,7 @@ HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel)
 	return hPrev;
 }
 
-void addItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level)
+void AddItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level)
 {
 	for (size_t i = 0; i < items.size(); i++)
 	{

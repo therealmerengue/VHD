@@ -164,7 +164,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		//File treeview - center
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 225, 16, 400, 250);
-		addItemsToTreeView(driveLetters, hwndTreeView);
+		AddItemsToTreeView(driveLetters, hwndTreeView);
 		HIMAGELIST himg;
 		if (SUCCEEDED(SHGetImageList(SHIL_SMALL, IID_IImageList, reinterpret_cast<void**>(&himg))))
 			SendMessage(hwndTreeView, TVM_SETIMAGELIST, (WPARAM)TVSIL_NORMAL, (LPARAM)himg);
