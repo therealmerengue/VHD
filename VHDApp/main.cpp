@@ -226,8 +226,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 			HTREEITEM hSelectedItem = TreeView_GetSelection(hwndTreeView);
 
-			wstring wstr = toWString(GetFullNodePath(hwndTreeView, hSelectedItem));
-			SetWindowText(hwndEditFolderToSort, &wstr[0]);
+			if (!hSelectedItem)
+			{
+				MessageBox(hwnd, L"No folder chosen: choose a folder to sort from treeview.", L"Error", MB_OK);
+				break;
+			}
+
+			string itemTextStr = GetFullNodePath(hwndTreeView, hSelectedItem);
+			
+			if (itemTextStr.find(".", 0) != std::string::npos)
+			{
+				MessageBox(hwnd, L"Invalid choice: choose a folder, not a file.", L"Error", MB_OK);
+				break;
+			}
+
+			wstring itemTextWStr = toWString(itemTextStr);
+
+			SetWindowText(hwndEditFolderToSort, &itemTextWStr[0]);
 		}
 
 		if (LOWORD(wParam) == ID_BUTTON_SORT) {
