@@ -2,13 +2,18 @@
 #include <Windows.h>
 #include "Visuals.h"
 
+#define ID_BUTTON_CREATE_AND_MOUNT 4
+
 HWND CreateDialogBox(HWND hwnd, HINSTANCE hInstance, LPCWSTR param);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance);
 LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	HWND hwndEditDiskName, hwndEditDiskSize;
+	HWND hwndEditDiskName, hwndButtonCreateAndMount, hwndEditFolderPath;
+	static LPCWSTR userdata;
+	static HWND hwndEditDiskSize;
+
 	switch (msg) {
 
 	case WM_CREATE:
@@ -31,18 +36,41 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			WS_CHILD | WS_VISIBLE, 20, 57, 35, 25, hwnd,
 			(HMENU)6, NULL, NULL);
 
-		static CREATESTRUCT *pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
-		static LPCWSTR userdata = reinterpret_cast<LPCWSTR>(pCreate->lpCreateParams);
+		hwndEditFolderPath = CreateWindowW(L"Edit", NULL,
+			WS_CHILD | WS_VISIBLE | WS_BORDER,
+			55, 80, 150, 20, hwnd, (HMENU)1,
+			NULL, NULL);
 
-		SetWindowText(hwndEditDiskSize, userdata);
+		CreateWindowW(L"static", L"Folder:",
+			WS_CHILD | WS_VISIBLE | ES_READONLY, 20, 82, 35, 25, hwnd,
+			(HMENU)6, NULL, NULL);
+
+		hwndButtonCreateAndMount = CreateWindowW(L"button", L"Create and mount",
+			WS_VISIBLE | WS_CHILD, 115, 115, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_CREATE_AND_MOUNT, NULL, NULL);
+
+		static CREATESTRUCT *pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
+		userdata = reinterpret_cast<LPCWSTR>(pCreate->lpCreateParams);
+
+		SetWindowText(hwndEditFolderPath, userdata);
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
 		break;
 
 	case WM_COMMAND:
-		break;
+	{
+		if (LOWORD(wParam) == ID_BUTTON_CREATE_AND_MOUNT) {
+			/*wchar_t diskSizeBuffer[128];
+			GetWindowText(hwndEditDiskSize, diskSizeBuffer, 128);
+			wstring wstr = wstring(diskSizeBuffer);
+			string str = toString(wstr);
+			int size = stoi(str);*/
+			CreateVHD_Fixed(L"F:\\a.vhd", 20);
+		}
 
+		break;
+	}
 	case WM_CLOSE:
 		break;
 
