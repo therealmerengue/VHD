@@ -20,6 +20,10 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_BUTTON_CHOOSE_FOLDER_TO_SORT 9
 #define ID_BUTTON_SORT 10
 
+#define IDM_DISK_NEW 11
+#define IDM_DISK_MOUNT 12
+#define IDM_QUIT 13
+
 HINSTANCE g_hinst;
 HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
 
@@ -29,6 +33,7 @@ void OpenFileDialog(HWND hwnd);
 void OpenFolderDialog(HWND hwnd);
 bool CALLBACK SetFont(HWND child, LPARAM font);
 void AddItemsToCombobox(HWND combobox, const std::vector<std::string>& items);
+void AddMenus(HWND hwnd);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) {
@@ -79,6 +84,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	case WM_CREATE:
 
 		CenterWindow(hwnd);
+		AddMenus(hwnd);
 
 		//Create disk groupbox - left top
 
@@ -158,7 +164,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
 			55, 265, 50, 65, hwnd, NULL, g_hinst, NULL);
 
-		hwndButtonChooseDisk = CreateWindowW(L"button", L"Show files",
+		hwndButtonChooseDisk = CreateWindowW(L"button", L"OK",
 			WS_VISIBLE | WS_CHILD, 115, 263, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
 		
@@ -193,6 +199,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			WS_VISIBLE | WS_CHILD, 670, 105, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_SORT, NULL, NULL);
 
+		//Create folders groupbox - right
+
 		//Debug edit text
 		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
@@ -205,6 +213,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		break;
 
 	case WM_COMMAND:
+
+		if (LOWORD(wParam) == IDM_DISK_NEW) {
+			OpenFolderDialog(hwndEditDiskFolder);
+		}
+
+		if (LOWORD(wParam) == IDM_DISK_MOUNT) {
+			OpenFileDialog(hwndEditChooseDisk);
+		}
 
 		if (LOWORD(wParam) == ID_BUTTON_OPEN_FILE) {
 			OpenFileDialog(hwndEditChooseDisk);
@@ -370,4 +386,21 @@ void OpenFileDialog(HWND hwnd) {
 bool CALLBACK SetFont(HWND child, LPARAM font) {
 	SendMessage(child, WM_SETFONT, font, true);
 	return true;
+}
+
+void AddMenus(HWND hwnd) {
+
+	HMENU hMenubar;
+	HMENU hMenu;
+
+	hMenubar = CreateMenu();
+	hMenu = CreateMenu();
+
+	AppendMenuW(hMenu, MF_STRING, IDM_DISK_NEW, L"&New");
+	AppendMenuW(hMenu, MF_STRING, IDM_DISK_MOUNT, L"&Mount");
+	AppendMenuW(hMenu, MF_SEPARATOR, 0, NULL);
+	AppendMenuW(hMenu, MF_STRING, IDM_QUIT, L"&Quit");
+
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenu, L"&Disk");
+	SetMenu(hwnd, hMenubar);
 }
