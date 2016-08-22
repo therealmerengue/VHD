@@ -362,7 +362,7 @@ void OpenFolderDialog(HWND hwnd) {
 	if (pidl) {
 		SHGetPathFromIDList(pidl, folderPath);
 		SetWindowText(hwnd, folderPath);
-		HWND dialog = CreateDialogBox(hwnd, g_hinst);
+		HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath);
 		CenterWindow(dialog);
 	}
 }
@@ -386,7 +386,7 @@ void OpenFileDialog(HWND hwnd) {
 	if (GetOpenFileName(&ofn))
 	{
 		SetWindowText(hwnd, ofn.lpstrFile);
-		HWND dialog = CreateDialogBox(hwnd, g_hinst);
+		HWND dialog = CreateDialogBox(hwnd, g_hinst, ofn.lpstrFile);
 		CenterWindow(dialog);
 	}
 }

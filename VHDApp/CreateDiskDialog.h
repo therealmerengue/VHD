@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include "Visuals.h"
 
-HWND CreateDialogBox(HWND hwnd, HINSTANCE hInstance);
+HWND CreateDialogBox(HWND hwnd, HINSTANCE hInstance, LPCWSTR param);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance);
 LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -31,6 +31,11 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			WS_CHILD | WS_VISIBLE, 20, 57, 35, 25, hwnd,
 			(HMENU)6, NULL, NULL);
 
+		static CREATESTRUCT *pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
+		static LPCWSTR userdata = reinterpret_cast<LPCWSTR>(pCreate->lpCreateParams);
+
+		SetWindowText(hwndEditDiskSize, userdata);
+
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
 		break;
@@ -58,10 +63,10 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance) {
 
 }
 
-HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance) {
+HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param) {
 
 	//EnableWindow(hwndParent, FALSE); 
-	return CreateWindow(L"DialogClass", L"Dialog Box",
+	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, L"DialogClass", L"Dialog Box",
 		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, 100, 100, 300, 200,
-		hwndParent, NULL, hInstance, NULL);
+		NULL, NULL, hInstance, (LPVOID)param);
 }
