@@ -114,10 +114,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CreateDiskDialog.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="Treeview.h" />
     <ClInclude Include="VHD.h" />
+    <ClInclude Include="Visuals.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
