@@ -67,7 +67,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	HWND hwndButtonOpenFile, hwndButtonBrowseFolders, hwndButtonCreateAndMount, hwndButtonMount, hwndButtonChooseDisk;
 
 	int size = 0;
-	std::vector<string> driveLetters = getDriveLetters(size);
+	std::vector<string> driveLetters = GetDriveLetters(size);
 	std::vector<string> files;
 	std::vector<string> dirs;
 
@@ -165,9 +165,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 225, 16, 400, 250);
 		AddItemsToTreeView(driveLetters, hwndTreeView);
-		HIMAGELIST himg;
-		if (SUCCEEDED(SHGetImageList(SHIL_SMALL, IID_IImageList, reinterpret_cast<void**>(&himg))))
-			SendMessage(hwndTreeView, TVM_SETIMAGELIST, (WPARAM)TVSIL_NORMAL, (LPARAM)himg);
+		SetImageList(hwndTreeView);
+
+		//Debug edit text
 		
 		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
@@ -214,7 +214,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			{
 				files.clear();
 				dirs.clear();
-				getFilesInDirectory(fullNodePath.c_str(), files, dirs);
+				GetFilesInDirectory(fullNodePath.c_str(), files, dirs);
 
 				for (size_t i = 0; i < files.size(); i++)
 				{

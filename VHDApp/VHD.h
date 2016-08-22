@@ -46,7 +46,7 @@ using namespace std;
         cout << failedApi << " failed at " << failedLine << " : Error Code - " << error << endl;    \
     }
 
-int countPhysicalDisks() //zwraca liczbę dysków fizycznych (jednocześnie pierwszy "dostępny" indeks dla nowego dysku)
+int CountPhysicalDisks() //zwraca liczbę dysków fizycznych (jednocześnie pierwszy "dostępny" indeks dla nowego dysku)
 {
 	HDEVINFO diskClassDevices;
 	GUID diskClassDeviceInterfaceGuid = GUID_DEVINTERFACE_DISK;
@@ -875,7 +875,7 @@ BOOL OpenAndGetPhysVHD(PCWSTR pszVhdPath, PWSTR pszPhysicalDiskPath)
 }
 
 //Wyświetlnie plików w folderze
-bool getFilesInDirectory(const char* path, std::vector<std::string>& files, std::vector<std::string>& dirs) 
+bool GetFilesInDirectory(const char* path, std::vector<std::string>& files, std::vector<std::string>& dirs) 
 {
 	DIR *dir;
 	struct dirent *ent;
@@ -896,29 +896,29 @@ bool getFilesInDirectory(const char* path, std::vector<std::string>& files, std:
 	}
 }
 
-void sortuj(std::vector<std::string>& pliki, std::string& sciezkaDoDysku, std::string& folderDoPosortowania)
+void Sort(std::vector<std::string>& files, std::string& diskPath, std::string& folderToSort)
 {
-	std::string nowyFolder;
-	std::set<std::string> rozszerzenia;
+	std::string newFolder;
+	std::set<std::string> extensions;
 
-	for (int i = 0; i < pliki.size(); i++)
+	for (int i = 0; i < files.size(); i++)
 	{
-		for (int j = pliki[i].length() - 1; j >= 0; j--)
+		for (int j = files[i].length() - 1; j >= 0; j--)
 		{
-			if (pliki[i][j] == '.')
+			if (files[i][j] == '.')
 			{
-				nowyFolder = sciezkaDoDysku + "\\" + pliki[i].substr(j + 1);
-				if (rozszerzenia.insert(pliki[i].substr(j + 1)).second)
+				newFolder = diskPath + "\\" + files[i].substr(j + 1);
+				if (extensions.insert(files[i].substr(j + 1)).second)
 				{
-					CreateDirectory(s2ws(nowyFolder).c_str(), NULL);
+					CreateDirectory(s2ws(newFolder).c_str(), NULL);
 				}
-				MoveFile(s2ws(folderDoPosortowania + "\\" + pliki[i]).c_str(), s2ws(nowyFolder + "\\" + pliki[i]).c_str());
+				MoveFile(s2ws(folderToSort + "\\" + files[i]).c_str(), s2ws(newFolder + "\\" + files[i]).c_str());
 			}
 		}
 	}
 }
 
-std::vector<string> getDriveLetters(int& size)
+std::vector<string> GetDriveLetters(int& size)
 {
 	DWORD dwSize = MAX_PATH;
 	wchar_t szLogicalDrives[MAX_PATH] = { 0 };
@@ -944,7 +944,7 @@ std::vector<string> getDriveLetters(int& size)
 }
 
 //nie dziala xD
-void setVolumeLetter() 
+void SetVolumeLetter() 
 {
 	WCHAR VolumeName[MAX_PATH] = L"";
 	
@@ -977,7 +977,7 @@ void setVolumeLetter()
 		// more than one Extents here but we don't have to worry about that with VHD
 		// Note that 'driveNumber' would be the integer you extracted out of 
 		// 'physicalDrive' in the previous snippet
-		if (diskExtents.Extents[0].DiskNumber == countPhysicalDisks()) {
+		if (diskExtents.Extents[0].DiskNumber == CountPhysicalDisks()) {
 			if (hadTrailingBackslash) {
 				VolumeName[backslashPos] = '\\';
 			}

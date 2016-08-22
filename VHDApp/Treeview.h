@@ -227,3 +227,10 @@ int AddIconToTree(HWND hwndTree, char *strPath)
 		SHGFI_SYSICONINDEX | SHGFI_USEFILEATTRIBUTES);
 	return sfi.iIcon;
 }
+
+void SetImageList(HWND hwndTree)
+{
+	HIMAGELIST himg;
+	if (SUCCEEDED(SHGetImageList(SHIL_SMALL, IID_IImageList, reinterpret_cast<void**>(&himg))))
+		SendMessage(hwndTree, TVM_SETIMAGELIST, (WPARAM)TVSIL_NORMAL, (LPARAM)himg);
+}
