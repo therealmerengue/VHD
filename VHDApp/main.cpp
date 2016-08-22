@@ -35,6 +35,10 @@ bool CALLBACK SetFont(HWND child, LPARAM font);
 void AddItemsToCombobox(HWND combobox, const std::vector<std::string>& items);
 void AddMenus(HWND hwnd);
 
+HWND CreateDialogBox(HWND hwnd);
+void RegisterDialogClass(HWND hwnd);
+LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) {
 
@@ -85,6 +89,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
+
+		RegisterDialogClass(hwnd);
 
 		//Create disk groupbox - left top
 
@@ -215,7 +221,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	case WM_COMMAND:
 
 		if (LOWORD(wParam) == IDM_DISK_NEW) {
-			OpenFolderDialog(hwndEditDiskFolder);
+			OpenFolderDialog(hwnd);
 		}
 
 		if (LOWORD(wParam) == IDM_DISK_MOUNT) {
@@ -360,6 +366,7 @@ void OpenFolderDialog(HWND hwnd) {
 	if (pidl) {
 		SHGetPathFromIDList(pidl, folderPath);
 		SetWindowText(hwnd, folderPath);
+		CreateDialogBox(hwnd);
 	}
 }
 
@@ -380,7 +387,10 @@ void OpenFileDialog(HWND hwnd) {
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 	if (GetOpenFileName(&ofn))
+	{
 		SetWindowText(hwnd, ofn.lpstrFile);
+		CreateDialogBox(hwnd);
+	}
 }
 
 bool CALLBACK SetFont(HWND child, LPARAM font) {
@@ -403,4 +413,51 @@ void AddMenus(HWND hwnd) {
 
 	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenu, L"&Disk");
 	SetMenu(hwnd, hMenubar);
+}
+
+LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg) {
+
+	case WM_CREATE:
+		CreateWindowW(L"button", L"Ok",
+			WS_VISIBLE | WS_CHILD,
+			50, 50, 80, 25, hwnd, (HMENU)1, NULL, NULL);
+		break;
+
+	case WM_COMMAND:
+		//EnableWindow(GetParent(hwnd), TRUE); //not working
+		DestroyWindow(hwnd);
+		
+		break;
+
+	case WM_CLOSE:
+		//EnableWindow(GetParent(hwnd), TRUE);
+		DestroyWindow(hwnd);
+		
+		break;
+
+	}
+
+	return (DefWindowProcW(hwnd, msg, wParam, lParam));
+}
+
+void RegisterDialogClass(HWND hwnd) {
+
+	WNDCLASSEXW wc = { 0 };
+	wc.cbSize = sizeof(WNDCLASSEXW);
+	wc.lpfnWndProc = (WNDPROC)DialogProc;
+	wc.hInstance = g_hinst;
+	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
+	wc.lpszClassName = L"DialogClass";
+	RegisterClassExW(&wc);
+
+}
+
+HWND CreateDialogBox(HWND hwndParent) {
+
+	//EnableWindow(hwndParent, FALSE); 
+	return CreateWindow(L"DialogClass", L"Dialog Box",
+		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, 100, 100, 200, 150,
+		hwndParent, NULL, g_hinst, NULL);
 }
