@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dirent.h" />
+    <ClInclude Include="Files.h" />
     <ClInclude Include="Treeview.h" />
     <ClInclude Include="VHD.h" />
   </ItemGroup>
