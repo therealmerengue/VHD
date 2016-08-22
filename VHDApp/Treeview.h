@@ -11,7 +11,7 @@ HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText);
 HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText);
 std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem);
 void AddItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level = 1);
-std::string GetFullNodePath(HWND hwndTV, TVITEM item);
+std::string GetFullNodePath(HWND hwndTV, HTREEITEM hItem);
 TVITEM GetSelectedNode(HWND hwndWindow, HWND hwndTV, LPNM_TREEVIEW& pntv, WCHAR* buffer);
 int AddIconToTree(HWND hwndTree, char *strPath);
 
@@ -198,16 +198,16 @@ TVITEM GetSelectedNode(HWND hwndWindow, HWND hwndTV, LPNM_TREEVIEW& pntv, WCHAR*
 	return item;
 }
 
-std::string GetFullNodePath(HWND hwndTV, TVITEM item)
+std::string GetFullNodePath(HWND hwndTV, HTREEITEM hItem)
 {
-	std::string fullPath = "\\" + toString(GetItemText(hwndTV, item.hItem));
-	HTREEITEM hItem = TreeView_GetParent(hwndTV, item.hItem);
+	std::string fullPath = "\\" + toString(GetItemText(hwndTV, hItem));
+	HTREEITEM hItemParent = TreeView_GetParent(hwndTV, hItem);
 	bool isVolume = true;
 
-	while (hItem != NULL && hItem != TVI_ROOT)
+	while (hItemParent != NULL && hItemParent != TVI_ROOT)
 	{
-		fullPath.insert(0, "\\" + toString(GetItemText(hwndTV, hItem)));
-		hItem = TreeView_GetParent(hwndTV, hItem);
+		fullPath.insert(0, "\\" + toString(GetItemText(hwndTV, hItemParent)));
+		hItemParent = TreeView_GetParent(hwndTV, hItemParent);
 		isVolume = false;
 	}
 
