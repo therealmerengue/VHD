@@ -36,17 +36,21 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 		AddItemsToCombobox(hwndCombo, GetDriveLetters());
 
 		hwndButtonChooseDisk = CreateWindowW(L"button", L"Create folders",
-			WS_VISIBLE | WS_CHILD, 115, 10, 90, 25,
+			WS_VISIBLE | WS_CHILD, 95, 130, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS, NULL, NULL);
+
+		CreateWindowW(L"Button", L"Choose folders",
+			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+			5, 40, 270, 85, hwnd, (HMENU)0, NULL, NULL);
 
 		CreateWindowW(L"button", L"Sort folder",
 			WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
-			10, 40, 100, 20, hwnd, (HMENU)ID_CHECKBOX_SORT_FOLDER,
+			10, 55, 100, 20, hwnd, (HMENU)ID_CHECKBOX_SORT_FOLDER,
 			NULL, NULL);
 
 		CreateWindowW(L"button", L"Encrypt folder",
 			WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
-			10, 60, 100, 20, hwnd, (HMENU)ID_CHECKBOX_ENCRYPT_FOLDER,
+			10, 75, 100, 20, hwnd, (HMENU)ID_CHECKBOX_ENCRYPT_FOLDER,
 			NULL, NULL);
 
 		CheckDlgButton(hwnd, ID_CHECKBOX_SORT_FOLDER, BST_UNCHECKED);
