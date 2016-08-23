@@ -17,9 +17,6 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, 
 LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-bool CheckIfStringEmpty(std::string str, LPCWSTR errorMessage, HWND hwndMB);
-bool CheckIfStringContainsNumbersOnly(std::string str, LPCWSTR errorMessage, HWND hwndMB);
-
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndCombo, hwndButtonChooseDisk;
@@ -67,7 +64,10 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 	{
 		if (LOWORD(wParam) == ID_BUTTON_CREATE_FOLDERS)
 		{
-			if (IsDlgButtonChecked(hwnd, ID_CHECKBOX_SORT_FOLDER))
+			bool sortFolder = IsDlgButtonChecked(hwnd, ID_CHECKBOX_SORT_FOLDER);
+			bool encryptFolder = IsDlgButtonChecked(hwnd, ID_CHECKBOX_ENCRYPT_FOLDER);
+
+			if (sortFolder)
 			{
 				string diskPath = TextFromComboboxToString(hwndCombo);
 				if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd))
@@ -78,7 +78,7 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 				CreateDirectory(&wstrSortFolderPath[0], NULL);
 			}
 
-			if (IsDlgButtonChecked(hwnd, ID_CHECKBOX_ENCRYPT_FOLDER))
+			if (encryptFolder)
 			{
 				string diskPath = TextFromComboboxToString(hwndCombo);
 				if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd))
@@ -88,6 +88,15 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 				wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
 				CreateDirectory(&wstrEncryptFolderPath[0], NULL);
 			}
+
+			if (!sortFolder && !encryptFolder)
+			{
+				MessageBox(hwnd, L"Choose a folder.", L"Error", MB_OK);
+				break;
+			}
+
+			DestroyWindow(hwnd);
+			break;
 		}
 
 		break;
@@ -182,6 +191,9 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 			//commented out for safety :p
 			/*CreateVHD_Fixed(&wstrFullDiskPath[0], size);
 			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());*/
+
+			DestroyWindow(hwnd);
+			break;
 		}
 
 		if (LOWORD(wParam) == ID_BUTTON_CREATE)
@@ -206,6 +218,9 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 			//commented out for safety :p
 			//CreateVHD_Fixed(&wstrFullDiskPath[0], size);
+
+			DestroyWindow(hwnd);
+			break;
 		}
 
 		break;
