@@ -12,9 +12,6 @@ name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 #define ID_EDIT 1
-#define ID_BUTTON_OPEN_FILE 2
-#define ID_BUTTON_OPEN_FOLDER 3
-#define ID_BUTTON_CREATE_AND_MOUNT 4
 #define ID_BUTTON_MOUNT 5
 #define ID_BUTTON_CHOOSE_DISK 8
 #define ID_LABEL 6
@@ -71,8 +68,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	static HWND hwndEditChooseDisk, hwndCombo, hwndEditDiskName, hwndEditDiskFolder, hwndEditDiskSize, hwndTreeView, hwndEditFolderToSort;
-	HWND hwndButtonOpenFile, hwndButtonBrowseFolders, hwndButtonCreateAndMount, hwndButtonMount, hwndButtonChooseDisk, hwndButtonChooseFolderToSort, hwndButtonSort;
+	static HWND hwndCombo, hwndTreeView, hwndEditFolderToSort;
+	HWND hwndButtonChooseDisk, hwndButtonChooseFolderToSort, hwndButtonSort, hwndButtonNewDisk;
 
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
@@ -87,69 +84,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		RegisterDialogClass(hwnd, g_hinst);
 
-		//Create disk groupbox - left top
+		//Buttons left
 
-		CreateWindowW(L"Button", L"Create disk",
-			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
-			10, 10, 210, 135, hwnd, (HMENU)0, g_hinst, NULL);
 
-		hwndEditDiskName = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER,
-			55, 30, 150, 20, hwnd, (HMENU)ID_EDIT,
-			NULL, NULL);
-
-		CreateWindowW(L"static", L"Name:",
-			WS_CHILD | WS_VISIBLE, 20, 32, 35, 25, hwnd,
-			(HMENU)ID_LABEL, NULL, NULL);
-
-		hwndEditDiskSize = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER,
-			55, 55, 150, 20, hwnd, (HMENU)ID_EDIT,
-			NULL, NULL);
-
-		CreateWindowW(L"static", L"Size:",
-			WS_CHILD | WS_VISIBLE, 20, 57, 35, 25, hwnd, 
-			(HMENU)ID_LABEL, NULL, NULL);
-
-		hwndEditDiskFolder = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL | ES_READONLY,
-			55, 80, 150, 20, hwnd, (HMENU)ID_EDIT,
-			NULL, NULL);
-
-		CreateWindowW(L"static", L"Folder:",
-			WS_CHILD | WS_VISIBLE, 20, 82, 35, 25, hwnd,
-			(HMENU)ID_LABEL, NULL, NULL);
-
-		hwndButtonBrowseFolders = CreateWindowW(L"button", L"Browse",
-			WS_VISIBLE | WS_CHILD, 20, 105, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_OPEN_FOLDER, NULL, NULL);
-
-		hwndButtonCreateAndMount = CreateWindowW(L"button", L"Create and mount",
-			WS_VISIBLE | WS_CHILD, 115, 105, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_CREATE_AND_MOUNT, NULL, NULL);
-
-		//Mount disk groupbox - left center
-
-		CreateWindowW(L"Button", L"Mount disk",
-			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
-			10, 150, 210, 90, hwnd, (HMENU)0, g_hinst, NULL);
-
-		CreateWindowW(L"static", L"File:",
-			WS_CHILD | WS_VISIBLE, 20, 172, 35, 25, hwnd,
-			(HMENU)ID_LABEL, NULL, NULL);
-
-		hwndEditChooseDisk = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL | ES_READONLY,
-			55, 170, 150, 20, hwnd, (HMENU)ID_EDIT,
-			NULL, NULL);
-
-		hwndButtonOpenFile = CreateWindowW(L"button", L"Browse",
-			WS_VISIBLE | WS_CHILD, 20, 195, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_OPEN_FILE, NULL, NULL);
-
-		hwndButtonMount = CreateWindowW(L"button", L"Mount",
-			WS_VISIBLE | WS_CHILD, 115, 195, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_MOUNT, NULL, NULL);
 
 		//Choose disk groupbox - left bottom
 
@@ -220,23 +157,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		}
 
 		if (LOWORD(wParam) == IDM_DISK_MOUNT) {
-			OpenFileDialog(hwndEditChooseDisk);
-		}
-
-		if (LOWORD(wParam) == ID_BUTTON_OPEN_FILE) {
-			OpenFileDialog(hwndEditChooseDisk);
-		}
-
-		if (LOWORD(wParam) == ID_BUTTON_OPEN_FOLDER) {
-			OpenFolderDialog(hwndEditDiskFolder);
-		}
-
-		if (LOWORD(wParam) == ID_BUTTON_CREATE_AND_MOUNT) {
-			//create and mount
-		}
-
-		if (LOWORD(wParam) == ID_BUTTON_MOUNT) {
-			//mount
+			OpenFileDialog(hwnd);
 		}
 
 		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {
