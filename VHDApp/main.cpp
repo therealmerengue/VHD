@@ -5,13 +5,15 @@
 #include "VHD.h"
 #include "Treeview.h"
 #include "Files.h"
-#include "CreateDiskDialog.h"
+#include "CreateDialog.h"
 
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 #define ID_EDIT 1
+#define ID_BUTTON_NEW_DISK 2
+#define ID_BUTTON_MOUNT_DISK 3
 #define ID_BUTTON_MOUNT 5
 #define ID_BUTTON_CHOOSE_DISK 8
 #define ID_LABEL 6
@@ -69,7 +71,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	static HWND hwndCombo, hwndTreeView, hwndEditFolderToSort;
-	HWND hwndButtonChooseDisk, hwndButtonChooseFolderToSort, hwndButtonSort, hwndButtonNewDisk;
+	HWND hwndButtonChooseDisk, hwndButtonChooseFolderToSort, hwndButtonSort, hwndButtonNewDisk, hwndButtonMountDisk;
 
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
@@ -82,11 +84,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
 
-		RegisterDialogClass(hwnd, g_hinst);
+		RegisterDialogClass(hwnd, g_hinst, (WNDPROC)CreateDiskDialogProc);
 
 		//Buttons left
 
+		hwndButtonNewDisk = CreateWindowW(L"button", L"New disk",
+			WS_VISIBLE | WS_CHILD, 10, 20, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_NEW_DISK, NULL, NULL);
 
+		hwndButtonMountDisk = CreateWindowW(L"button", L"Mount disk",
+			WS_VISIBLE | WS_CHILD, 10, 50, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_MOUNT_DISK, NULL, NULL);
 
 		//Choose disk groupbox - left bottom
 
@@ -157,6 +165,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		}
 
 		if (LOWORD(wParam) == IDM_DISK_MOUNT) {
+			OpenFileDialog(hwnd);
+		}
+
+		if (LOWORD(wParam == ID_BUTTON_NEW_DISK)) {
+			OpenFolderDialog(hwnd);
+		}
+
+		if (LOWORD(wParam == ID_BUTTON_MOUNT_DISK)) {
 			OpenFileDialog(hwnd);
 		}
 

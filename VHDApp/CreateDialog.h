@@ -7,10 +7,10 @@
 #define ID_BUTTON_CREATE 14
 
 HWND CreateDialogBox(HWND hwnd, HINSTANCE hInstance, LPCWSTR param, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
-void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance);
-LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, WNDPROC lpfnWndProc);
+LRESULT CALLBACK CreateDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CreateDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hwndButtonCreateAndMount, hwndButtonCreate;
 	static LPCWSTR userdata;
@@ -79,6 +79,7 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
 
 			//TODO : error checking
+			//TODO : refresh treeview after mount
 
 			//commented out for safety :p
 			/*CreateVHD_Fixed(&wstrFullDiskPath[0], size);
@@ -113,11 +114,11 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return (DefWindowProcW(hwnd, msg, wParam, lParam));
 }
 
-void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance) {
+void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, WNDPROC lpfnWndProc) {
 
 	WNDCLASSEXW wc = { 0 };
 	wc.cbSize = sizeof(WNDCLASSEXW);
-	wc.lpfnWndProc = (WNDPROC)DialogProc;
+	wc.lpfnWndProc = (WNDPROC)CreateDiskDialogProc;
 	wc.hInstance = hInstance;
 	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
 	wc.lpszClassName = L"DialogClass";

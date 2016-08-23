@@ -115,7 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Conversions.h" />
-    <ClInclude Include="CreateDiskDialog.h" />
+    <ClInclude Include="CreateDialog.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="Treeview.h" />
