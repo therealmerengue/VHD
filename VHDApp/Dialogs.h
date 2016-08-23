@@ -67,12 +67,12 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			bool sortFolder = IsDlgButtonChecked(hwnd, ID_CHECKBOX_SORT_FOLDER);
 			bool encryptFolder = IsDlgButtonChecked(hwnd, ID_CHECKBOX_ENCRYPT_FOLDER);
 
+			string diskPath = TextFromComboboxToString(hwndCombo);
+			if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd))
+				break;
+
 			if (sortFolder)
 			{
-				string diskPath = TextFromComboboxToString(hwndCombo);
-				if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd))
-					break;
-
 				string strSortFolderPath = diskPath + "Sort";
 				wstring wstrSortFolderPath = toWString(strSortFolderPath);
 				CreateDirectory(&wstrSortFolderPath[0], NULL);
@@ -80,10 +80,6 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
 			if (encryptFolder)
 			{
-				string diskPath = TextFromComboboxToString(hwndCombo);
-				if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd))
-					break;
-
 				string strEncryptFolderPath = diskPath + "Encrypt";
 				wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
 				CreateDirectory(&wstrEncryptFolderPath[0], NULL);
