@@ -37,12 +37,12 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			(HMENU)6, NULL, NULL);
 
 		hwndEditFolderPath = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER,
+			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY,
 			55, 80, 150, 20, hwnd, (HMENU)1,
 			NULL, NULL);
 
 		CreateWindowW(L"static", L"Folder:",
-			WS_CHILD | WS_VISIBLE | ES_READONLY, 20, 82, 35, 25, hwnd,
+			WS_CHILD | WS_VISIBLE, 20, 82, 35, 25, hwnd,
 			(HMENU)6, NULL, NULL);
 
 		hwndButtonCreateAndMount = CreateWindowW(L"button", L"Create and mount",
@@ -60,13 +60,26 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case WM_COMMAND:
 	{
-		if (LOWORD(wParam) == ID_BUTTON_CREATE_AND_MOUNT) {
-			/*wchar_t diskSizeBuffer[128];
+		if (LOWORD(wParam) == ID_BUTTON_CREATE_AND_MOUNT) 
+		{
+			wchar_t diskNameBuffer[128];
+			GetWindowText(hwndEditDiskName, diskNameBuffer, 128);
+			wstring wstrDiskName = wstring(diskNameBuffer);
+			string strDiskSize = toString(wstrDiskName);
+
+			wstring wstrFolderName = wstring(userdata);
+			string strFolderName = toString(wstrFolderName);
+
+			wchar_t diskSizeBuffer[128]; // TODO: move to method window text to string
 			GetWindowText(hwndEditDiskSize, diskSizeBuffer, 128);
-			wstring wstr = wstring(diskSizeBuffer);
-			string str = toString(wstr);
-			int size = stoi(str);*/
-			CreateVHD_Fixed(L"F:\\a.vhd", 20);
+			wstring wstrDiskSize = wstring(diskSizeBuffer);
+			string strDiskSize = toString(wstrDiskSize);
+			int size = stoi(strDiskSize);
+
+			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
+			wstring wstrFullDiskPath = toWString(strFullDiskPath);
+
+			CreateVHD_Fixed(&wstrFullDiskPath[0], size);
 		}
 
 		break;
