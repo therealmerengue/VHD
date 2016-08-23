@@ -2,9 +2,12 @@
 #include <Windows.h>
 #include "Visuals.h"
 #include "Conversions.h"
+#include "Combobox.h"
 
 #define ID_BUTTON_CREATE_AND_MOUNT 4
+#define ID_BUTTON_CHOOSE_DISK 8
 #define ID_BUTTON_CREATE 14
+#define ID_COMBOBOX 16
 
 HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
@@ -14,9 +17,25 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	HWND hwndCombo, hwndButtonChooseDisk;
+
 	switch (msg) {
 
 	case WM_CREATE:
+
+		CreateWindowW(L"static", L"Disk:",
+			WS_CHILD | WS_VISIBLE, 10, 14, 35, 25, hwnd,
+			(HMENU)6, NULL, NULL);
+
+		hwndCombo = CreateWindowW(L"Combobox", NULL,
+			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
+			55, 12, 50, 65, hwnd, (HMENU)ID_COMBOBOX, NULL, NULL);
+
+		hwndButtonChooseDisk = CreateWindowW(L"button", L"OK",
+			WS_VISIBLE | WS_CHILD, 115, 10, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
+
+		AddItemsToCombobox(hwndCombo, GetDriveLetters());
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 

@@ -6,6 +6,7 @@
 #include "Treeview.h"
 #include "Files.h"
 #include "Dialogs.h"
+#include "Combobox.h"
 
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
@@ -15,7 +16,6 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_BUTTON_NEW_DISK 2
 #define ID_BUTTON_MOUNT_DISK 3
 #define ID_BUTTON_CREATE_FOLDERS 5
-#define ID_BUTTON_CHOOSE_DISK 8
 #define ID_LABEL 6
 #define ID_BUTTON_CHOOSE_FOLDER_TO_SORT 9
 #define ID_BUTTON_SORT 10
@@ -31,7 +31,6 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void CenterWindow(HWND hwnd);
 void OpenFileDialog(HWND hwnd);
 void OpenFolderDialog(HWND hwnd);
-void AddItemsToCombobox(HWND combobox, const std::vector<std::string>& items);
 void AddMenus(HWND hwnd);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -70,8 +69,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	static HWND hwndCombo, hwndTreeView, hwndEditFolderToSort;
-	HWND hwndButtonChooseDisk, hwndButtonChooseFolderToSort, hwndButtonSort;
+	static HWND hwndTreeView, hwndEditFolderToSort;
+	HWND hwndButtonChooseFolderToSort, hwndButtonSort;
 	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonCreateFolders; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
@@ -100,26 +99,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		hwndButtonCreateFolders = CreateWindowW(L"button", L"Create folders",
 			WS_VISIBLE | WS_CHILD, 10, 80, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS, NULL, NULL);
-
-		//Choose disk groupbox - left bottom
-
-		CreateWindowW(L"Button", L"Choose disk",
-			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
-			10, 245, 210, 65, hwnd, (HMENU)0, g_hinst, NULL);
-
-		CreateWindowW(L"static", L"Disk:",
-			WS_CHILD | WS_VISIBLE, 20, 267, 35, 25, hwnd,
-			(HMENU)ID_LABEL, NULL, NULL);
-
-		hwndCombo = CreateWindowW(L"Combobox", NULL,
-			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
-			55, 265, 50, 65, hwnd, NULL, g_hinst, NULL);
-
-		hwndButtonChooseDisk = CreateWindowW(L"button", L"OK",
-			WS_VISIBLE | WS_CHILD, 115, 263, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
-		
-		AddItemsToCombobox(hwndCombo, driveLetters);
 
 		//File treeview - center
 
@@ -263,15 +242,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	}
 
 	return DefWindowProcW(hwnd, msg, wParam, lParam);
-}
-
-void AddItemsToCombobox(HWND combobox, const std::vector<std::string>& items)
-{
-	for (size_t i = 0; i < items.size(); i++)
-	{
-		std::wstring wdl = std::wstring(items[i].begin(), items[i].end());
-		SendMessage(combobox, (UINT)CB_ADDSTRING, (WPARAM)0, (LPARAM)wdl.c_str());
-	}
 }
 
 void OpenFolderDialog(HWND hwnd) {

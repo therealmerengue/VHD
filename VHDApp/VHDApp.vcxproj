@@ -114,6 +114,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Combobox.h" />
     <ClInclude Include="Conversions.h" />
     <ClInclude Include="Dialogs.h" />
     <ClInclude Include="dirent.h" />
