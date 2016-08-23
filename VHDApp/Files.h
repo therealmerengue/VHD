@@ -24,12 +24,11 @@ bool GetFilesInDirectory(const char* path, std::vector<std::string>& files, std:
 	}
 	else {
 		/* could not open directory */
-		perror("");
 		return EXIT_FAILURE;
 	}
 }
 
-void Sort(std::vector<std::string>& files, std::string& diskPath, std::string& folderToSort)
+void Sort(const std::vector<std::string>& files, const std::string& diskPath, const std::string& folderToSort)
 {
 	std::string newFolder;
 	std::set<std::string> extensions;
@@ -51,20 +50,18 @@ void Sort(std::vector<std::string>& files, std::string& diskPath, std::string& f
 	}
 }
 
-std::vector<string> GetDriveLetters(int& size)
+std::vector<string> GetDriveLetters()
 {
 	DWORD dwSize = MAX_PATH;
 	wchar_t szLogicalDrives[MAX_PATH] = { 0 };
 	DWORD dwResult = GetLogicalDriveStrings(dwSize, szLogicalDrives);
 	std::vector<string> driveLetters;
-	size = 0;
 
 	if (dwResult > 0 && dwResult <= MAX_PATH)
 	{
 		wchar_t* szSingleDrive = szLogicalDrives;
 		while (*szSingleDrive)
 		{
-			size++;
 			//printf("Drive: %s\n", szSingleDrive);
 			wstring wstr(szSingleDrive);
 			driveLetters.push_back(string(wstr.begin(), wstr.end()));

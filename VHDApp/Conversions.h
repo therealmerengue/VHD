@@ -2,11 +2,6 @@
 #include <Windows.h>
 #include <string>
 
-std::string toString(const std::wstring& wstr);
-std::wstring toWString(const std::string& str);
-std::wstring s2ws(const std::string& s);
-std::string WindowTextToString(HWND hwndWindow);
-
 std::string toString(const std::wstring& wstr)
 {
 	return std::string(wstr.begin(), wstr.end());

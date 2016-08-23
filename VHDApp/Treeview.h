@@ -11,10 +11,10 @@ HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent, int imag
 HTREEITEM FindItem(HWND hwndTV, const std::wstring& itemText);
 HTREEITEM FindItemDepthFirstImpl(HWND hwndTV, HTREEITEM htStart, const std::wstring& itemText);
 std::wstring GetItemText(HWND hwndTV, HTREEITEM htItem);
-void AddItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level = 1);
+void AddItemsToTreeView(const std::vector<string>& items, HWND hwndTreeView, int level = 1);
 std::string GetFullNodePath(HWND hwndTV, HTREEITEM hItem);
 TVITEM GetSelectedNode(HWND hwndWindow, HWND hwndTV, LPNM_TREEVIEW& pntv, WCHAR* buffer);
-int AddIconToTree(HWND hwndTree, char *strPath);
+int AddIconToTree(HWND hwndTree, const char* strPath);
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width, int height)
 {
@@ -178,7 +178,7 @@ HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel)
 	return hPrev;
 }
 
-void AddItemsToTreeView(std::vector<string> items, HWND hwndTreeView, int level)
+void AddItemsToTreeView(const std::vector<string>& items, HWND hwndTreeView, int level)
 {
 	for (size_t i = 0; i < items.size(); i++)
 	{
@@ -217,7 +217,7 @@ std::string GetFullNodePath(HWND hwndTV, HTREEITEM hItem)
 	return isVolume ? fullPath : fullPath.erase(2, 1); //really bad
 }
 
-int AddIconToTree(HWND hwndTree, char *strPath)
+int AddIconToTree(HWND hwndTree, const char* strPath)
 {
 	SHFILEINFO sfi;
 	memset(&sfi, 0, sizeof(sfi));

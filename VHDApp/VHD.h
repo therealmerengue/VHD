@@ -158,8 +158,6 @@ int CountPhysicalDisks() //zwraca liczbę dysków fizycznych (jednocześnie pier
 	return firstFreeIndex;
 }
 
-
-
 void PrintErrorMessage(ULONG ErrorId)
 {
 	PVOID Message = NULL;
@@ -175,24 +173,6 @@ void PrintErrorMessage(ULONG ErrorId)
 
 	wprintf(L"%s\n", Message);
 	LocalFree(Message);
-}
-
-void usage()
-{
-	printf("CppVhdAPI.exe -[cxaomdgpe] -f <vhdfile> -s <size>\n");
-	printf("-c CreateVirtualDisk............input: -f <vhd file name>, -s <size in MB>\n");
-	printf("-a AttachVirtualDisk............input: -f <vhd file name>\n");
-	printf("-d DetachVirtualDisk............input: -f <vhd file name>\n");
-	//printf("-g GetVirtualDiskInformation....input: -f <vhd file name>\n");
-	printf("-p GetVirtualDiskPhysicalPath...input: -f <vhd file name> -- note: must be attached\n");
-	// printf("-e SetVirtualDiskInformation....input: -f <vhd file name>, -u <new GUID>\n");
-	printf("Examples:\n");
-	printf("  Create a 3.6 Gb VHD named 'mytest.vhd'\n");
-	printf("CppVhdAPI.exe -c -f c:\\testdir\\mytest.vhd -s 3600\n\n");
-	printf("  Attach a VHD named 'mytest.vhd'\n");
-	printf("CppVhdAPI.exe -a -f c:\\testdir\\mytest.vhd\n\n");
-	//printf("  Set VHD GUID 'mytest.vhd'\n");
-	//printf("CppVhdAPI.exe -e -f c:\\testdir\\mytest.vhd -u {12345678-1234-5678-1234-000000000000}\n");
 }
 
 BOOL CreateVHD_Fixed(PCWSTR pszVhdPath, ULONG sizeInMB)
