@@ -114,6 +114,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Conversions.h" />
     <ClInclude Include="CreateDiskDialog.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Files.h" />

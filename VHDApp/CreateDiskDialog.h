@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "Visuals.h"
+#include "Conversions.h"
 
 #define ID_BUTTON_CREATE_AND_MOUNT 4
 
@@ -10,9 +11,9 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	HWND hwndEditDiskName, hwndButtonCreateAndMount, hwndEditFolderPath;
+	HWND hwndButtonCreateAndMount;
 	static LPCWSTR userdata;
-	static HWND hwndEditDiskSize;
+	static HWND hwndEditDiskSize, hwndEditDiskName, hwndEditFolderPath;
 
 	switch (msg) {
 
@@ -62,24 +63,19 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		if (LOWORD(wParam) == ID_BUTTON_CREATE_AND_MOUNT) 
 		{
-			wchar_t diskNameBuffer[128];
-			GetWindowText(hwndEditDiskName, diskNameBuffer, 128);
-			wstring wstrDiskName = wstring(diskNameBuffer);
-			string strDiskSize = toString(wstrDiskName);
+			string strDiskName = WindowTextToString(hwndEditDiskName);
 
-			wstring wstrFolderName = wstring(userdata);
-			string strFolderName = toString(wstrFolderName);
+			string strFolderName = WindowTextToString(hwndEditFolderPath);
 
-			wchar_t diskSizeBuffer[128]; // TODO: move to method window text to string
-			GetWindowText(hwndEditDiskSize, diskSizeBuffer, 128);
-			wstring wstrDiskSize = wstring(diskSizeBuffer);
-			string strDiskSize = toString(wstrDiskSize);
+			string strDiskSize = WindowTextToString(hwndEditDiskSize);
 			int size = stoi(strDiskSize);
 
 			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
 
-			CreateVHD_Fixed(&wstrFullDiskPath[0], size);
+			//commented out for safety :p
+			/*CreateVHD_Fixed(&wstrFullDiskPath[0], size);
+			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());*/
 		}
 
 		break;

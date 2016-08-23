@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <Windows.h>
+#include "Conversions.h"
 
 #define ID_TREEVIEW 7
 
