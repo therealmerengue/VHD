@@ -6,8 +6,8 @@
 #define ID_BUTTON_CREATE_AND_MOUNT 4
 #define ID_BUTTON_CREATE 14
 
-HWND CreateDialogBox(HWND hwnd, HINSTANCE hInstance, LPCWSTR param, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
-void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, WNDPROC lpfnWndProc);
+HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
+void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
 LRESULT CALLBACK CreateDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK CreateDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -114,22 +114,22 @@ LRESULT CALLBACK CreateDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 	return (DefWindowProcW(hwnd, msg, wParam, lParam));
 }
 
-void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, WNDPROC lpfnWndProc) {
+void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc) {
 
 	WNDCLASSEXW wc = { 0 };
 	wc.cbSize = sizeof(WNDCLASSEXW);
 	wc.lpfnWndProc = (WNDPROC)CreateDiskDialogProc;
 	wc.hInstance = hInstance;
 	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
-	wc.lpszClassName = L"DialogClass";
+	wc.lpszClassName = lpszClassName;
 	RegisterClassExW(&wc);
 
 }
 
-HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR title, int x, int y, int width, int height) {
+HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x, int y, int width, int height) {
 
 	//EnableWindow(hwndParent, FALSE); 
-	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, L"DialogClass", title,
+	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, lpClassName, title,
 		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, x, y, width, height,
 		NULL, NULL, hInstance, (LPVOID)param);
 }

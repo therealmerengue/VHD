@@ -84,7 +84,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
 
-		RegisterDialogClass(hwnd, g_hinst, (WNDPROC)CreateDiskDialogProc);
+		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)CreateDiskDialogProc);
 
 		//Buttons left
 
@@ -298,7 +298,7 @@ void OpenFolderDialog(HWND hwnd) {
 	if (pidl) {
 		SHGetPathFromIDList(pidl, folderPath);
 		SetWindowText(hwnd, folderPath);
-		HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"Create disk");
+		HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
 		CenterWindow(dialog);
 	}
 }
