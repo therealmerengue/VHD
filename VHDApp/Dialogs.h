@@ -91,6 +91,8 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 				break;
 			}
 
+			//TODO : return diskPath somehow through global var I guess
+
 			DestroyWindow(hwnd);
 			break;
 		}
@@ -209,8 +211,6 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
-
-			//TODO : error checking
 
 			//commented out for safety :p
 			//CreateVHD_Fixed(&wstrFullDiskPath[0], size);
