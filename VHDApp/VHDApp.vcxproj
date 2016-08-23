@@ -115,7 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Combobox.h" />
-    <ClInclude Include="Conversions.h" />
+    <ClInclude Include="StringOperations.h" />
     <ClInclude Include="Dialogs.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Files.h" />

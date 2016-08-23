@@ -35,13 +35,13 @@
     <ClInclude Include="Visuals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Conversions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Dialogs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Combobox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringOperations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

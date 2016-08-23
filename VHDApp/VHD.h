@@ -15,7 +15,7 @@
 #include <Setupapi.h>
 #include <Ntddstor.h>
 #include "dirent.h"
-#include "Conversions.h"
+#include "StringOperations.h"
 
 #define DEFIND_GUID
 #pragma comment(lib, "VirtDisk.lib")

@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "Visuals.h"
-#include "Conversions.h"
+#include "StringOperations.h"
 #include "Combobox.h"
 
 #define ID_BUTTON_CREATE_AND_MOUNT 4
@@ -17,6 +17,9 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, 
 LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+bool CheckIfStringEmpty(std::string str, LPCWSTR errorMessage, HWND hwndMB);
+bool CheckIfStringContainsNumbersOnly(std::string str, LPCWSTR errorMessage, HWND hwndMB);
+
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndCombo, hwndButtonChooseDisk;
@@ -29,7 +32,7 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			WS_CHILD | WS_VISIBLE, 10, 14, 35, 25, hwnd,
 			(HMENU)6, NULL, NULL);
 
-		hwndCombo = CreateWindowW(L"Combobox", NULL,
+		hwndCombo = CreateWindowW(L"Combobox", NULL, //TODO : make combobox so u can't write in there lol
 			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
 			55, 12, 50, 65, hwnd, (HMENU)ID_COMBOBOX, NULL, NULL);
 
@@ -67,11 +70,9 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			if (IsDlgButtonChecked(hwnd, ID_CHECKBOX_SORT_FOLDER))
 			{
 				string diskPath = TextFromComboboxToString(hwndCombo);
-				if (diskPath.size() == 0)
-				{
-					MessageBox(hwnd, L"Choose a disk.", L"Error", MB_OK);
+				if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd))
 					break;
-				}
+
 				string strSortFolderPath = diskPath + "Sort";
 				wstring wstrSortFolderPath = toWString(strSortFolderPath);
 				CreateDirectory(&wstrSortFolderPath[0], NULL);
@@ -80,11 +81,9 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			if (IsDlgButtonChecked(hwnd, ID_CHECKBOX_ENCRYPT_FOLDER))
 			{
 				string diskPath = TextFromComboboxToString(hwndCombo);
-				if (diskPath.size() == 0)
-				{
-					MessageBox(hwnd, L"Choose a disk.", L"Error", MB_OK);
+				if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd))
 					break;
-				}
+
 				string strEncryptFolderPath = diskPath + "Encrypt";
 				wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
 				CreateDirectory(&wstrEncryptFolderPath[0], NULL);
@@ -163,16 +162,21 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		if (LOWORD(wParam) == ID_BUTTON_CREATE_AND_MOUNT) 
 		{
 			string strDiskName = WindowTextToString(hwndEditDiskName);
+			if (!CheckIfStringEmpty(strDiskName, L"Enter disk name.", hwnd))
+				break;
 
 			string strFolderName = WindowTextToString(hwndEditFolderPath);
 
 			string strDiskSize = WindowTextToString(hwndEditDiskSize);
+			if (!CheckIfStringEmpty(strDiskSize, L"Enter disk size (in MB).", hwnd))
+				break;
+			if (!CheckIfStringContainsNumbersOnly(strDiskSize, L"Enter a valid disk size - numbers only.", hwnd))
+				break;
 			int size = stoi(strDiskSize);
 
 			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
 
-			//TODO : error checking
 			//TODO : refresh treeview after mount
 
 			//commented out for safety :p
@@ -183,10 +187,16 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		if (LOWORD(wParam) == ID_BUTTON_CREATE)
 		{
 			string strDiskName = WindowTextToString(hwndEditDiskName);
+			if (!CheckIfStringEmpty(strDiskName, L"Enter disk name.", hwnd))
+				break;
 
 			string strFolderName = WindowTextToString(hwndEditFolderPath);
 
 			string strDiskSize = WindowTextToString(hwndEditDiskSize);
+			if (!CheckIfStringEmpty(strDiskSize, L"Enter disk size.", hwnd))
+				break;
+			if (!CheckIfStringContainsNumbersOnly(strDiskSize, L"Enter a valid disk size - numbers only.", hwnd))
+				break;
 			int size = stoi(strDiskSize);
 
 			string strFullDiskPath = strFolderName + "\\" + strDiskSize;

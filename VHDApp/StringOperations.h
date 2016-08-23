@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <string>
+#include <algorithm>
 
 std::string toString(const std::wstring& wstr)
 {
@@ -30,4 +31,24 @@ std::string WindowTextToString(HWND hwndWindow)
 	GetWindowText(hwndWindow, diskNameBuffer, 128);
 	std::wstring wstrDiskName = std::wstring(diskNameBuffer);
 	return toString(wstrDiskName);
+}
+
+bool CheckIfStringEmpty(std::string str, LPCWSTR errorMessage, HWND hwndMB)
+{
+	if (str.size() == 0)
+	{
+		MessageBox(hwndMB, errorMessage, L"Error", MB_OK);
+		return false;
+	}
+	return true;
+}
+
+bool CheckIfStringContainsNumbersOnly(std::string str, LPCWSTR errorMessage, HWND hwndMB)
+{
+	if (!std::all_of(str.begin(), str.end(), ::isdigit))
+	{
+		MessageBox(hwndMB, errorMessage, L"Error", MB_OK);
+		return false;
+	}
+	return true;
 }

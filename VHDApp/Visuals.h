@@ -6,7 +6,6 @@ bool CALLBACK SetFont(HWND child, LPARAM font) {
 	return true;
 }
 
-
 void CenterWindow(HWND hwnd) {
 
 	RECT rc = { 0 };
