@@ -182,7 +182,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		}
 
 		if (LOWORD(wParam == ID_BUTTON_CREATE_FOLDERS)) {
-			CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Create folders");
+			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Create folders");
+			CenterWindow(dialog);
 		}
 
 		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {
@@ -262,21 +263,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	}
 
 	return DefWindowProcW(hwnd, msg, wParam, lParam);
-}
-
-void CenterWindow(HWND hwnd) {
-
-	RECT rc = { 0 };
-
-	GetWindowRect(hwnd, &rc);
-	int win_w = rc.right - rc.left;
-	int win_h = rc.bottom - rc.top;
-
-	int screen_w = GetSystemMetrics(SM_CXSCREEN);
-	int screen_h = GetSystemMetrics(SM_CYSCREEN);
-
-	SetWindowPos(hwnd, HWND_TOP, (screen_w - win_w) / 2,
-		(screen_h - win_h) / 2, 0, 0, SWP_NOSIZE);
 }
 
 void AddItemsToCombobox(HWND combobox, const std::vector<std::string>& items)
