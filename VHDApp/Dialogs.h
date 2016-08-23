@@ -8,9 +8,37 @@
 
 HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
-LRESULT CALLBACK CreateDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-LRESULT CALLBACK CreateDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg) {
+
+	case WM_CREATE:
+
+		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
+
+		break;
+
+	case WM_COMMAND:
+	{
+
+		break;
+	}
+	case WM_CLOSE:
+
+		break;
+
+	case WM_DESTROY:
+		break;
+	}
+
+	return (DefWindowProcW(hwnd, msg, wParam, lParam));
+}
+
+LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hwndButtonCreateAndMount, hwndButtonCreate;
 	static LPCWSTR userdata;
@@ -118,7 +146,7 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, 
 
 	WNDCLASSEXW wc = { 0 };
 	wc.cbSize = sizeof(WNDCLASSEXW);
-	wc.lpfnWndProc = (WNDPROC)CreateDiskDialogProc;
+	wc.lpfnWndProc = lpfnWndProc;
 	wc.hInstance = hInstance;
 	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
 	wc.lpszClassName = lpszClassName;

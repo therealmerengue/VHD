@@ -5,7 +5,7 @@
 #include "VHD.h"
 #include "Treeview.h"
 #include "Files.h"
-#include "CreateDialog.h"
+#include "Dialogs.h"
 
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
@@ -14,7 +14,7 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_EDIT 1
 #define ID_BUTTON_NEW_DISK 2
 #define ID_BUTTON_MOUNT_DISK 3
-#define ID_BUTTON_MOUNT 5
+#define ID_BUTTON_CREATE_FOLDERS 5
 #define ID_BUTTON_CHOOSE_DISK 8
 #define ID_LABEL 6
 #define ID_BUTTON_CHOOSE_FOLDER_TO_SORT 9
@@ -71,8 +71,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	static HWND hwndCombo, hwndTreeView, hwndEditFolderToSort;
-	HWND hwndButtonChooseDisk, hwndButtonChooseFolderToSort, hwndButtonSort, hwndButtonNewDisk, hwndButtonMountDisk;
-
+	HWND hwndButtonChooseDisk, hwndButtonChooseFolderToSort, hwndButtonSort;
+	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonCreateFolders; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -84,7 +84,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
 
-		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)CreateDiskDialogProc);
+		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)DiskDialogProc);
+		RegisterDialogClass(hwnd, g_hinst, L"CreateFoldersDialog", (WNDPROC)CreateFoldersDialogProc);
 
 		//Buttons left
 
@@ -95,6 +96,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		hwndButtonMountDisk = CreateWindowW(L"button", L"Mount disk",
 			WS_VISIBLE | WS_CHILD, 10, 50, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_MOUNT_DISK, NULL, NULL);
+
+		hwndButtonCreateFolders = CreateWindowW(L"button", L"Create folders",
+			WS_VISIBLE | WS_CHILD, 10, 80, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS, NULL, NULL);
 
 		//Choose disk groupbox - left bottom
 
@@ -174,6 +179,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		if (LOWORD(wParam == ID_BUTTON_MOUNT_DISK)) {
 			OpenFileDialog(hwnd);
+		}
+
+		if (LOWORD(wParam == ID_BUTTON_CREATE_FOLDERS)) {
+			CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Create folders");
 		}
 
 		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {

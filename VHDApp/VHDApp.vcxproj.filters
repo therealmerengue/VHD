@@ -38,7 +38,7 @@
     <ClInclude Include="Conversions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CreateDialog.h">
+    <ClInclude Include="Dialogs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
