@@ -5,9 +5,11 @@
 #include "Combobox.h"
 
 #define ID_BUTTON_CREATE_AND_MOUNT 4
-#define ID_BUTTON_CHOOSE_DISK 8
+#define ID_BUTTON_CREATE_FOLDERS 8
 #define ID_BUTTON_CREATE 14
 #define ID_COMBOBOX 16
+#define ID_CHECKBOX_SORT_FOLDER 30
+#define ID_CHECKBOX_ENCRYPT_FOLDER 31
 
 HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
@@ -17,7 +19,7 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	HWND hwndCombo, hwndButtonChooseDisk;
+	static HWND hwndCombo, hwndButtonChooseDisk;
 
 	switch (msg) {
 
@@ -31,11 +33,24 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
 			55, 12, 50, 65, hwnd, (HMENU)ID_COMBOBOX, NULL, NULL);
 
-		hwndButtonChooseDisk = CreateWindowW(L"button", L"OK",
-			WS_VISIBLE | WS_CHILD, 115, 10, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
-
 		AddItemsToCombobox(hwndCombo, GetDriveLetters());
+
+		hwndButtonChooseDisk = CreateWindowW(L"button", L"Create folders",
+			WS_VISIBLE | WS_CHILD, 115, 10, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS, NULL, NULL);
+
+		CreateWindowW(L"button", L"Sort folder",
+			WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+			10, 40, 100, 20, hwnd, (HMENU)ID_CHECKBOX_SORT_FOLDER,
+			NULL, NULL);
+
+		CreateWindowW(L"button", L"Encrypt folder",
+			WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+			10, 60, 100, 20, hwnd, (HMENU)ID_CHECKBOX_ENCRYPT_FOLDER,
+			NULL, NULL);
+
+		CheckDlgButton(hwnd, ID_CHECKBOX_SORT_FOLDER, BST_UNCHECKED);
+		CheckDlgButton(hwnd, ID_CHECKBOX_ENCRYPT_FOLDER, BST_UNCHECKED);
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
@@ -43,6 +58,34 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
 	case WM_COMMAND:
 	{
+		if (LOWORD(wParam) == ID_BUTTON_CREATE_FOLDERS)
+		{
+			if (IsDlgButtonChecked(hwnd, ID_CHECKBOX_SORT_FOLDER))
+			{
+				string diskPath = TextFromComboboxToString(hwndCombo);
+				if (diskPath.size() == 0)
+				{
+					MessageBox(hwnd, L"Choose a disk.", L"Error", MB_OK);
+					break;
+				}
+				string strSortFolderPath = diskPath + "Sort";
+				wstring wstrSortFolderPath = toWString(strSortFolderPath);
+				CreateDirectory(&wstrSortFolderPath[0], NULL);
+			}
+
+			if (IsDlgButtonChecked(hwnd, ID_CHECKBOX_ENCRYPT_FOLDER))
+			{
+				string diskPath = TextFromComboboxToString(hwndCombo);
+				if (diskPath.size() == 0)
+				{
+					MessageBox(hwnd, L"Choose a disk.", L"Error", MB_OK);
+					break;
+				}
+				string strEncryptFolderPath = diskPath + "Encrypt";
+				wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
+				CreateDirectory(&wstrEncryptFolderPath[0], NULL);
+			}
+		}
 
 		break;
 	}
