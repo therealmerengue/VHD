@@ -146,23 +146,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		if (LOWORD(wParam) == IDM_DISK_NEW) {
 			OpenFolderDialog(hwnd);
+			break;
 		}
 
 		if (LOWORD(wParam) == IDM_DISK_MOUNT) {
 			OpenFileDialog(hwnd);
+			break;
 		}
 
 		if (LOWORD(wParam == ID_BUTTON_NEW_DISK)) {
 			OpenFolderDialog(hwnd);
+			break;
 		}
 
 		if (LOWORD(wParam == ID_BUTTON_MOUNT_DISK)) {
 			OpenFileDialog(hwnd);
+			break;
 		}
 
 		if (LOWORD(wParam == ID_BUTTON_CREATE_FOLDERS)) {
 			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Create folders");
-			CenterWindow(dialog);
+			CenterWindow(dialog); 
+			break;
 		}
 
 		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {

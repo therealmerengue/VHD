@@ -11,6 +11,8 @@
 #define ID_CHECKBOX_SORT_FOLDER 30
 #define ID_CHECKBOX_ENCRYPT_FOLDER 31
 
+string g_diskPath;
+
 HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
 
@@ -92,6 +94,7 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			}
 
 			//TODO : return diskPath somehow through global var I guess
+			g_diskPath = diskPath;
 
 			DestroyWindow(hwnd);
 			break;
