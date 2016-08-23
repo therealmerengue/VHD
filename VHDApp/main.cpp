@@ -385,8 +385,11 @@ void OpenFileDialog(HWND hwnd) {
 	if (GetOpenFileName(&ofn))
 	{
 		SetWindowText(hwnd, ofn.lpstrFile);
-		HWND dialog = CreateDialogBox(hwnd, g_hinst, ofn.lpstrFile, L"Mount disk");
-		CenterWindow(dialog);
+		//commented out for safety
+
+		//OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
+
+		//TODO: File name error checking
 	}
 }
 
@@ -398,11 +401,11 @@ void AddMenus(HWND hwnd) {
 	hMenubar = CreateMenu();
 	hMenu = CreateMenu();
 
-	AppendMenuW(hMenu, MF_STRING, IDM_DISK_NEW, L"&New");
-	AppendMenuW(hMenu, MF_STRING, IDM_DISK_MOUNT, L"&Mount");
+	AppendMenuW(hMenu, MF_STRING, IDM_DISK_NEW, L"&New disk");
+	AppendMenuW(hMenu, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
 	AppendMenuW(hMenu, MF_SEPARATOR, 0, NULL);
 	AppendMenuW(hMenu, MF_STRING, IDM_QUIT, L"&Quit");
 
-	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenu, L"&Disk");
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenu, L"&File");
 	SetMenu(hwnd, hMenubar);
 }

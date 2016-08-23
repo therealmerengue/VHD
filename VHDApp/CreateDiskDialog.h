@@ -78,6 +78,8 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
 
+			//TODO : error checking
+
 			//commented out for safety :p
 			/*CreateVHD_Fixed(&wstrFullDiskPath[0], size);
 			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());*/
@@ -94,6 +96,8 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
+
+			//TODO : error checking
 
 			//commented out for safety :p
 			//CreateVHD_Fixed(&wstrFullDiskPath[0], size);
