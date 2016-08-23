@@ -4,14 +4,15 @@
 #include "Conversions.h"
 
 #define ID_BUTTON_CREATE_AND_MOUNT 4
+#define ID_BUTTON_CREATE 14
 
-HWND CreateDialogBox(HWND hwnd, HINSTANCE hInstance, LPCWSTR param);
+HWND CreateDialogBox(HWND hwnd, HINSTANCE hInstance, LPCWSTR param, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance);
 LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	HWND hwndButtonCreateAndMount;
+	HWND hwndButtonCreateAndMount, hwndButtonCreate;
 	static LPCWSTR userdata;
 	static HWND hwndEditDiskSize, hwndEditDiskName, hwndEditFolderPath;
 
@@ -21,33 +22,37 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		hwndEditDiskName = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER,
-			55, 30, 150, 20, hwnd, (HMENU)1,
+			45, 30, 220, 20, hwnd, (HMENU)1,
 			NULL, NULL);
 
 		CreateWindowW(L"static", L"Name:",
-			WS_CHILD | WS_VISIBLE, 20, 32, 35, 25, hwnd,
+			WS_CHILD | WS_VISIBLE, 10, 32, 35, 25, hwnd,
 			(HMENU)6, NULL, NULL);
 
 		hwndEditDiskSize = CreateWindowW(L"Edit", NULL,
 			WS_CHILD | WS_VISIBLE | WS_BORDER,
-			55, 55, 150, 20, hwnd, (HMENU)1,
+			45, 55, 220, 20, hwnd, (HMENU)1,
 			NULL, NULL);
 
 		CreateWindowW(L"static", L"Size:",
-			WS_CHILD | WS_VISIBLE, 20, 57, 35, 25, hwnd,
+			WS_CHILD | WS_VISIBLE, 10, 57, 35, 25, hwnd,
 			(HMENU)6, NULL, NULL);
 
 		hwndEditFolderPath = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY,
-			55, 80, 150, 20, hwnd, (HMENU)1,
+			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY | ES_AUTOHSCROLL,
+			45, 80, 220, 20, hwnd, (HMENU)1,
 			NULL, NULL);
 
 		CreateWindowW(L"static", L"Folder:",
-			WS_CHILD | WS_VISIBLE, 20, 82, 35, 25, hwnd,
+			WS_CHILD | WS_VISIBLE, 10, 82, 35, 25, hwnd,
 			(HMENU)6, NULL, NULL);
 
+		hwndButtonCreate = CreateWindowW(L"button", L"Create",
+			WS_VISIBLE | WS_CHILD, 10, 115, 130, 25,
+			hwnd, (HMENU)ID_BUTTON_CREATE, NULL, NULL);
+
 		hwndButtonCreateAndMount = CreateWindowW(L"button", L"Create and mount",
-			WS_VISIBLE | WS_CHILD, 115, 115, 90, 25,
+			WS_VISIBLE | WS_CHILD, 145, 115, 130, 25,
 			hwnd, (HMENU)ID_BUTTON_CREATE_AND_MOUNT, NULL, NULL);
 
 		static CREATESTRUCT *pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
@@ -78,6 +83,22 @@ LRESULT CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());*/
 		}
 
+		if (LOWORD(wParam) == ID_BUTTON_CREATE)
+		{
+			string strDiskName = WindowTextToString(hwndEditDiskName);
+
+			string strFolderName = WindowTextToString(hwndEditFolderPath);
+
+			string strDiskSize = WindowTextToString(hwndEditDiskSize);
+			int size = stoi(strDiskSize);
+
+			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
+			wstring wstrFullDiskPath = toWString(strFullDiskPath);
+
+			//commented out for safety :p
+			//CreateVHD_Fixed(&wstrFullDiskPath[0], size);
+		}
+
 		break;
 	}
 	case WM_CLOSE:
@@ -100,10 +121,10 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance) {
 
 }
 
-HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param) {
+HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR title, int x, int y, int width, int height) {
 
 	//EnableWindow(hwndParent, FALSE); 
-	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, L"DialogClass", L"Dialog Box",
-		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, 100, 100, 300, 200,
+	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, L"DialogClass", title,
+		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, x, y, width, height,
 		NULL, NULL, hInstance, (LPVOID)param);
 }
