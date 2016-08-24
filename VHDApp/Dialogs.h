@@ -70,7 +70,7 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			bool encryptFolder = IsDlgButtonChecked(hwnd, ID_CHECKBOX_ENCRYPT_FOLDER);
 
 			string diskPath = TextFromComboboxToString(hwndCombo);
-			if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd))
+			if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwnd, NULL))
 				break;
 
 			if (sortFolder)
@@ -172,16 +172,20 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		if (LOWORD(wParam) == ID_BUTTON_CREATE_AND_MOUNT) 
 		{
 			string strDiskName = WindowTextToString(hwndEditDiskName);
-			if (!CheckIfStringEmpty(strDiskName, L"Enter disk name.", hwnd))
+			if (!CheckIfStringEmpty(strDiskName, L"Enter disk name.", hwnd, hwndEditDiskName))
 				break;
+			if (strDiskName.find(".vhd") != strDiskName.size() - 4)
+				strDiskName.append(".vhd");
 
 			string strFolderName = WindowTextToString(hwndEditFolderPath);
 
 			string strDiskSize = WindowTextToString(hwndEditDiskSize);
-			if (!CheckIfStringEmpty(strDiskSize, L"Enter disk size (in MB).", hwnd))
+			if (!CheckIfStringEmpty(strDiskSize, L"Enter disk size (in MB).", hwnd, hwndEditDiskSize))
 				break;
-			if (!CheckIfStringContainsNumbersOnly(strDiskSize, L"Enter a valid disk size - numbers only.", hwnd))
+
+			if (!CheckIfStringContainsNumbersOnly(strDiskSize, L"Enter a valid disk size - numbers only.", hwnd, hwndEditDiskSize))
 				break;
+
 			int size = stoi(strDiskSize);
 
 			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
@@ -200,15 +204,15 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		if (LOWORD(wParam) == ID_BUTTON_CREATE)
 		{
 			string strDiskName = WindowTextToString(hwndEditDiskName);
-			if (!CheckIfStringEmpty(strDiskName, L"Enter disk name.", hwnd))
+			if (!CheckIfStringEmpty(strDiskName, L"Enter disk name.", hwnd, hwndEditDiskName))
 				break;
 
 			string strFolderName = WindowTextToString(hwndEditFolderPath);
 
 			string strDiskSize = WindowTextToString(hwndEditDiskSize);
-			if (!CheckIfStringEmpty(strDiskSize, L"Enter disk size.", hwnd))
+			if (!CheckIfStringEmpty(strDiskSize, L"Enter disk size.", hwnd, hwndEditDiskSize))
 				break;
-			if (!CheckIfStringContainsNumbersOnly(strDiskSize, L"Enter a valid disk size - numbers only.", hwnd))
+			if (!CheckIfStringContainsNumbersOnly(strDiskSize, L"Enter a valid disk size - numbers only.", hwnd, hwndEditDiskSize))
 				break;
 			int size = stoi(strDiskSize);
 

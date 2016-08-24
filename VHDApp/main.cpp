@@ -284,9 +284,9 @@ void OpenFileDialog(HWND hwnd) {
 	ofn.lpstrFile[0] = '\0';
 	ofn.hwndOwner = hwnd;
 	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = TEXT("All files(*.*)\0*.VHD\0");
+	ofn.lpstrFilter = TEXT("Only VHDs(*.*)\0*.VHD\0");
 	ofn.nFilterIndex = 1;
-	ofn.lpstrInitialDir = NULL;
+	ofn.lpstrInitialDir = L"C:\\";
 	ofn.lpstrFileTitle = NULL;
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 

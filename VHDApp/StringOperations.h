@@ -33,21 +33,23 @@ std::string WindowTextToString(HWND hwndWindow)
 	return toString(wstrDiskName);
 }
 
-bool CheckIfStringEmpty(std::string str, LPCWSTR errorMessage, HWND hwndMB)
+bool CheckIfStringEmpty(std::string str, LPCWSTR errorMessage, HWND hwndMB, HWND hwndEdit)
 {
 	if (str.size() == 0)
 	{
 		MessageBox(hwndMB, errorMessage, L"Error", MB_OK);
+		SetWindowText(hwndEdit, L"");
 		return false;
 	}
 	return true;
 }
 
-bool CheckIfStringContainsNumbersOnly(std::string str, LPCWSTR errorMessage, HWND hwndMB)
+bool CheckIfStringContainsNumbersOnly(std::string str, LPCWSTR errorMessage, HWND hwndMB, HWND hwndEdit)
 {
 	if (!std::all_of(str.begin(), str.end(), ::isdigit))
 	{
 		MessageBox(hwndMB, errorMessage, L"Error", MB_OK);
+		SetWindowText(hwndEdit, L"");
 		return false;
 	}
 	return true;
