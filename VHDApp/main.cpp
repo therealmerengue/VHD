@@ -166,8 +166,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				vector<string> filesToSort;
 				string folderToSort = g_diskPath + "Sort";
 				//commented out for safety
-				/*GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
-				Sort(filesToSort, g_diskPath, folderToSort);*/
+				GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
+				Sort(filesToSort, g_diskPath, folderToSort);
 			}
 			else
 			{
@@ -230,6 +230,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_SETFOCUS:
 		EnableWindow(hwnd, TRUE);
 		ShowWindow(hwnd, SW_RESTORE);
+		TreeView_DeleteAllItems(hwndTreeView);
+		AddItemsToTreeView(GetDriveLetters(), hwndTreeView);
 		break;
 
 	case WM_CLOSE:
