@@ -204,7 +204,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			WCHAR buffer[128];
 			TVITEM item = GetSelectedNode(hwnd, hwndTreeView, pntv, buffer);
 			std::string fullNodePath = GetFullNodePath(hwndTreeView, item.hItem);
-			
+
 			if (!TreeView_GetChild(hwndTreeView, item.hItem))
 			{
 				files.clear();
@@ -228,9 +228,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 
 	case WM_SETFOCUS:
-		break;
-
-	case WM_KILLFOCUS:
+		EnableWindow(hwnd, TRUE);
+		ShowWindow(hwnd, SW_RESTORE);
 		break;
 
 	case WM_CLOSE:
