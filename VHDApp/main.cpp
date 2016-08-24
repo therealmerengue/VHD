@@ -87,6 +87,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)DiskDialogProc);
 		RegisterDialogClass(hwnd, g_hinst, L"CreateFoldersDialog", (WNDPROC)CreateFoldersDialogProc);
+		RegisterDialogClass(hwnd, g_hinst, L"ChooseFolderToSortDialog", (WNDPROC)ChooseFolderToSortDialogProc);
 
 		//Buttons left
 
@@ -178,6 +179,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		if (LOWORD(wParam == ID_BUTTON_SORT)) {
 			//sort created folder
+			if (!g_diskPath.empty())
+			{
+				vector<string> filesToSort;
+				string folderToSort = g_diskPath + "Sort";
+				//commented out for safety
+				/*GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
+				Sort(filesToSort, g_diskPath, folderToSort);*/
+			}
+			else
+			{
+				//show choose folder to sort dialog
+				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"ChooseFolderToSortDialog", L"Choose folder to sort");
+				CenterWindow(dialog);
+			}
 		}
 
 		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {
