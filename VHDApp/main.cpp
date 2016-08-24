@@ -18,8 +18,6 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_BUTTON_MOUNT_DISK 3
 #define ID_BUTTON_CREATE_FOLDERS 5
 #define ID_LABEL 6
-#define ID_BUTTON_CHOOSE_FOLDER_TO_SORT 9
-#define ID_BUTTON_SORT_FOLDER 10
 #define ID_BUTTON_SORT 17
 
 #define IDM_DISK_NEW 11
@@ -71,8 +69,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	static HWND hwndTreeView, hwndEditFolderToSort;
-	HWND hwndButtonChooseFolderToSort, hwndButtonSortFolder;
+	static HWND hwndTreeView;
 	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonCreateFolders, hwndButtonSort; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
@@ -112,31 +109,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 225, 16, 335, 250);
 		AddItemsToTreeView(driveLetters, hwndTreeView);
 		SetImageList(hwndTreeView);
-
-		//Sort groupbox - right top
-
-		CreateWindowW(L"Button", L"Sort folder",
-			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
-			565, 10, 210, 135, hwnd, (HMENU)0, g_hinst, NULL);
-
-		CreateWindowW(L"static", L"Folder:",
-			WS_CHILD | WS_VISIBLE, 575, 32, 35, 25, hwnd,
-			(HMENU)ID_LABEL, NULL, NULL);
-
-		hwndEditFolderToSort = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY,
-			610, 30, 150, 20, hwnd, (HMENU)ID_EDIT,
-			NULL, NULL);
-
-		hwndButtonChooseFolderToSort = CreateWindowW(L"button", L"Choose folder",
-			WS_VISIBLE | WS_CHILD, 575, 105, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_CHOOSE_FOLDER_TO_SORT, NULL, NULL);
-
-		hwndButtonSortFolder = CreateWindowW(L"button", L"Sort",
-			WS_VISIBLE | WS_CHILD, 670, 105, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_SORT_FOLDER, NULL, NULL);
-
-		//Create folders groupbox - right
 
 		//Debug edit text
 		
@@ -193,33 +165,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"ChooseFolderToSortDialog", L"Choose folder to sort");
 				CenterWindow(dialog);
 			}
-		}
-
-		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {
-
-			HTREEITEM hSelectedItem = TreeView_GetSelection(hwndTreeView);
-
-			if (!hSelectedItem)
-			{
-				MessageBox(hwnd, L"No folder chosen: choose a folder to sort from treeview.", L"Error", MB_OK);
-				break;
-			}
-
-			string itemTextStr = GetFullNodePath(hwndTreeView, hSelectedItem);
-			
-			if (itemTextStr.find(".", 0) != std::string::npos)
-			{
-				MessageBox(hwnd, L"Invalid choice: choose a folder, not a file.", L"Error", MB_OK);
-				break;
-			}
-
-			wstring itemTextWStr = toWString(itemTextStr);
-
-			SetWindowText(hwndEditFolderToSort, &itemTextWStr[0]);
-		}
-
-		if (LOWORD(wParam) == ID_BUTTON_SORT_FOLDER) {
-			//sort
 		}
 
 		break;

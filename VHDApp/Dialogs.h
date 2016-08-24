@@ -6,6 +6,8 @@
 
 #define ID_BUTTON_CREATE_AND_MOUNT 4
 #define ID_BUTTON_CREATE_FOLDERS 8
+#define ID_BUTTON_CHOOSE_FOLDER_TO_SORT 9
+#define ID_BUTTON_SORT_FOLDER 10
 #define ID_BUTTON_CREATE 14
 #define ID_COMBOBOX 16
 #define ID_CHECKBOX_SORT_FOLDER 30
@@ -22,19 +24,42 @@ LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam
 
 LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	HWND hwndEditFolderToSort, hwndButtonChooseFolderToSort, hwndButtonSortFolder;
+
 	switch (msg) {
 
 	case WM_CREATE:
+	{
+		CreateWindowW(L"static", L"Folder:",
+			WS_CHILD | WS_VISIBLE, 10, 32, 35, 25, hwnd,
+			(HMENU)6, NULL, NULL);
 
-		
+		hwndEditFolderToSort = CreateWindowW(L"Edit", NULL,
+			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY,
+			55, 30, 150, 20, hwnd, (HMENU)1,
+			NULL, NULL);
+
+		hwndButtonChooseFolderToSort = CreateWindowW(L"button", L"Choose folder",
+			WS_VISIBLE | WS_CHILD, 10, 105, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_CHOOSE_FOLDER_TO_SORT, NULL, NULL);
+
+		hwndButtonSortFolder = CreateWindowW(L"button", L"Sort",
+			WS_VISIBLE | WS_CHILD, 105, 105, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_SORT_FOLDER, NULL, NULL);
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
 		break;
-
+	}
 	case WM_COMMAND:
 	{
-		
+		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {
+			//show folder dialog
+		}
+
+		if (LOWORD(wParam) == ID_BUTTON_SORT_FOLDER) {
+			//sort
+		}
 
 		break;
 	}
