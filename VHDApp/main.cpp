@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <ShlObj.h>
 #include <commoncontrols.h>
+#include <string>
 
 #include "VHD.h"
 #include "Treeview.h"
@@ -283,7 +284,7 @@ void OpenFileDialog(HWND hwnd) {
 	ofn.lpstrFile[0] = '\0';
 	ofn.hwndOwner = hwnd;
 	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = TEXT("All files(*.*)\0*.*\0");
+	ofn.lpstrFilter = TEXT("All files(*.*)\0*.VHD\0");
 	ofn.nFilterIndex = 1;
 	ofn.lpstrInitialDir = NULL;
 	ofn.lpstrFileTitle = NULL;
@@ -295,8 +296,6 @@ void OpenFileDialog(HWND hwnd) {
 		//commented out for safety
 
 		//OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
-
-		//TODO: File name error checking
 	}
 }
 

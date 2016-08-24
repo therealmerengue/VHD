@@ -31,8 +31,8 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			WS_CHILD | WS_VISIBLE, 10, 14, 35, 25, hwnd,
 			(HMENU)6, NULL, NULL);
 
-		hwndCombo = CreateWindowW(L"Combobox", NULL, //TODO : make combobox so u can't write in there lol
-			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
+		hwndCombo = CreateWindowW(L"Combobox", NULL,
+			WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST,
 			55, 12, 50, 65, hwnd, (HMENU)ID_COMBOBOX, NULL, NULL);
 
 		AddItemsToCombobox(hwndCombo, GetDriveLetters());
