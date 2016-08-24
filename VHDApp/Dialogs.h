@@ -191,7 +191,7 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
 
-			//TODO : refresh treeview after mount
+			// TODO : refresh treeview after mount
 
 			//commented out for safety :p
 			/*CreateVHD_Fixed(&wstrFullDiskPath[0], size);

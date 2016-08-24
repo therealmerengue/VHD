@@ -19,7 +19,8 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_BUTTON_CREATE_FOLDERS 5
 #define ID_LABEL 6
 #define ID_BUTTON_CHOOSE_FOLDER_TO_SORT 9
-#define ID_BUTTON_SORT 10
+#define ID_BUTTON_SORT_FOLDER 10
+#define ID_BUTTON_SORT 17
 
 #define IDM_DISK_NEW 11
 #define IDM_DISK_MOUNT 12
@@ -71,8 +72,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	static HWND hwndTreeView, hwndEditFolderToSort;
-	HWND hwndButtonChooseFolderToSort, hwndButtonSort;
-	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonCreateFolders; //buttons left
+	HWND hwndButtonChooseFolderToSort, hwndButtonSortFolder;
+	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonCreateFolders, hwndButtonSort; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -101,6 +102,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			WS_VISIBLE | WS_CHILD, 10, 80, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS, NULL, NULL);
 
+		hwndButtonSort = CreateWindowW(L"button", L"Sort",
+			WS_VISIBLE | WS_CHILD, 10, 110, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_SORT, NULL, NULL);
+
 		//File treeview - center
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 225, 16, 335, 250);
@@ -126,9 +131,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			WS_VISIBLE | WS_CHILD, 575, 105, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_CHOOSE_FOLDER_TO_SORT, NULL, NULL);
 
-		hwndButtonSort = CreateWindowW(L"button", L"Sort",
+		hwndButtonSortFolder = CreateWindowW(L"button", L"Sort",
 			WS_VISIBLE | WS_CHILD, 670, 105, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_SORT, NULL, NULL);
+			hwnd, (HMENU)ID_BUTTON_SORT_FOLDER, NULL, NULL);
 
 		//Create folders groupbox - right
 
@@ -171,6 +176,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			break;
 		}
 
+		if (LOWORD(wParam == ID_BUTTON_SORT)) {
+			//sort created folder
+		}
+
 		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {
 
 			HTREEITEM hSelectedItem = TreeView_GetSelection(hwndTreeView);
@@ -194,7 +203,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			SetWindowText(hwndEditFolderToSort, &itemTextWStr[0]);
 		}
 
-		if (LOWORD(wParam) == ID_BUTTON_SORT) {
+		if (LOWORD(wParam) == ID_BUTTON_SORT_FOLDER) {
 			//sort
 		}
 
