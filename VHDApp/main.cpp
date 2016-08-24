@@ -16,7 +16,7 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_EDIT 1
 #define ID_BUTTON_NEW_DISK 2
 #define ID_BUTTON_MOUNT_DISK 3
-#define ID_BUTTON_CREATE_FOLDERS 5
+#define ID_BUTTON_CHOOSE_DISK 5
 #define ID_LABEL 6
 #define ID_BUTTON_SORT 17
 
@@ -66,7 +66,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 {
 	static HWND hwndTreeView;
-	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonCreateFolders, hwndButtonSort; //buttons left
+	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -79,7 +79,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		AddMenus(hwnd);
 
 		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)NewDiskDialogProc);
-		RegisterDialogClass(hwnd, g_hinst, L"CreateFoldersDialog", (WNDPROC)CreateFoldersDialogProc);
+		RegisterDialogClass(hwnd, g_hinst, L"CreateFoldersDialog", (WNDPROC)ChooseDiskDialogProc);
 		RegisterDialogClass(hwnd, g_hinst, L"NoDiskChosen", (WNDPROC)NoFoldersCreatedDialogProc);
 
 		//Buttons left
@@ -92,9 +92,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			WS_VISIBLE | WS_CHILD, 10, 50, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_MOUNT_DISK, NULL, NULL);
 
-		hwndButtonCreateFolders = CreateWindowW(L"button", L"Create folders",
+		hwndButtonChooseDisk = CreateWindowW(L"button", L"Choose disk",
 			WS_VISIBLE | WS_CHILD, 10, 80, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS, NULL, NULL);
+			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
 
 		hwndButtonSort = CreateWindowW(L"button", L"Sort",
 			WS_VISIBLE | WS_CHILD, 10, 110, 90, 25,
@@ -159,9 +159,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_CREATE_FOLDERS)) 
+		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK)) 
 		{
-			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Create folders");
+			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Choose disk");
 			CenterWindow(dialog); 
 			break;
 		}

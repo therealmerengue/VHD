@@ -5,7 +5,7 @@
 #include "Combobox.h"
 
 #define ID_BUTTON_CREATE_AND_MOUNT 4
-#define ID_BUTTON_CREATE_FOLDERS 8
+#define ID_BUTTON_CHOOSE_DISK 8
 #define ID_BUTTON_CHOOSE_FOLDER_TO_SORT 9
 #define ID_BUTTON_SORT_FOLDER 10
 #define ID_BUTTON_CREATE 14
@@ -24,7 +24,7 @@ void OpenFileDialog(HWND hwnd);
 PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd);
 
 LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK ChooseDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam); //unnecessary
 LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -71,10 +71,11 @@ LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, 
 		break;
 	}
 	case WM_CLOSE:
-
+		DestroyWindow(hwnd);
 		break;
 
 	case WM_DESTROY:
+		DestroyWindow(hwnd);
 		break;
 	}
 
@@ -150,7 +151,7 @@ LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam
 	return (DefWindowProcW(hwnd, msg, wParam, lParam));
 }
 
-LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK ChooseDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndCombo, hwndButtonChooseDisk;
 
@@ -170,7 +171,7 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
 		hwndButtonChooseDisk = CreateWindowW(L"button", L"Create folders",
 			WS_VISIBLE | WS_CHILD, 95, 130, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS, NULL, NULL);
+			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
 
 		CreateWindowW(L"Button", L"Choose folders",
 			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
@@ -195,7 +196,7 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
 	case WM_COMMAND:
 	{
-		if (LOWORD(wParam) == ID_BUTTON_CREATE_FOLDERS)
+		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_DISK)
 		{
 			bool sortFolder = IsDlgButtonChecked(hwnd, ID_CHECKBOX_SORT_FOLDER);
 			bool encryptFolder = IsDlgButtonChecked(hwnd, ID_CHECKBOX_ENCRYPT_FOLDER);
@@ -414,7 +415,7 @@ void OpenFileDialog(HWND hwnd)
 	ofn.lpstrFile[0] = '\0';
 	ofn.hwndOwner = hwnd;
 	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = TEXT("Only VHDs(*.*)\0*.VHD\0");
+	ofn.lpstrFilter = TEXT("Only VHDs(*.vhd)\0*.VHD\0");
 	ofn.nFilterIndex = 1;
 	ofn.lpstrInitialDir = L"C:\\";
 	ofn.lpstrFileTitle = NULL;
