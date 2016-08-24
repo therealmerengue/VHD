@@ -20,9 +20,10 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_LABEL 6
 #define ID_BUTTON_SORT 17
 
-#define IDM_DISK_NEW 11
-#define IDM_DISK_MOUNT 12
-#define IDM_QUIT 13
+#define IDM_DISK_NEW 40
+#define IDM_DISK_MOUNT 41
+#define IDM_QUIT 42
+#define IDM_DISK_CHOOSE 43
 
 HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
 
@@ -119,7 +120,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case WM_COMMAND:
 
-		if (LOWORD(wParam) == IDM_DISK_NEW) 
+		if (LOWORD(wParam) == IDM_DISK_NEW || LOWORD(wParam == ID_BUTTON_NEW_DISK))
 		{
 			wchar_t folderPath[MAX_PATH + 1];
 			auto pidl = OpenFolderDialog(hwnd);
@@ -133,33 +134,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		if (LOWORD(wParam) == IDM_DISK_MOUNT) 
+		if (LOWORD(wParam) == IDM_DISK_MOUNT || LOWORD(wParam == ID_BUTTON_MOUNT_DISK))
 		{
 			OpenFileDialog(hwnd);
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_NEW_DISK)) 
-		{
-			wchar_t folderPath[MAX_PATH + 1];
-			auto pidl = OpenFolderDialog(hwnd);
-			if (pidl)
-			{
-				SHGetPathFromIDList(pidl, folderPath);
-				SetWindowText(hwnd, folderPath);
-				HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
-				CenterWindow(dialog);
-			}
-			break;
-		}
-
-		if (LOWORD(wParam == ID_BUTTON_MOUNT_DISK)) 
-		{
-			OpenFileDialog(hwnd);
-			break;
-		}
-
-		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK)) 
+		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK) || LOWORD(wParam == IDM_DISK_CHOOSE)) 
 		{
 			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Choose disk");
 			CenterWindow(dialog); 
@@ -247,6 +228,7 @@ void AddMenus(HWND hwnd)
 
 	AppendMenuW(hMenu, MF_STRING, IDM_DISK_NEW, L"&New disk");
 	AppendMenuW(hMenu, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
+	AppendMenuW(hMenu, MF_STRING, IDM_DISK_CHOOSE, L"&Choose disk");
 	AppendMenuW(hMenu, MF_SEPARATOR, 0, NULL);
 	AppendMenuW(hMenu, MF_STRING, IDM_QUIT, L"&Quit");
 

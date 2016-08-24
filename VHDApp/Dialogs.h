@@ -25,7 +25,6 @@ PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd);
 
 LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ChooseDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam); //unnecessary
 LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -76,75 +75,6 @@ LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, 
 
 	case WM_DESTROY:
 		DestroyWindow(hwnd);
-		break;
-	}
-
-	return (DefWindowProcW(hwnd, msg, wParam, lParam));
-}
-
-LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	static HWND hwndEditFolderToSort, hwndButtonChooseFolderToSort, hwndButtonSortFolder;
-
-	switch (msg) 
-	{
-	case WM_CREATE:
-	{
-		CreateWindowW(L"static", L"Folder:",
-			WS_CHILD | WS_VISIBLE, 10, 32, 35, 25, hwnd,
-			(HMENU)6, NULL, NULL);
-
-		hwndEditFolderToSort = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY | ES_AUTOHSCROLL,
-			55, 30, 150, 20, hwnd, (HMENU)1,
-			NULL, NULL);
-
-		hwndButtonChooseFolderToSort = CreateWindowW(L"button", L"Choose folder",
-			WS_VISIBLE | WS_CHILD, 10, 105, 130, 25,
-			hwnd, (HMENU)ID_BUTTON_CHOOSE_FOLDER_TO_SORT, NULL, NULL);
-
-		hwndButtonSortFolder = CreateWindowW(L"button", L"Sort",
-			WS_VISIBLE | WS_CHILD, 145, 105, 130, 25,
-			hwnd, (HMENU)ID_BUTTON_SORT_FOLDER, NULL, NULL);
-
-		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
-
-		break;
-	}
-	case WM_COMMAND:
-	{
-		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) 
-		{
-			wchar_t folderPath[MAX_PATH + 1];
-			auto pidl = OpenFolderDialog(hwnd);
-			if (pidl)
-			{
-				SHGetPathFromIDList(pidl, folderPath);
-				SetWindowText(hwndEditFolderToSort, folderPath);
-			}
-		}
-
-		if (LOWORD(wParam) == ID_BUTTON_SORT_FOLDER) 
-		{
-			string folderPath = WindowTextToString(hwndEditFolderToSort);
-			if (folderPath.empty())
-			{
-				MessageBox(hwnd, L"Choose a folder to sort.", L"Error", MB_OK);
-				break;
-			}
-			//sort
-			/*vector<string> files;
-			GetFilesInDirectory(folderPath.c_str(), files, vector<string>());
-			Sort(files, folderPath.substr(0, 3), folderPath);*/
-		}
-
-		break;
-	}
-	case WM_CLOSE:
-
-		break;
-
-	case WM_DESTROY:
 		break;
 	}
 
@@ -235,10 +165,11 @@ LRESULT CALLBACK ChooseDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 		break;
 	}
 	case WM_CLOSE:
-
+		DestroyWindow(hwnd);
 		break;
 
 	case WM_DESTROY:
+		DestroyWindow(hwnd);
 		break;
 	}
 
@@ -360,7 +291,13 @@ LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
 		break;
 	}
+
 	case WM_CLOSE:
+		DestroyWindow(hwnd);
+		break;
+
+	case WM_DESTROY:
+		DestroyWindow(hwnd);
 		break;
 
 	}
