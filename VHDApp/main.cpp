@@ -121,7 +121,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		if (LOWORD(wParam) == IDM_DISK_NEW) 
 		{
-			OpenFolderDialog(hwnd);
+			wchar_t folderPath[MAX_PATH + 1];
+			auto pidl = OpenFolderDialog(hwnd);
+			if (pidl) 
+			{
+				SHGetPathFromIDList(pidl, folderPath);
+				SetWindowText(hwnd, folderPath);
+				HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
+				CenterWindow(dialog);
+			}
 			break;
 		}
 
@@ -133,7 +141,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		if (LOWORD(wParam == ID_BUTTON_NEW_DISK)) 
 		{
-			OpenFolderDialog(hwnd);
+			wchar_t folderPath[MAX_PATH + 1];
+			auto pidl = OpenFolderDialog(hwnd);
+			if (pidl)
+			{
+				SHGetPathFromIDList(pidl, folderPath);
+				SetWindowText(hwnd, folderPath);
+				HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
+				CenterWindow(dialog);
+			}
 			break;
 		}
 

@@ -19,7 +19,7 @@ HINSTANCE g_hinst;
 HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
 void OpenFileDialog(HWND hwnd);
-void OpenFolderDialog(HWND hwnd);
+PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd);
 
 LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -314,13 +314,10 @@ HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWST
 		NULL, NULL, hInstance, (LPVOID)param);
 }
 
-void OpenFolderDialog(HWND hwnd) 
+PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd)
 {
 	BROWSEINFO bi;
-	wchar_t folderPath[MAX_PATH + 1];
-
 	int iImage = 0;
-
 	bi.hwndOwner = hwnd;
 	bi.pidlRoot = NULL;
 	bi.pszDisplayName = NULL;
@@ -330,16 +327,10 @@ void OpenFolderDialog(HWND hwnd)
 	bi.lParam = NULL;
 	bi.iImage = iImage;
 
-	auto pidl = SHBrowseForFolder(&bi);
-	if (pidl) {
-		SHGetPathFromIDList(pidl, folderPath);
-		SetWindowText(hwnd, folderPath);
-		HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
-		CenterWindow(dialog);
-	}
+	return SHBrowseForFolder(&bi);
 }
 
-void OpenFileDialog(HWND hwnd) 
+void OpenFileDialog(HWND hwnd)
 {
 	OPENFILENAME ofn;
 	TCHAR szFile[MAX_PATH];

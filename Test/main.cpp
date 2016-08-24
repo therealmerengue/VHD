@@ -12,12 +12,5 @@ using namespace std;
 
 int main()
 {
-	std::vector<string> files;
-	GetFilesInDirectory("C:\\", files, files);
-	cout << files.size() << endl;
-	for each (string file in files)
-	{
-		cout << file << "\t" << endl;
-	}
 	return 0;
 }
