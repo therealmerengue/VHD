@@ -10,6 +10,8 @@
 #define ID_BUTTON_SORT_FOLDER 10
 #define ID_BUTTON_CREATE 14
 #define ID_COMBOBOX 16
+#define ID_BUTTON_CANCEL 17
+#define ID_BUTTON_CREATE_FOLDERS_FROM_DIALOG 18
 #define ID_CHECKBOX_SORT_FOLDER 30
 #define ID_CHECKBOX_ENCRYPT_FOLDER 31
 
@@ -23,7 +25,61 @@ PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd);
 
 LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam); //unnecessary
+LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	static HWND hwndButtonChooseFolderToSort, hwndButtonSortFolder;
+
+	switch (msg)
+	{
+	case WM_CREATE:
+	{
+		CreateWindowW(L"static", L"No disk chosen. To sort files you need to choose a disk and create folders.",
+			WS_CHILD | WS_VISIBLE, 10, 32, 280, 25, hwnd,
+			(HMENU)6, NULL, NULL);
+
+		hwndButtonChooseFolderToSort = CreateWindowW(L"button", L"Choose disk",
+			WS_VISIBLE | WS_CHILD, 10, 105, 130, 25,
+			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS_FROM_DIALOG, NULL, NULL);
+
+		hwndButtonSortFolder = CreateWindowW(L"button", L"Cancel",
+			WS_VISIBLE | WS_CHILD, 145, 105, 130, 25,
+			hwnd, (HMENU)ID_BUTTON_CANCEL, NULL, NULL);
+
+		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
+
+		break;
+	}
+	case WM_COMMAND:
+	{
+		if (LOWORD(wParam) == ID_BUTTON_CREATE_FOLDERS_FROM_DIALOG)
+		{
+			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Create folders");
+			CenterWindow(dialog);
+			DestroyWindow(hwnd);
+			break;
+		}
+
+		if (LOWORD(wParam) == ID_BUTTON_CANCEL)
+		{
+			DestroyWindow(hwnd);
+			break;
+		}
+
+		break;
+	}
+	case WM_CLOSE:
+
+		break;
+
+	case WM_DESTROY:
+		break;
+	}
+
+	return (DefWindowProcW(hwnd, msg, wParam, lParam));
+}
 
 LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {

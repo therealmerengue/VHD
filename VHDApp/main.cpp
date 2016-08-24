@@ -80,7 +80,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)NewDiskDialogProc);
 		RegisterDialogClass(hwnd, g_hinst, L"CreateFoldersDialog", (WNDPROC)CreateFoldersDialogProc);
-		RegisterDialogClass(hwnd, g_hinst, L"ChooseFolderToSortDialog", (WNDPROC)ChooseFolderToSortDialogProc);
+		RegisterDialogClass(hwnd, g_hinst, L"NoDiskChosen", (WNDPROC)NoFoldersCreatedDialogProc);
 
 		//Buttons left
 
@@ -180,7 +180,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				//show choose folder to sort dialog
-				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"ChooseFolderToSortDialog", L"Choose folder to sort");
+				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"NoDiskChosen", L"Error");
 				CenterWindow(dialog);
 			}
 		}
