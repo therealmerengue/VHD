@@ -19,11 +19,14 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define ID_BUTTON_CHOOSE_DISK 5
 #define ID_LABEL 6
 #define ID_BUTTON_SORT 17
+#define ID_BUTTON_ENCRYPT 19
 
 #define IDM_DISK_NEW 40
 #define IDM_DISK_MOUNT 41
 #define IDM_QUIT 42
 #define IDM_DISK_CHOOSE 43
+#define IDM_SORT 44
+#define IDM_ENCRYPT 45
 
 HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
 
@@ -67,7 +70,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 {
 	static HWND hwndTreeView;
-	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort; //buttons left
+	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -100,6 +103,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonSort = CreateWindowW(L"button", L"Sort",
 			WS_VISIBLE | WS_CHILD, 10, 110, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_SORT, NULL, NULL);
+
+		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
+			WS_VISIBLE | WS_CHILD, 10, 140, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
 
 		//File treeview - center
 
@@ -147,9 +154,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_SORT)) 
+		if (LOWORD(wParam == IDM_QUIT))
 		{
-			//sort created folder
+			DestroyWindow(hwnd);
+		}
+
+		if (LOWORD(wParam == ID_BUTTON_SORT) || LOWORD(wParam == IDM_SORT)) 
+		{
 			if (!g_diskPath.empty())
 			{
 				vector<string> filesToSort;
@@ -160,7 +171,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				//show choose folder to sort dialog
+				//show choose disk dialog
+				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"NoDiskChosen", L"Error");
+				CenterWindow(dialog);
+			}
+		}
+
+		if (LOWORD(wParam == ID_BUTTON_ENCRYPT) || LOWORD(wParam == IDM_ENCRYPT))
+		{
+			if (!g_diskPath.empty())
+			{
+				//encrypt
+			}
+			else
+			{
+				//show choose disk dialog
 				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"NoDiskChosen", L"Error");
 				CenterWindow(dialog);
 			}
@@ -208,10 +233,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_KILLFOCUS:
 		break;
 
+	case WM_CLOSE:
+		DestroyWindow(hwnd);
+		break;
+
 	case WM_DESTROY:
-
+		DestroyWindow(hwnd);
 		PostQuitMessage(0);
-
 		break;
 	}
 
@@ -221,17 +249,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void AddMenus(HWND hwnd) 
 {
 	HMENU hMenubar;
-	HMENU hMenu;
+	HMENU hMenuFile, hMenuAction;
 
 	hMenubar = CreateMenu();
-	hMenu = CreateMenu();
+	hMenuFile = CreateMenu();
+	hMenuAction = CreateMenu();
 
-	AppendMenuW(hMenu, MF_STRING, IDM_DISK_NEW, L"&New disk");
-	AppendMenuW(hMenu, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
-	AppendMenuW(hMenu, MF_STRING, IDM_DISK_CHOOSE, L"&Choose disk");
-	AppendMenuW(hMenu, MF_SEPARATOR, 0, NULL);
-	AppendMenuW(hMenu, MF_STRING, IDM_QUIT, L"&Quit");
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuFile, L"&File");
 
-	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenu, L"&File");
+	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_NEW, L"&New disk");
+	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
+	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_CHOOSE, L"&Choose disk");
+	AppendMenuW(hMenuFile, MF_SEPARATOR, 0, NULL);
+	AppendMenuW(hMenuFile, MF_STRING, IDM_QUIT, L"&Quit");
+
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuAction, L"&Action");
+	AppendMenuW(hMenuAction, MF_STRING, IDM_SORT, L"&Sort");
+	AppendMenuW(hMenuAction, MF_STRING, IDM_ENCRYPT, L"&Encrypt");
+	
 	SetMenu(hwnd, hMenubar);
 }
