@@ -24,13 +24,9 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define IDM_DISK_MOUNT 12
 #define IDM_QUIT 13
 
-HINSTANCE g_hinst;
 HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-void CenterWindow(HWND hwnd);
-void OpenFileDialog(HWND hwnd);
-void OpenFolderDialog(HWND hwnd);
 void AddMenus(HWND hwnd);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -217,55 +213,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	}
 
 	return DefWindowProcW(hwnd, msg, wParam, lParam);
-}
-
-void OpenFolderDialog(HWND hwnd) {
-	BROWSEINFO bi;
-	wchar_t folderPath[MAX_PATH + 1];
-
-	int iImage = 0;
-
-	bi.hwndOwner = hwnd;
-	bi.pidlRoot = NULL;
-	bi.pszDisplayName = NULL;
-	bi.lpszTitle = TEXT("Choose folder");
-	bi.ulFlags = BIF_NEWDIALOGSTYLE;
-	bi.lpfn = NULL;
-	bi.lParam = NULL;
-	bi.iImage = iImage;
-
-	auto pidl = SHBrowseForFolder(&bi);
-	if (pidl) {
-		SHGetPathFromIDList(pidl, folderPath);
-		SetWindowText(hwnd, folderPath);
-		HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
-		CenterWindow(dialog);
-	}
-}
-
-void OpenFileDialog(HWND hwnd) {
-	OPENFILENAME ofn;
-	TCHAR szFile[MAX_PATH];
-
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.lpstrFile = szFile;
-	ofn.lpstrFile[0] = '\0';
-	ofn.hwndOwner = hwnd;
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = TEXT("Only VHDs(*.*)\0*.VHD\0");
-	ofn.nFilterIndex = 1;
-	ofn.lpstrInitialDir = L"C:\\";
-	ofn.lpstrFileTitle = NULL;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-	if (GetOpenFileName(&ofn))
-	{
-		SetWindowText(hwnd, ofn.lpstrFile);
-		//commented out for safety
-
-		//OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
-	}
 }
 
 void AddMenus(HWND hwnd) {

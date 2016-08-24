@@ -14,9 +14,12 @@
 #define ID_CHECKBOX_ENCRYPT_FOLDER 31
 
 string g_diskPath;
+HINSTANCE g_hinst;
 
 HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
+void OpenFileDialog(HWND hwnd);
+void OpenFolderDialog(HWND hwnd);
 
 LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -309,4 +312,53 @@ HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWST
 	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, lpClassName, title,
 		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, x, y, width, height,
 		NULL, NULL, hInstance, (LPVOID)param);
+}
+
+void OpenFolderDialog(HWND hwnd) {
+	BROWSEINFO bi;
+	wchar_t folderPath[MAX_PATH + 1];
+
+	int iImage = 0;
+
+	bi.hwndOwner = hwnd;
+	bi.pidlRoot = NULL;
+	bi.pszDisplayName = NULL;
+	bi.lpszTitle = TEXT("Choose folder");
+	bi.ulFlags = BIF_NEWDIALOGSTYLE;
+	bi.lpfn = NULL;
+	bi.lParam = NULL;
+	bi.iImage = iImage;
+
+	auto pidl = SHBrowseForFolder(&bi);
+	if (pidl) {
+		SHGetPathFromIDList(pidl, folderPath);
+		SetWindowText(hwnd, folderPath);
+		HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
+		CenterWindow(dialog);
+	}
+}
+
+void OpenFileDialog(HWND hwnd) {
+	OPENFILENAME ofn;
+	TCHAR szFile[MAX_PATH];
+
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = '\0';
+	ofn.hwndOwner = hwnd;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = TEXT("Only VHDs(*.*)\0*.VHD\0");
+	ofn.nFilterIndex = 1;
+	ofn.lpstrInitialDir = L"C:\\";
+	ofn.lpstrFileTitle = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+	if (GetOpenFileName(&ofn))
+	{
+		SetWindowText(hwnd, ofn.lpstrFile);
+		//commented out for safety
+
+		//OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
+	}
 }
