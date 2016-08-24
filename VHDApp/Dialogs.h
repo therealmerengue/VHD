@@ -27,7 +27,7 @@ LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam
 
 LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	HWND hwndEditFolderToSort, hwndButtonChooseFolderToSort, hwndButtonSortFolder;
+	static HWND hwndEditFolderToSort, hwndButtonChooseFolderToSort, hwndButtonSortFolder;
 
 	switch (msg) 
 	{
@@ -38,7 +38,7 @@ LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam
 			(HMENU)6, NULL, NULL);
 
 		hwndEditFolderToSort = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY,
+			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY | ES_AUTOHSCROLL,
 			55, 30, 150, 20, hwnd, (HMENU)1,
 			NULL, NULL);
 
@@ -56,11 +56,19 @@ LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam
 	}
 	case WM_COMMAND:
 	{
-		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) {
-			//show folder dialog
+		if (LOWORD(wParam) == ID_BUTTON_CHOOSE_FOLDER_TO_SORT) 
+		{
+			wchar_t folderPath[MAX_PATH + 1];
+			auto pidl = OpenFolderDialog(hwnd);
+			if (pidl)
+			{
+				SHGetPathFromIDList(pidl, folderPath);
+				SetWindowText(hwndEditFolderToSort, folderPath);
+			}
 		}
 
-		if (LOWORD(wParam) == ID_BUTTON_SORT_FOLDER) {
+		if (LOWORD(wParam) == ID_BUTTON_SORT_FOLDER) 
+		{
 			//sort
 		}
 
