@@ -78,7 +78,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
 
-		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)DiskDialogProc);
+		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)NewDiskDialogProc);
 		RegisterDialogClass(hwnd, g_hinst, L"CreateFoldersDialog", (WNDPROC)CreateFoldersDialogProc);
 		RegisterDialogClass(hwnd, g_hinst, L"ChooseFolderToSortDialog", (WNDPROC)ChooseFolderToSortDialogProc);
 

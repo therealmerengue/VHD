@@ -21,7 +21,7 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, 
 void OpenFileDialog(HWND hwnd);
 PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd);
 
-LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -43,11 +43,11 @@ LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam
 			NULL, NULL);
 
 		hwndButtonChooseFolderToSort = CreateWindowW(L"button", L"Choose folder",
-			WS_VISIBLE | WS_CHILD, 10, 105, 90, 25,
+			WS_VISIBLE | WS_CHILD, 10, 105, 130, 25,
 			hwnd, (HMENU)ID_BUTTON_CHOOSE_FOLDER_TO_SORT, NULL, NULL);
 
 		hwndButtonSortFolder = CreateWindowW(L"button", L"Sort",
-			WS_VISIBLE | WS_CHILD, 105, 105, 90, 25,
+			WS_VISIBLE | WS_CHILD, 145, 105, 130, 25,
 			hwnd, (HMENU)ID_BUTTON_SORT_FOLDER, NULL, NULL);
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
@@ -69,7 +69,16 @@ LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam
 
 		if (LOWORD(wParam) == ID_BUTTON_SORT_FOLDER) 
 		{
+			string folderPath = WindowTextToString(hwndEditFolderToSort);
+			if (folderPath.empty())
+			{
+				MessageBox(hwnd, L"Choose a folder to sort.", L"Error", MB_OK);
+				break;
+			}
 			//sort
+			/*vector<string> files;
+			GetFilesInDirectory(folderPath.c_str(), files, vector<string>());
+			Sort(files, folderPath.substr(0, 3), folderPath);*/
 		}
 
 		break;
@@ -179,7 +188,7 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 	return (DefWindowProcW(hwnd, msg, wParam, lParam));
 }
 
-LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hwndButtonCreateAndMount, hwndButtonCreate;
 	static LPCWSTR userdata;
