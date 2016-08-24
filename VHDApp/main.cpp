@@ -30,8 +30,8 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void AddMenus(HWND hwnd);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-	PWSTR pCmdLine, int nCmdShow) {
-
+	PWSTR pCmdLine, int nCmdShow) 
+{
 	MSG  msg;
 	HWND hwnd;
 	WNDCLASSW wc;
@@ -63,16 +63,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return (int)msg.wParam;
 }
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
+{
 	static HWND hwndTreeView;
 	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonCreateFolders, hwndButtonSort; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
 
-	switch (msg) {
-
+	switch (msg) 
+	{
 	case WM_CREATE:
 
 		CenterWindow(hwnd);
@@ -119,33 +119,39 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	case WM_COMMAND:
 
-		if (LOWORD(wParam) == IDM_DISK_NEW) {
+		if (LOWORD(wParam) == IDM_DISK_NEW) 
+		{
 			OpenFolderDialog(hwnd);
 			break;
 		}
 
-		if (LOWORD(wParam) == IDM_DISK_MOUNT) {
+		if (LOWORD(wParam) == IDM_DISK_MOUNT) 
+		{
 			OpenFileDialog(hwnd);
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_NEW_DISK)) {
+		if (LOWORD(wParam == ID_BUTTON_NEW_DISK)) 
+		{
 			OpenFolderDialog(hwnd);
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_MOUNT_DISK)) {
+		if (LOWORD(wParam == ID_BUTTON_MOUNT_DISK)) 
+		{
 			OpenFileDialog(hwnd);
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_CREATE_FOLDERS)) {
+		if (LOWORD(wParam == ID_BUTTON_CREATE_FOLDERS)) 
+		{
 			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Create folders");
 			CenterWindow(dialog); 
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_SORT)) {
+		if (LOWORD(wParam == ID_BUTTON_SORT)) 
+		{
 			//sort created folder
 			if (!g_diskPath.empty())
 			{
@@ -215,8 +221,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
-void AddMenus(HWND hwnd) {
-
+void AddMenus(HWND hwnd) 
+{
 	HMENU hMenubar;
 	HMENU hMenu;
 

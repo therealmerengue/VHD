@@ -1,13 +1,14 @@
 #pragma once
 #include <Windows.h>
 
-bool CALLBACK SetFont(HWND child, LPARAM font) {
+bool CALLBACK SetFont(HWND child, LPARAM font) 
+{
 	SendMessage(child, WM_SETFONT, font, true);
 	return true;
 }
 
-void CenterWindow(HWND hwnd) {
-
+void CenterWindow(HWND hwnd) 
+{
 	RECT rc = { 0 };
 
 	GetWindowRect(hwnd, &rc);

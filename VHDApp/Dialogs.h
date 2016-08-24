@@ -29,8 +29,8 @@ LRESULT CALLBACK ChooseFolderToSortDialogProc(HWND hwnd, UINT msg, WPARAM wParam
 {
 	HWND hwndEditFolderToSort, hwndButtonChooseFolderToSort, hwndButtonSortFolder;
 
-	switch (msg) {
-
+	switch (msg) 
+	{
 	case WM_CREATE:
 	{
 		CreateWindowW(L"static", L"Folder:",
@@ -81,8 +81,8 @@ LRESULT CALLBACK CreateFoldersDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 {
 	static HWND hwndCombo, hwndButtonChooseDisk;
 
-	switch (msg) {
-
+	switch (msg) 
+	{
 	case WM_CREATE:
 
 		CreateWindowW(L"static", L"Disk:",
@@ -177,8 +177,8 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 	static LPCWSTR userdata;
 	static HWND hwndEditDiskSize, hwndEditDiskName, hwndEditFolderPath;
 
-	switch (msg) {
-
+	switch (msg) 
+	{
 	case WM_CREATE:
 
 		hwndEditDiskName = CreateWindowW(L"Edit", NULL,
@@ -294,8 +294,8 @@ LRESULT CALLBACK DiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 	return (DefWindowProcW(hwnd, msg, wParam, lParam));
 }
 
-void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc) {
-
+void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc) 
+{
 	WNDCLASSEXW wc = { 0 };
 	wc.cbSize = sizeof(WNDCLASSEXW);
 	wc.lpfnWndProc = lpfnWndProc;
@@ -306,15 +306,16 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, 
 
 }
 
-HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x, int y, int width, int height) {
-
+HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x, int y, int width, int height) 
+{
 	//EnableWindow(hwndParent, FALSE); 
 	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, lpClassName, title,
 		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, x, y, width, height,
 		NULL, NULL, hInstance, (LPVOID)param);
 }
 
-void OpenFolderDialog(HWND hwnd) {
+void OpenFolderDialog(HWND hwnd) 
+{
 	BROWSEINFO bi;
 	wchar_t folderPath[MAX_PATH + 1];
 
@@ -338,7 +339,8 @@ void OpenFolderDialog(HWND hwnd) {
 	}
 }
 
-void OpenFileDialog(HWND hwnd) {
+void OpenFileDialog(HWND hwnd) 
+{
 	OPENFILENAME ofn;
 	TCHAR szFile[MAX_PATH];
 
