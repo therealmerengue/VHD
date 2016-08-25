@@ -9,6 +9,9 @@
 #include "Dialogs.h"
 #include "Combobox.h"
 
+#include "resources.h"
+#include "DialogBoxes.h"
+
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -34,8 +37,6 @@ HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CH
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void AddMenus(HWND hwnd);
-
-UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) 
@@ -144,8 +145,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				SHGetPathFromIDList(pidl, folderPath);
 				SetWindowText(hwnd, folderPath);
-				HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
-				CenterWindow(dialog);
+				/*HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
+				CenterWindow(dialog);*/
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_NEWDISK), hwnd, (DLGPROC)NewDiscDialogProc, (LPARAM)folderPath);
 			}
 			break;
 		}
@@ -206,7 +208,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		if (LOWORD(wParam == ID_BUTTON_TEST))
 		{
-			DialogBox(g_hinst, NULL, hwnd, (DLGPROC)DialogProc);
+			DialogBox(g_hinst, NULL, hwnd, (DLGPROC)NewDiscDialogProc);
 			DWORD err = GetLastError();
 			wchar_t szTest[10];
 			swprintf_s(szTest, 10, L"%d", err);
@@ -291,18 +293,4 @@ void AddMenus(HWND hwnd)
 	AppendMenuW(hMenuAction, MF_STRING, IDM_ENCRYPT, L"&Encrypt");
 	
 	SetMenu(hwnd, hMenubar);
-}
-
-UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	switch (uMsg) {
-	case WM_INITDIALOG:
-
-		break;
-	case WM_COMMAND:
-
-		break;
-	default:
-		return FALSE;
-	}
-	return TRUE;
 }

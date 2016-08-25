@@ -44,5 +44,16 @@
     <ClInclude Include="StringOperations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DialogBoxes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NewDiskDialog.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@
 HINSTANCE g_hinst;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
+UINT_PTR CALLBACK NewDiscDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
 void PrintLastError(HWND hwnd);
 
@@ -66,7 +66,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
 	case WM_COMMAND:
 		if (LOWORD(wParam) == 1)
 		{
-			auto ip = DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ABOUT), hwnd, (DLGPROC)DialogProc, (LPARAM)L"path");
+			auto ip = DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ABOUT), hwnd, (DLGPROC)NewDiscDialogProc, (LPARAM)L"path");
 		}
 		break;
 
@@ -79,7 +79,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
 	return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
-UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) 
+UINT_PTR CALLBACK NewDiscDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	static LPCWSTR path;
 	switch (uMsg) 

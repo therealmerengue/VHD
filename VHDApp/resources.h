@@ -1,0 +1,9 @@
+#pragma once
+#define IDC_STATIC 100
+#define ID_EDIT 101
+#define IDD_NEWDISK 200
+#define ID_BTN_CREATE 201
+#define ID_BTN_CREATE_AND_MOUNT 202
+#define ID_EDIT_DISKNAME 203
+#define ID_EDIT_DISKSIZE 204
+#define ID_EDIT_DISKFOLDER 205
