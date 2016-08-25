@@ -4,11 +4,6 @@
 #include "StringOperations.h"
 #include "Combobox.h"
 
-HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
-void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
-void OpenFileDialog(HWND hwnd);
-PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd);
-
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc) 
 {
 	WNDCLASSEXW wc = { 0 };

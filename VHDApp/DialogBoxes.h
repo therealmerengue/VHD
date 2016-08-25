@@ -75,12 +75,18 @@ INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 
 		break;
 
+	case WM_CLOSE:
+		EndDialog(hwndDlg, 0);
+		break;
+
 	case WM_QUIT:
 		EndDialog(hwndDlg, 0);
 		break;
+
 	case WM_DESTROY:
 		EndDialog(hwndDlg, 0);
 		break;
+
 	default:
 		return FALSE;
 	}
@@ -141,12 +147,19 @@ INT_PTR CALLBACK ChooseDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 
 		break;
 
-	case WM_QUIT:
+	case WM_CLOSE:
 		EndDialog(hwndDlg, 0);
 		break;
+
+	case WM_QUIT:
+		EndDialog(hwndDlg, 0);
+		PostQuitMessage(0);
+		break;
+
 	case WM_DESTROY:
 		EndDialog(hwndDlg, 0);
 		break;
+
 	default:
 		return FALSE;
 	}
@@ -177,12 +190,18 @@ INT_PTR CALLBACK NoFoldersDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 		
 		break;
 
+	case WM_CLOSE:
+		EndDialog(hwndDlg, 0);
+		break;
+
 	case WM_QUIT:
 		EndDialog(hwndDlg, 0);
 		break;
+
 	case WM_DESTROY:
 		EndDialog(hwndDlg, 0);
 		break;
+
 	default:
 		return FALSE;
 	}
