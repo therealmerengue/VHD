@@ -1,0 +1,12 @@
+#include <windows.h>
+#include "resources.h"
+
+IDD_NOFOLDERS DIALOG DISCARDABLE  0, 0, 300, 200
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Create disk"
+FONT 8, "MS Sans Serif"
+BEGIN
+	CTEXT "No disk chosen. To sort files you need to choose a disk and create folders.", IDC_STATIC, 10, 32, 280, 25
+	DEFPUSHBUTTON "&Choose disk", ID_BTN_CHOOSE_DISK, 10, 105, 130, 25
+	DEFPUSHBUTTON "&Cancel", ID_BTN_CANCEL, 145, 105, 130, 25
+END

@@ -23,62 +23,6 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, 
 void OpenFileDialog(HWND hwnd);
 PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd);
 
-LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-LRESULT CALLBACK NoFoldersCreatedDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	static HWND hwndButtonChooseFolderToSort, hwndButtonSortFolder;
-
-	switch (msg)
-	{
-	case WM_CREATE:
-	{
-		CreateWindowW(L"static", L"No disk chosen. To sort files you need to choose a disk and create folders.",
-			WS_CHILD | WS_VISIBLE, 10, 32, 280, 25, hwnd,
-			(HMENU)6, NULL, NULL);
-
-		hwndButtonChooseFolderToSort = CreateWindowW(L"button", L"Choose disk",
-			WS_VISIBLE | WS_CHILD, 10, 105, 130, 25,
-			hwnd, (HMENU)ID_BUTTON_CREATE_FOLDERS_FROM_DIALOG, NULL, NULL);
-
-		hwndButtonSortFolder = CreateWindowW(L"button", L"Cancel",
-			WS_VISIBLE | WS_CHILD, 145, 105, 130, 25,
-			hwnd, (HMENU)ID_BUTTON_CANCEL, NULL, NULL);
-
-		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
-
-		break;
-	}
-	case WM_COMMAND:
-	{
-		if (LOWORD(wParam) == ID_BUTTON_CREATE_FOLDERS_FROM_DIALOG)
-		{
-			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Create folders");
-			CenterWindow(dialog);
-			DestroyWindow(hwnd);
-			break;
-		}
-
-		if (LOWORD(wParam) == ID_BUTTON_CANCEL)
-		{
-			DestroyWindow(hwnd);
-			break;
-		}
-
-		break;
-	}
-	case WM_CLOSE:
-		DestroyWindow(hwnd);
-		break;
-
-	case WM_DESTROY:
-		DestroyWindow(hwnd);
-		break;
-	}
-
-	return (DefWindowProcW(hwnd, msg, wParam, lParam));
-}
-
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc) 
 {
 	WNDCLASSEXW wc = { 0 };
@@ -88,13 +32,10 @@ void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, 
 	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
 	wc.lpszClassName = lpszClassName;
 	RegisterClassExW(&wc);
-
 }
 
 HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x, int y, int width, int height) 
 {
-	/*EnableWindow(hwndParent, FALSE); 
-	ShowWindow(hwndParent, SW_SHOW);*/
 	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, lpClassName, title,
 		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, x, y, width, height,
 		NULL, NULL, hInstance, (LPVOID)param);
@@ -136,7 +77,6 @@ void OpenFileDialog(HWND hwnd)
 	if (GetOpenFileName(&ofn))
 	{
 		SetWindowText(hwnd, ofn.lpstrFile);
-		//commented out for safety
 
 		OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
 	}

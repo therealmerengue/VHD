@@ -83,7 +83,7 @@ INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	return TRUE;
 }
 
-INT_PTR CALLBACK CDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK ChooseDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndCombo;
 
@@ -134,6 +134,42 @@ INT_PTR CALLBACK CDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			break;
 		}
 
+		break;
+
+	case WM_QUIT:
+		EndDialog(hwndDlg, 0);
+		break;
+	case WM_DESTROY:
+		EndDialog(hwndDlg, 0);
+		break;
+	default:
+		return FALSE;
+	}
+	return TRUE;
+}
+
+INT_PTR CALLBACK NoFoldersDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+	case WM_INITDIALOG:
+
+		break;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == ID_BTN_CHOOSE_DISK)
+		{
+			DialogBox(g_hinst, MAKEINTRESOURCE(IDD_CHOOSEDISK), hwndDlg, (DLGPROC)ChooseDiskDialogProc);
+			EndDialog(hwndDlg, 0);
+			break;
+		}
+
+		if (LOWORD(wParam) == ID_BTN_CANCEL)
+		{
+			EndDialog(hwndDlg, 0);
+			break;
+		}
+		
 		break;
 
 	case WM_QUIT:

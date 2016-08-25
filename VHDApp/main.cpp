@@ -76,7 +76,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndTreeView;
 	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt; //buttons left
-	HWND hwndButtonTest;
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -87,8 +86,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
-
-		RegisterDialogClass(hwnd, g_hinst, L"NoDiskChosen", (WNDPROC)NoFoldersCreatedDialogProc);
 
 		//Buttons left
 
@@ -111,10 +108,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
 			WS_VISIBLE | WS_CHILD, 10, 140, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
-
-		hwndButtonTest = CreateWindowW(L"button", L"Test",
-			WS_VISIBLE | WS_CHILD, 10, 170, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_TEST, NULL, NULL);
 
 		//File treeview - center
 
@@ -143,8 +136,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				SHGetPathFromIDList(pidl, folderPath);
 				SetWindowText(hwnd, folderPath);
-				/*HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
-				CenterWindow(dialog);*/
 				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_NEWDISK), hwnd, (DLGPROC)NewDiskDialogProc, (LPARAM)folderPath);
 			}
 			break;
@@ -158,9 +149,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK) || LOWORD(wParam == IDM_DISK_CHOOSE)) 
 		{
-			DialogBox(g_hinst, MAKEINTRESOURCE(IDD_CHOOSEDISK), hwnd, (DLGPROC)CDiskDialogProc, (LPARAM)folderPath);
-			/*HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Choose disk");
-			CenterWindow(dialog); */
+			DialogBox(g_hinst, MAKEINTRESOURCE(IDD_CHOOSEDISK), hwnd, (DLGPROC)ChooseDiskDialogProc, (LPARAM)folderPath);
 			break;
 		}
 
@@ -175,15 +164,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				vector<string> filesToSort;
 				string folderToSort = g_diskPath + "Sort";
-				//commented out for safety
 				GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
 				Sort(filesToSort, g_diskPath, folderToSort);
 			}
 			else
 			{
 				//show choose disk dialog
-				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"NoDiskChosen", L"Error");
-				CenterWindow(dialog);
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
 			}
 
 			break;
@@ -198,20 +185,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				//show choose disk dialog
-				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"NoDiskChosen", L"Error");
-				CenterWindow(dialog);
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
 			}
 
 			break;
-		}
-
-		if (LOWORD(wParam == ID_BUTTON_TEST))
-		{
-			DialogBox(g_hinst, NULL, hwnd, (DLGPROC)NewDiskDialogProc);
-			DWORD err = GetLastError();
-			wchar_t szTest[10];
-			swprintf_s(szTest, 10, L"%d", err);
-			MessageBox(hwnd, szTest, L"error", MB_OK);
 		}
 
 		break;
