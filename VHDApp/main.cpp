@@ -16,23 +16,6 @@
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-#define ID_EDIT 1
-#define ID_BUTTON_NEW_DISK 2
-#define ID_BUTTON_MOUNT_DISK 3
-#define ID_BUTTON_CHOOSE_DISK 5
-#define ID_LABEL 6
-#define ID_BUTTON_SORT 17
-#define ID_BUTTON_ENCRYPT 19
-
-#define IDM_DISK_NEW 40
-#define IDM_DISK_MOUNT 41
-#define IDM_QUIT 42
-#define IDM_DISK_CHOOSE 43
-#define IDM_SORT 44
-#define IDM_ENCRYPT 45
-
-#define ID_BUTTON_TEST 99
-
 HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

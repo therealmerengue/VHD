@@ -1,4 +1,20 @@
 #pragma once
+#define ID_EDIT 1
+#define ID_LABEL 2
+#define ID_TREEVIEW 3
+#define ID_BUTTON_NEW_DISK 11
+#define ID_BUTTON_MOUNT_DISK 12
+#define ID_BUTTON_CHOOSE_DISK 13
+#define ID_BUTTON_SORT 14
+#define ID_BUTTON_ENCRYPT 15
+
+#define IDM_DISK_NEW 50
+#define IDM_DISK_MOUNT 51
+#define IDM_QUIT 52
+#define IDM_DISK_CHOOSE 53
+#define IDM_SORT 54
+#define IDM_ENCRYPT 55
+
 #define IDC_STATIC 100
 #define IDD_NEWDISK 200
 #define ID_BTN_CREATE 201

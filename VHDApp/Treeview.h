@@ -2,8 +2,8 @@
 #include <vector>
 #include <Windows.h>
 #include "StringOperations.h"
+#include "resources.h"
 
-#define ID_TREEVIEW 7
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x = 0, int y = 0, int width = 100, int height = 100);
 HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel);
