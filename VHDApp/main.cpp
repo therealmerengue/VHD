@@ -28,10 +28,14 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define IDM_SORT 44
 #define IDM_ENCRYPT 45
 
+#define ID_BUTTON_TEST 99
+
 HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void AddMenus(HWND hwnd);
+
+UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) 
@@ -71,6 +75,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndTreeView;
 	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt; //buttons left
+	HWND hwndButtonTest;
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -107,6 +112,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
 			WS_VISIBLE | WS_CHILD, 10, 140, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
+
+		hwndButtonTest = CreateWindowW(L"button", L"Test",
+			WS_VISIBLE | WS_CHILD, 10, 170, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_TEST, NULL, NULL);
 
 		//File treeview - center
 
@@ -175,6 +184,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"NoDiskChosen", L"Error");
 				CenterWindow(dialog);
 			}
+
+			break;
 		}
 
 		if (LOWORD(wParam == ID_BUTTON_ENCRYPT) || LOWORD(wParam == IDM_ENCRYPT))
@@ -189,6 +200,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"NoDiskChosen", L"Error");
 				CenterWindow(dialog);
 			}
+
+			break;
+		}
+
+		if (LOWORD(wParam == ID_BUTTON_TEST))
+		{
+			DialogBox(g_hinst, NULL, hwnd, (DLGPROC)DialogProc);
+			DWORD err = GetLastError();
+			wchar_t szTest[10];
+			swprintf_s(szTest, 10, L"%d", err);
+			MessageBox(hwnd, szTest, L"error", MB_OK);
 		}
 
 		break;
@@ -267,4 +289,18 @@ void AddMenus(HWND hwnd)
 	AppendMenuW(hMenuAction, MF_STRING, IDM_ENCRYPT, L"&Encrypt");
 	
 	SetMenu(hwnd, hMenubar);
+}
+
+UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	switch (uMsg) {
+	case WM_INITDIALOG:
+
+		break;
+	case WM_COMMAND:
+
+		break;
+	default:
+		return FALSE;
+	}
+	return TRUE;
 }
