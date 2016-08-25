@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <rc6.h>
 
 #include <vector>
 #include <set>
