@@ -13,7 +13,8 @@ HINSTANCE g_hinst;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
-HMODULE GetCurrentModule();
+
+void PrintLastError(HWND hwnd);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) {
@@ -65,11 +66,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
 	case WM_COMMAND:
 		if (LOWORD(wParam) == 1)
 		{
-			auto ip = DialogBox(GetCurrentModule(), MAKEINTRESOURCE(IDD_ABOUT), hwnd, (DLGPROC)DialogProc);
-			DWORD err = GetLastError();
-			wchar_t szTest[10];
-			swprintf_s(szTest, 10, L"%d", err);
-			MessageBox(hwnd, szTest, L"error", MB_OK);
+			auto ip = DialogBox(g_hinst, MAKEINTRESOURCE(IDD_ABOUT), hwnd, (DLGPROC)DialogProc);
 		}
 		break;
 
@@ -105,13 +102,10 @@ UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return TRUE;
 }
 
-HMODULE GetCurrentModule()
-{ // NB: XP+ solution!
-	HMODULE hModule = NULL;
-	GetModuleHandleEx(
-		GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
-		(LPCTSTR)GetCurrentModule,
-		&hModule);
-
-	return hModule;
+void PrintLastError(HWND hwnd)
+{
+	DWORD err = GetLastError();
+	wchar_t szTest[10];
+	swprintf_s(szTest, 10, L"%d", err);
+	MessageBox(hwnd, szTest, L"error", MB_OK);
 }
