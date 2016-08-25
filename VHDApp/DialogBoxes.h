@@ -45,6 +45,7 @@ INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		path = (LPCWSTR)lParam;
 		hwndEditFolderPath = GetDlgItem(hwndDlg, ID_EDIT_DISKFOLDER);
 		SetWindowText(hwndEditFolderPath, path);
+		EnumChildWindows(hwndDlg, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 		break;
 
 	case WM_COMMAND:
@@ -97,6 +98,7 @@ INT_PTR CALLBACK ChooseDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 		AddItemsToCombobox(hwndCombo, GetDriveLetters());
 		CheckDlgButton(hwndDlg, ID_CHECKBOX_SORT, BST_UNCHECKED);
 		CheckDlgButton(hwndDlg, ID_CHECKBOX_ENCRYPT, BST_UNCHECKED);
+		EnumChildWindows(hwndDlg, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 		break;
 
 	case WM_COMMAND:
@@ -156,7 +158,7 @@ INT_PTR CALLBACK NoFoldersDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 	switch (uMsg)
 	{
 	case WM_INITDIALOG:
-
+		EnumChildWindows(hwndDlg, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 		break;
 
 	case WM_COMMAND:
