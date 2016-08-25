@@ -251,14 +251,14 @@ LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
 			int size = stoi(strDiskSize);
 
-			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
+			string strFullDiskPath = strFolderName + "\\" + strDiskName;
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
 
 			// TODO : refresh treeview after mount
 
 			//commented out for safety :p
-			/*CreateVHD_Fixed(&wstrFullDiskPath[0], size);
-			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());*/
+			CreateVHD_Fixed(&wstrFullDiskPath[0], size);
+			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());
 
 			DestroyWindow(hwnd);
 			break;
@@ -269,6 +269,8 @@ LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 			string strDiskName = WindowTextToString(hwndEditDiskName);
 			if (!CheckIfStringEmpty(strDiskName, L"Enter disk name.", hwnd, hwndEditDiskName))
 				break;
+			if (strDiskName.find(".vhd") != strDiskName.size() - 4)
+				strDiskName = strDiskName.append(".vhd");
 
 			string strFolderName = WindowTextToString(hwndEditFolderPath);
 
@@ -279,11 +281,11 @@ LRESULT CALLBACK NewDiskDialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 				break;
 			int size = stoi(strDiskSize);
 
-			string strFullDiskPath = strFolderName + "\\" + strDiskSize;
+			string strFullDiskPath = strFolderName + "\\" + strDiskName;
 			wstring wstrFullDiskPath = toWString(strFullDiskPath);
 
 			//commented out for safety :p
-			//CreateVHD_Fixed(&wstrFullDiskPath[0], size);
+			CreateVHD_Fixed(&wstrFullDiskPath[0], size);
 
 			DestroyWindow(hwnd);
 			break;
@@ -364,6 +366,6 @@ void OpenFileDialog(HWND hwnd)
 		SetWindowText(hwnd, ofn.lpstrFile);
 		//commented out for safety
 
-		//OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
+		OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
 	}
 }
