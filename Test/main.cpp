@@ -66,7 +66,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
 	case WM_COMMAND:
 		if (LOWORD(wParam) == 1)
 		{
-			auto ip = DialogBox(g_hinst, MAKEINTRESOURCE(IDD_ABOUT), hwnd, (DLGPROC)DialogProc);
+			auto ip = DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ABOUT), hwnd, (DLGPROC)DialogProc, (LPARAM)L"path");
 		}
 		break;
 
@@ -79,15 +79,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
 	return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
-UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+UINT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) 
+{
+	static LPCWSTR path;
 	switch (uMsg) 
 	{
 	case WM_INITDIALOG:
-		
+		path = (LPCWSTR)lParam;
 		break;
 	case WM_COMMAND:
 		if (LOWORD(wParam == IDCANCEL))
 			EndDialog(hwndDlg, IDCANCEL);
+		if (LOWORD(wParam == IDOK))
+			MessageBox(hwndDlg, path, L"Path", MB_OK);
 		break;
 
 	case WM_QUIT:
