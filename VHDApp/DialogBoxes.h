@@ -5,6 +5,9 @@
 
 using namespace std;
 
+string g_diskPath;
+HINSTANCE g_hinst;
+
 bool SetupDiskCreation(HWND hwndDlg, wstring& wstrFullDiskPath)
 {
 	HWND hwndEditDiskName = GetDlgItem(hwndDlg, ID_EDIT_DISKNAME);

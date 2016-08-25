@@ -4,20 +4,6 @@
 #include "StringOperations.h"
 #include "Combobox.h"
 
-#define ID_BUTTON_CREATE_AND_MOUNT 4
-#define ID_BUTTON_CHOOSE_DISK 8
-#define ID_BUTTON_CHOOSE_FOLDER_TO_SORT 9
-#define ID_BUTTON_SORT_FOLDER 10
-#define ID_BUTTON_CREATE 14
-#define ID_COMBOBOX 16
-#define ID_BUTTON_CANCEL 17
-#define ID_BUTTON_CREATE_FOLDERS_FROM_DIALOG 18
-#define ID_CHECKBOX_SORT_FOLDER 30
-#define ID_CHECKBOX_ENCRYPT_FOLDER 31
-
-string g_diskPath;
-HINSTANCE g_hinst;
-
 HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x = 100, int y = 100, int width = 300, int height = 200);
 void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc);
 void OpenFileDialog(HWND hwnd);
