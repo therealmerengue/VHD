@@ -116,6 +116,7 @@
   <ItemGroup>
     <ClInclude Include="Combobox.h" />
     <ClInclude Include="DialogBoxes.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="StringOperations.h" />
     <ClInclude Include="Dialogs.h" />
