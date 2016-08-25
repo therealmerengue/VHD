@@ -32,7 +32,7 @@ bool SetupDiskCreation(HWND hwndDlg, wstring& wstrFullDiskPath)
 	return true;
 }
 
-UINT_PTR CALLBACK NewDiscDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static LPCWSTR path;
 	static HWND hwndEditFolderPath;
@@ -67,6 +67,71 @@ UINT_PTR CALLBACK NewDiscDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			//commented out for safety :p
 			//CreateVHD_Fixed(&wstrFullDiskPath[0], size);
 			EndDialog(hwndDlg, ID_BTN_CREATE_AND_MOUNT);
+		}
+
+		break;
+
+	case WM_QUIT:
+		EndDialog(hwndDlg, 0);
+		break;
+	case WM_DESTROY:
+		EndDialog(hwndDlg, 0);
+		break;
+	default:
+		return FALSE;
+	}
+	return TRUE;
+}
+
+INT_PTR CALLBACK CDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	static HWND hwndCombo;
+
+	switch (uMsg)
+	{
+	case WM_INITDIALOG:
+		hwndCombo = GetDlgItem(hwndDlg, ID_COMBO_DISK);
+		AddItemsToCombobox(hwndCombo, GetDriveLetters());
+		CheckDlgButton(hwndDlg, ID_CHECKBOX_SORT, BST_UNCHECKED);
+		CheckDlgButton(hwndDlg, ID_CHECKBOX_ENCRYPT, BST_UNCHECKED);
+		break;
+
+	case WM_COMMAND:
+
+		if (LOWORD(wParam) == ID_BTN_CREATE_FOLDERS)
+		{
+			bool sortFolder = IsDlgButtonChecked(hwndDlg, ID_CHECKBOX_SORT);
+			bool encryptFolder = IsDlgButtonChecked(hwndDlg, ID_CHECKBOX_ENCRYPT);
+			hwndCombo = GetDlgItem(hwndDlg, ID_COMBO_DISK);
+			string diskPath = TextFromComboboxToString(hwndCombo);
+			if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwndDlg, NULL))
+				break;
+
+			if (sortFolder)
+			{
+				string strSortFolderPath = diskPath + "Sort";
+				wstring wstrSortFolderPath = toWString(strSortFolderPath);
+				CreateDirectory(&wstrSortFolderPath[0], NULL);
+			}
+
+			if (encryptFolder)
+			{
+				string strEncryptFolderPath = diskPath + "Encrypt";
+				wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
+				CreateDirectory(&wstrEncryptFolderPath[0], NULL);
+			}
+
+			if (!sortFolder && !encryptFolder)
+			{
+				MessageBox(hwndDlg, L"Choose a folder.", L"Error", MB_OK);
+				break;
+			}
+
+			//TODO : return diskPath somehow through global var I guess
+			g_diskPath = diskPath;
+
+			EndDialog(hwndDlg, ID_BTN_CREATE_FOLDERS);
+			break;
 		}
 
 		break;

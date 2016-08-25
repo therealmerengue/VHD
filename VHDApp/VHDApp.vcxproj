@@ -126,6 +126,7 @@
     <ClInclude Include="Visuals.h" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="ChooseDiskDialog.rc" />
     <ResourceCompile Include="NewDiskDialog.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

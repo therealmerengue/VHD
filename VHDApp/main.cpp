@@ -88,8 +88,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
 
-		RegisterDialogClass(hwnd, g_hinst, L"NewDiskDialog", (WNDPROC)NewDiskDialogProc);
-		RegisterDialogClass(hwnd, g_hinst, L"CreateFoldersDialog", (WNDPROC)ChooseDiskDialogProc);
 		RegisterDialogClass(hwnd, g_hinst, L"NoDiskChosen", (WNDPROC)NoFoldersCreatedDialogProc);
 
 		//Buttons left
@@ -147,7 +145,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				SetWindowText(hwnd, folderPath);
 				/*HWND dialog = CreateDialogBox(hwnd, g_hinst, folderPath, L"NewDiskDialog", L"Create disk");
 				CenterWindow(dialog);*/
-				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_NEWDISK), hwnd, (DLGPROC)NewDiscDialogProc, (LPARAM)folderPath);
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_NEWDISK), hwnd, (DLGPROC)NewDiskDialogProc, (LPARAM)folderPath);
 			}
 			break;
 		}
@@ -160,8 +158,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK) || LOWORD(wParam == IDM_DISK_CHOOSE)) 
 		{
-			HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Choose disk");
-			CenterWindow(dialog); 
+			DialogBox(g_hinst, MAKEINTRESOURCE(IDD_CHOOSEDISK), hwnd, (DLGPROC)CDiskDialogProc, (LPARAM)folderPath);
+			/*HWND dialog = CreateDialogBox(hwnd, g_hinst, NULL, L"CreateFoldersDialog", L"Choose disk");
+			CenterWindow(dialog); */
 			break;
 		}
 
@@ -208,7 +207,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		if (LOWORD(wParam == ID_BUTTON_TEST))
 		{
-			DialogBox(g_hinst, NULL, hwnd, (DLGPROC)NewDiscDialogProc);
+			DialogBox(g_hinst, NULL, hwnd, (DLGPROC)NewDiskDialogProc);
 			DWORD err = GetLastError();
 			wchar_t szTest[10];
 			swprintf_s(szTest, 10, L"%d", err);
