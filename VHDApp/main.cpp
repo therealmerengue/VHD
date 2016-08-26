@@ -2,6 +2,7 @@
 #include <ShlObj.h>
 #include <commoncontrols.h>
 #include <string>
+#include <thread>
 
 #include "VHD.h"
 #include "Treeview.h"
@@ -142,7 +143,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				vector<string> filesToSort;
 				string folderToSort = g_diskPath + "Sort";
 				GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
-				Sort(filesToSort, g_diskPath, folderToSort);
+				std::thread(Sort, filesToSort, g_diskPath, folderToSort).join();
+				//Sort(filesToSort, g_diskPath, folderToSort);
 			}
 			else
 			{
