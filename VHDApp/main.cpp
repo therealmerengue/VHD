@@ -42,7 +42,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	RegisterClassW(&wc);
 	hwnd = CreateWindowW(wc.lpszClassName, L"Window",
 		WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU,
-		100, 100, 800, 600, NULL, NULL, hInstance, NULL);
+		100, 100, 575, 355, NULL, NULL, hInstance, NULL);
 
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
@@ -74,37 +74,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		//Buttons left
 
 		hwndButtonNewDisk = CreateWindowW(L"button", L"New disk",
-			WS_VISIBLE | WS_CHILD, 10, 20, 90, 25,
+			WS_VISIBLE | WS_CHILD, 375, 20, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_NEW_DISK, NULL, NULL);
 
 		hwndButtonMountDisk = CreateWindowW(L"button", L"Mount disk",
-			WS_VISIBLE | WS_CHILD, 10, 50, 90, 25,
+			WS_VISIBLE | WS_CHILD, 375, 50, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_MOUNT_DISK, NULL, NULL);
 
 		hwndButtonChooseDisk = CreateWindowW(L"button", L"Choose disk",
-			WS_VISIBLE | WS_CHILD, 10, 80, 90, 25,
+			WS_VISIBLE | WS_CHILD, 375, 80, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
 
 		hwndButtonSort = CreateWindowW(L"button", L"Sort",
-			WS_VISIBLE | WS_CHILD, 10, 110, 90, 25,
+			WS_VISIBLE | WS_CHILD, 375, 110, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_SORT, NULL, NULL);
 
 		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
-			WS_VISIBLE | WS_CHILD, 10, 140, 90, 25,
+			WS_VISIBLE | WS_CHILD, 375, 140, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
 
 		//File treeview - center
 
-		hwndTreeView = CreateATreeView(g_hinst, hwnd, 225, 16, 335, 250);
+		hwndTreeView = CreateATreeView(g_hinst, hwnd, 30, 20, 335, 250);
 		AddItemsToTreeView(driveLetters, hwndTreeView);
 		SetImageList(hwndTreeView);
-
-		//Debug edit text
-		
-		static HWND hwndDebug = CreateWindowW(L"Edit", NULL,
-			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
-			400, 500, 150, 20, hwnd, (HMENU)ID_EDIT,
-			NULL, NULL);
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
