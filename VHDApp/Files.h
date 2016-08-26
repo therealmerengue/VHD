@@ -45,6 +45,7 @@ void Sort(const std::vector<std::string>& files, const std::string& diskPath, co
 					CreateDirectory(s2ws(newFolder).c_str(), NULL);
 				}
 				MoveFile(s2ws(folderToSort + "\\" + files[i]).c_str(), s2ws(newFolder + "\\" + files[i]).c_str());
+				break;
 			}
 		}
 	}
