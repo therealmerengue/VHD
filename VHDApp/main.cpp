@@ -40,7 +40,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 
 	RegisterClassW(&wc);
-	hwnd = CreateWindowW(wc.lpszClassName, L"Window",
+	hwnd = CreateWindowW(wc.lpszClassName, L"VHD App",
 		WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU,
 		100, 100, 575, 355, NULL, NULL, hInstance, NULL);
 

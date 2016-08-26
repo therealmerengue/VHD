@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <memory.h>
-#include <windows.h> // this header is necessary for wincrypt.h
+#include <windows.h>
 #include <wincrypt.h>
 #include <mbstring.h>
 

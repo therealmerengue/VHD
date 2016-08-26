@@ -67,7 +67,6 @@ std::vector<string> GetDriveLetters()
 		wchar_t* szSingleDrive = szLogicalDrives;
 		while (*szSingleDrive)
 		{
-			//printf("Drive: %s\n", szSingleDrive);
 			wstring wstr(szSingleDrive);
 			driveLetters.push_back(string(wstr.begin(), wstr.end()));
 			// get the next drive

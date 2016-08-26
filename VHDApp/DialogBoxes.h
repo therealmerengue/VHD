@@ -55,7 +55,6 @@ INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			wstring wstrFullDiskPath;
 			if (!SetupDiskCreation(hwndDlg, wstrFullDiskPath))
 				break;
-			//commented out for safety :p
 			/*CreateVHD_Fixed(&wstrFullDiskPath[0], size);
 			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());*/
 			EndDialog(hwndDlg, ID_BTN_CREATE_AND_MOUNT);
@@ -68,7 +67,6 @@ INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			wstring wstrFullDiskPath;
 			if (!SetupDiskCreation(hwndDlg, wstrFullDiskPath))
 				break;
-			//commented out for safety :p
 			//CreateVHD_Fixed(&wstrFullDiskPath[0], size);
 			EndDialog(hwndDlg, ID_BTN_CREATE_AND_MOUNT);
 		}
@@ -122,7 +120,6 @@ INT_PTR CALLBACK ChooseDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 			wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
 			CreateDirectory(&wstrEncryptFolderPath[0], NULL);
 
-			//TODO : return diskPath somehow through global var I guess
 			g_diskPath = diskPath;
 
 			EndDialog(hwndDlg, ID_BTN_CREATE_FOLDERS);
@@ -211,7 +208,7 @@ INT_PTR CALLBACK EncryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			string password = WindowTextToString(hwndEditPassword);
 			CreateDirectory(s2ws(g_diskPath + "\\Encrypted").c_str(), NULL);
 			EncryptFiles(filesToEncrypt, g_diskPath + "Encrypt", g_diskPath + "Encrypted", password);
-			EndDialog(hwndDlg, ID_BTN_ENCRYPT); // TODO : check if encrypting files works, take away choosing folders to create -> create all anyway
+			EndDialog(hwndDlg, ID_BTN_ENCRYPT);
 		}
 
 		break;
