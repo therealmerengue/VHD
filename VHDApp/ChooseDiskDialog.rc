@@ -2,6 +2,7 @@
 //
 #include <windows.h>
 #include "resource.h"
+#include "resources.h"
 /////////////////////////////////////////////////////////////////////////////
 // English (United States) resources
 
@@ -14,17 +15,14 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_CHOOSEDISK DIALOGEX 0, 0, 191, 124
+IDD_CHOOSEDISK DIALOGEX 0, 0, 191, 70
 STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Choose disk"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CTEXT           "Disk:",IDC_STATIC,13,13,20,10
     COMBOBOX        ID_COMBO_DISK,36,11,50,65,CBS_DROPDOWNLIST
-    GROUPBOX        "Choose folders",IDC_STATIC,10,27,171,64
-    CONTROL         "Sort folder",ID_CHECKBOX_SORT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,39,43,13
-    CONTROL         "Encrypt folder",ID_CHECKBOX_ENCRYPT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,53,53,13
-    DEFPUSHBUTTON   "&Create folders",ID_BTN_CREATE_FOLDERS,59,101,67,15
+    DEFPUSHBUTTON   "&Create folders",ID_BTN_CREATE_FOLDERS,59,51,67,15
 END
 
 

@@ -102,8 +102,6 @@ INT_PTR CALLBACK ChooseDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 	case WM_INITDIALOG:
 		hwndCombo = GetDlgItem(hwndDlg, ID_COMBO_DISK);
 		AddItemsToCombobox(hwndCombo, GetDriveLetters());
-		CheckDlgButton(hwndDlg, ID_CHECKBOX_SORT, BST_UNCHECKED);
-		CheckDlgButton(hwndDlg, ID_CHECKBOX_ENCRYPT, BST_UNCHECKED);
 		EnumChildWindows(hwndDlg, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 		break;
 
@@ -111,32 +109,18 @@ INT_PTR CALLBACK ChooseDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 
 		if (LOWORD(wParam) == ID_BTN_CREATE_FOLDERS)
 		{
-			bool sortFolder = IsDlgButtonChecked(hwndDlg, ID_CHECKBOX_SORT);
-			bool encryptFolder = IsDlgButtonChecked(hwndDlg, ID_CHECKBOX_ENCRYPT);
 			hwndCombo = GetDlgItem(hwndDlg, ID_COMBO_DISK);
 			string diskPath = TextFromComboboxToString(hwndCombo);
 			if (!CheckIfStringEmpty(diskPath, L"Choose a disk.", hwndDlg, NULL))
 				break;
 
-			if (sortFolder)
-			{
-				string strSortFolderPath = diskPath + "Sort";
-				wstring wstrSortFolderPath = toWString(strSortFolderPath);
-				CreateDirectory(&wstrSortFolderPath[0], NULL);
-			}
+			string strSortFolderPath = diskPath + "Sort";
+			wstring wstrSortFolderPath = toWString(strSortFolderPath);
+			CreateDirectory(&wstrSortFolderPath[0], NULL);
 
-			if (encryptFolder)
-			{
-				string strEncryptFolderPath = diskPath + "Encrypt";
-				wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
-				CreateDirectory(&wstrEncryptFolderPath[0], NULL);
-			}
-
-			if (!sortFolder && !encryptFolder)
-			{
-				MessageBox(hwndDlg, L"Choose a folder.", L"Error", MB_OK);
-				break;
-			}
+			string strEncryptFolderPath = diskPath + "Encrypt";
+			wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
+			CreateDirectory(&wstrEncryptFolderPath[0], NULL);
 
 			//TODO : return diskPath somehow through global var I guess
 			g_diskPath = diskPath;

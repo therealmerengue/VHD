@@ -47,7 +47,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
 
-	while (GetMessage(&msg, NULL, 0, 0)) {
+	while (GetMessage(&msg, NULL, 0, 0)) 
+	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
@@ -59,12 +60,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndTreeView;
 	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt; //buttons left
-	HWND hwndButtonTest;
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
-
-	switch (msg) 
+	
+	switch (msg)
 	{
 	case WM_CREATE:
 
@@ -92,10 +92,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
 			WS_VISIBLE | WS_CHILD, 10, 140, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
-
-		hwndButtonTest = CreateWindowW(L"button", L"Test",
-			WS_VISIBLE | WS_CHILD, 10, 170, 90, 25,
-			hwnd, (HMENU)ID_BUTTON_TEST, NULL, NULL);
 
 		//File treeview - center
 
@@ -135,7 +131,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK) || LOWORD(wParam == IDM_DISK_CHOOSE)) 
+		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK) || LOWORD(wParam == IDM_DISK_CHOOSE))  //TODO : check if folders already exist on mounted disk
 		{
 			DialogBox(g_hinst, MAKEINTRESOURCE(IDD_CHOOSEDISK), hwnd, (DLGPROC)ChooseDiskDialogProc, (LPARAM)folderPath);
 			break;
@@ -178,11 +174,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 
 			break;
-		}
-
-		if (LOWORD(wParam == ID_BUTTON_TEST))
-		{
-			CreateEncryptedFile("C:\\Users\\osobat\\Documents\\test.txt", "C:\\Users\\osobat\\Documents\\enc.txt", "passwordyo");
 		}
 
 		break;
