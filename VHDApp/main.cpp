@@ -59,6 +59,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndTreeView;
 	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt; //buttons left
+	HWND hwndButtonTest;
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -91,6 +92,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
 			WS_VISIBLE | WS_CHILD, 10, 140, 90, 25,
 			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
+
+		hwndButtonTest = CreateWindowW(L"button", L"Test",
+			WS_VISIBLE | WS_CHILD, 10, 170, 90, 25,
+			hwnd, (HMENU)ID_BUTTON_TEST, NULL, NULL);
 
 		//File treeview - center
 
@@ -172,6 +177,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 
 			break;
+		}
+
+		if (LOWORD(wParam == ID_BUTTON_TEST))
+		{
+			CreateEncryptedFile("C:\\Users\\osobat\\Documents\\test.txt", "C:\\Users\\osobat\\Documents\\enc.txt", "passwordyo");
 		}
 
 		break;

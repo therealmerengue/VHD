@@ -4,6 +4,10 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <sstream>
+#include <fstream>
+
+#include "Encryption.h"
 
 using namespace std;
 
@@ -72,4 +76,21 @@ std::vector<string> GetDriveLetters()
 	}
 
 	return driveLetters;
+}
+
+void CreateEncryptedFile(string inputPath, string outputPath, string password)
+{
+	ifstream inputFile(inputPath);
+	stringstream inputStream;
+
+	inputStream << inputFile.rdbuf();
+	inputFile.close();
+	string inputText = inputStream.str();
+
+	string outputText = Encrypt(password.c_str(), inputText.c_str());
+
+	ofstream outputFile(outputPath);
+	if (outputFile.is_open())
+		outputFile << outputText;
+	outputFile.close();
 }
