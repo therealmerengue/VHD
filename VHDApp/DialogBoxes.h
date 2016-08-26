@@ -8,7 +8,7 @@ using namespace std;
 string g_diskPath;
 HINSTANCE g_hinst;
 
-bool SetupDiskCreation(HWND hwndDlg, wstring& wstrFullDiskPath)
+bool SetupDiskCreation(HWND hwndDlg, wstring& wstrFullDiskPath, int& size)
 {
 	HWND hwndEditDiskName = GetDlgItem(hwndDlg, ID_EDIT_DISKNAME);
 	string strDiskName = WindowTextToString(hwndEditDiskName);
@@ -23,7 +23,7 @@ bool SetupDiskCreation(HWND hwndDlg, wstring& wstrFullDiskPath)
 		return false;
 	if (!CheckIfStringContainsNumbersOnly(strDiskSize, L"Enter a valid disk size - numbers only.", hwndDlg, hwndEditDiskSize))
 		return false;
-	int size = stoi(strDiskSize);
+	size = stoi(strDiskSize);
 
 	HWND hwndEditFolderPath = GetDlgItem(hwndDlg, ID_EDIT_DISKFOLDER);
 
@@ -38,7 +38,9 @@ bool SetupDiskCreation(HWND hwndDlg, wstring& wstrFullDiskPath)
 INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static LPCWSTR path;
-	static HWND hwndEditFolderPath;
+	static HWND hwndEditFolderPath, hwndEditDiskSize;
+	int size = 0;
+
 	switch (uMsg)
 	{
 	case WM_INITDIALOG:
@@ -53,10 +55,11 @@ INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		if (LOWORD(wParam == ID_BTN_CREATE_AND_MOUNT))
 		{
 			wstring wstrFullDiskPath;
-			if (!SetupDiskCreation(hwndDlg, wstrFullDiskPath))
+			if (!SetupDiskCreation(hwndDlg, wstrFullDiskPath, size))
 				break;
-			/*CreateVHD_Fixed(&wstrFullDiskPath[0], size);
-			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());*/
+			
+			CreateVHD_Fixed(&wstrFullDiskPath[0], size);
+			OpenAndAttachVHD2(&wstrFullDiskPath[0], CountPhysicalDisks());
 			EndDialog(hwndDlg, ID_BTN_CREATE_AND_MOUNT);
 
 			break;
@@ -65,9 +68,10 @@ INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		if (LOWORD(wParam == ID_BTN_CREATE))
 		{
 			wstring wstrFullDiskPath;
-			if (!SetupDiskCreation(hwndDlg, wstrFullDiskPath))
+			if (!SetupDiskCreation(hwndDlg, wstrFullDiskPath, size))
 				break;
-			//CreateVHD_Fixed(&wstrFullDiskPath[0], size);
+
+			CreateVHD_Fixed(&wstrFullDiskPath[0], size);
 			EndDialog(hwndDlg, ID_BTN_CREATE_AND_MOUNT);
 		}
 
