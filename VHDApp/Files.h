@@ -78,7 +78,7 @@ std::vector<string> GetDriveLetters()
 	return driveLetters;
 }
 
-void CreateEncryptedFile(string inputPath, string outputPath, string password)
+void CreateEncryptedFile(const string& inputPath, const string& outputPath, const string& password)
 {
 	ifstream inputFile(inputPath);
 	stringstream inputStream;
@@ -93,4 +93,21 @@ void CreateEncryptedFile(string inputPath, string outputPath, string password)
 	if (outputFile.is_open())
 		outputFile << outputText;
 	outputFile.close();
+}
+
+void EncryptFiles(const vector<string>& files, const string& inputFolderPath, const string& outputFolderPath, const string& password)
+{
+	for (int i = 0; i < files.size(); i++)
+	{
+		for (int j = files[i].length() - 1; j >= 0; j--)
+		{
+			if (files[i][j] == '.')
+			{
+				if (files[i].substr(j + 1) == "txt")
+					CreateEncryptedFile(inputFolderPath + "\\" + files[i], outputFolderPath + "\\Enc" + files[i], password);
+				
+				break;
+			}
+		}
+	}
 }

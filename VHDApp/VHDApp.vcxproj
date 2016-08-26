@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ChooseDiskDialog.rc" />
+    <ResourceCompile Include="EncryptDialog.rc" />
     <ResourceCompile Include="NewDiskDialog.rc" />
     <ResourceCompile Include="NoFoldersDialog.rc" />
   </ItemGroup>

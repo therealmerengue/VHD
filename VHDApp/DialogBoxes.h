@@ -207,3 +207,45 @@ INT_PTR CALLBACK NoFoldersDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 	}
 	return TRUE;
 }
+
+INT_PTR CALLBACK EncryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	static HWND hwndEditPassword;
+	switch (uMsg)
+	{
+	case WM_INITDIALOG:
+
+		break;
+
+	case WM_COMMAND:
+
+		if (LOWORD(wParam == ID_BTN_ENCRYPT))
+		{
+			vector<string> filesToEncrypt;
+			GetFilesInDirectory((g_diskPath + "Encrypt").c_str(), filesToEncrypt, vector<string>());
+			hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_PASSWORD);
+			string password = WindowTextToString(hwndEditPassword);
+			CreateDirectory(s2ws(g_diskPath + "\\Encrypted").c_str(), NULL);
+			EncryptFiles(filesToEncrypt, g_diskPath + "Encrypt", g_diskPath + "Encrypted", password);
+			EndDialog(hwndDlg, ID_BTN_ENCRYPT); // TODO : check if encrypting files works, take away choosing folders to create -> create all anyway
+		}
+
+		break;
+
+	case WM_CLOSE:
+		EndDialog(hwndDlg, 0);
+		break;
+
+	case WM_QUIT:
+		EndDialog(hwndDlg, 0);
+		break;
+
+	case WM_DESTROY:
+		EndDialog(hwndDlg, 0);
+		break;
+
+	default:
+		return FALSE;
+	}
+	return TRUE;
+}

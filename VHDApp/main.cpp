@@ -169,6 +169,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (!g_diskPath.empty())
 			{
 				//encrypt
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc);
 			}
 			else
 			{

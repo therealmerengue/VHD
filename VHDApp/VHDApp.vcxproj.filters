@@ -67,5 +67,8 @@
     <ResourceCompile Include="NoFoldersDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="EncryptDialog.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
