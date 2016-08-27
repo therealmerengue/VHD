@@ -60,7 +60,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 {
 	static HWND hwndTreeView;
-	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt; //buttons left
+	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt, hwndButtonDecrypt; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -93,6 +93,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
 			WS_VISIBLE | WS_CHILD, 375, 140, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
+
+		hwndButtonDecrypt = CreateWindowW(L"button", L"Decrypt",
+			WS_VISIBLE | WS_CHILD, 375, 170, 150, 25,
+			hwnd, (HMENU)ID_BUTTON_DECRYPT, NULL, NULL);
 
 		//File treeview - center
 
@@ -161,6 +165,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				//encrypt
 				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc);
+			}
+			else
+			{
+				//show choose disk dialog
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+			}
+
+			break;
+		}
+
+		if (LOWORD(wParam == ID_BUTTON_DECRYPT) || LOWORD(wParam == IDM_DECRYPT))
+		{
+			if (!g_diskPath.empty())
+			{
+				//encrypt
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc);
 			}
 			else
 			{
@@ -247,6 +267,7 @@ void AddMenus(HWND hwnd)
 	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuAction, L"&Action");
 	AppendMenuW(hMenuAction, MF_STRING, IDM_SORT, L"&Sort");
 	AppendMenuW(hMenuAction, MF_STRING, IDM_ENCRYPT, L"&Encrypt");
+	AppendMenuW(hMenuAction, MF_STRING, IDM_DECRYPT, L"&Decrypt");
 	
 	SetMenu(hwnd, hMenubar);
 }

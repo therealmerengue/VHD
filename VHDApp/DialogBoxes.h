@@ -124,6 +124,10 @@ INT_PTR CALLBACK ChooseDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 			wstring wstrEncryptFolderPath = toWString(strEncryptFolderPath);
 			CreateDirectory(&wstrEncryptFolderPath[0], NULL);
 
+			string strDecryptFolderPath = diskPath + "Decrypt";
+			wstring wstrDecryptFolderPath = toWString(strDecryptFolderPath);
+			CreateDirectory(&wstrDecryptFolderPath[0], NULL);
+
 			g_diskPath = diskPath;
 
 			EndDialog(hwndDlg, ID_BTN_CREATE_FOLDERS);
@@ -208,11 +212,53 @@ INT_PTR CALLBACK EncryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		{
 			vector<string> filesToEncrypt;
 			GetFilesInDirectory((g_diskPath + "Encrypt").c_str(), filesToEncrypt, vector<string>());
-			hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_PASSWORD);
+			hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_ENCRYPT_PASSWORD);
 			string password = WindowTextToString(hwndEditPassword);
 			CreateDirectory(s2ws(g_diskPath + "\\Encrypted").c_str(), NULL);
 			EncryptFiles(filesToEncrypt, g_diskPath + "Encrypt", g_diskPath + "Encrypted", password);
 			EndDialog(hwndDlg, ID_BTN_ENCRYPT);
+		}
+
+		break;
+
+	case WM_CLOSE:
+		EndDialog(hwndDlg, 0);
+		break;
+
+	case WM_QUIT:
+		EndDialog(hwndDlg, 0);
+		break;
+
+	case WM_DESTROY:
+		EndDialog(hwndDlg, 0);
+		break;
+
+	default:
+		return FALSE;
+	}
+	return TRUE;
+}
+
+INT_PTR CALLBACK DecryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	static HWND hwndEditPassword;
+	switch (uMsg)
+	{
+	case WM_INITDIALOG:
+
+		break;
+
+	case WM_COMMAND:
+
+		if (LOWORD(wParam == ID_BTN_DECRYPT))
+		{
+			vector<string> filesToDecrypt;
+			GetFilesInDirectory((g_diskPath + "Decrypt").c_str(), filesToDecrypt, vector<string>());
+			hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_DECRYPT_PASSWORD);
+			string password = WindowTextToString(hwndEditPassword);
+			CreateDirectory(s2ws(g_diskPath + "\\Decrypted").c_str(), NULL);
+			EncryptFiles(filesToDecrypt, g_diskPath + "Decrypt", g_diskPath + "Decrypted", password);
+			EndDialog(hwndDlg, ID_BTN_DECRYPT);
 		}
 
 		break;
