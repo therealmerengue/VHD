@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by NoFoldersDialog.rc
+// Used by DecryptDialog.rc
 //
 #define SW_HIDE                         0
 #define HIDE_WINDOW                     0
@@ -570,6 +570,7 @@
 #define SUBLANG_ARABIC_QATAR            0x10
 #define SUBLANG_ENGLISH_INDIA           0x10
 #define SUBLANG_SPANISH_BOLIVIA         0x10
+#define ID_BUTTON_DECRYPT               16
 #define VK_CONTROL                      0x11
 #define WM_QUERYENDSESSION              0x0011
 #define HTBOTTOMRIGHT                   17
@@ -714,6 +715,7 @@
 #define LANG_GEORGIAN                   0x37
 #define IDM_ENCRYPT                     55
 #define LANG_FAEROESE                   0x38
+#define IDM_DECRYPT                     56
 #define WM_COMPAREITEM                  0x0039
 #define LANG_HINDI                      0x39
 #define LANG_MALTESE                    0x3a
@@ -1091,9 +1093,7 @@
 #define WM_QUERYUISTATE                 0x0129
 #define IDD_CHOOSEDISK                  300
 #define ID_COMBO_DISK                   301
-#define ID_CHECKBOX_SORT                302
-#define ID_CHECKBOX_ENCRYPT             303
-#define ID_BTN_CREATE_FOLDERS           304
+#define ID_BTN_CREATE_FOLDERS           303
 #define WM_CTLCOLORMSGBOX               0x0132
 #define WM_CTLCOLOREDIT                 0x0133
 #define WM_CTLCOLORLISTBOX              0x0134
@@ -1105,6 +1105,9 @@
 #define ID_BTN_CHOOSE_DISK              401
 #define ID_BTN_CANCEL                   402
 #define MN_GETHMENU                     0x01E1
+#define IDD_ENCRYPT                     500
+#define ID_EDIT_ENCRYPT_PASSWORD        501
+#define ID_BTN_ENCRYPT                  502
 #define _WIN32_IE_IE20                  0x0200
 #define WM_MOUSEFIRST                   0x0200
 #define WM_MOUSEMOVE                    0x0200
@@ -1176,6 +1179,9 @@
 #define WM_POINTERWHEEL                 0x024E
 #define WM_POINTERHWHEEL                0x024F
 #define DM_POINTERHITTEST               0x0250
+#define IDD_DECRYPT                     600
+#define ID_EDIT_DECRYPT_PASSWORD        601
+#define ID_BTN_DECRYPT                  602
 #define WM_IME_SETCONTEXT               0x0281
 #define WM_IME_NOTIFY                   0x0282
 #define WM_IME_CONTROL                  0x0283
@@ -1581,10 +1587,10 @@
 #define SC_CONTEXTHELP                  0xF180
 #define LVS_TYPESTYLEMASK               0xfc00
 #define SPVERSION_MASK                  0x0000FF00
-#define HTERROR                         -7
-#define PWR_FAIL                        -6
+#define HTERROR                         -2
+#define PWR_FAIL                        -1
 #define UNICODE_NOCHAR                  0xFFFF
-#define HTTRANSPARENT                   -5
+#define HTTRANSPARENT                   -1
 
 // Next default values for new objects
 // 
