@@ -215,7 +215,10 @@ INT_PTR CALLBACK EncryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_ENCRYPT_PASSWORD);
 			string password = WindowTextToString(hwndEditPassword);
 			CreateDirectory(s2ws(g_diskPath + "\\Encrypted").c_str(), NULL);
+			std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
 			EncryptFiles(filesToEncrypt, g_diskPath + "Encrypt", g_diskPath + "Encrypted", password);
+			std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+			ShowTimeDialog(hwndDlg, begin_time, end_time, L"Encrypted in: ");
 			EndDialog(hwndDlg, ID_BTN_ENCRYPT);
 		}
 
@@ -257,7 +260,10 @@ INT_PTR CALLBACK DecryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_DECRYPT_PASSWORD);
 			string password = WindowTextToString(hwndEditPassword);
 			CreateDirectory(s2ws(g_diskPath + "\\Decrypted").c_str(), NULL);
+			std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
 			EncryptFiles(filesToDecrypt, g_diskPath + "Decrypt", g_diskPath + "Decrypted", password);
+			std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+			ShowTimeDialog(hwndDlg, begin_time, end_time, L"Decrypted in: ");
 			EndDialog(hwndDlg, ID_BTN_DECRYPT);
 		}
 

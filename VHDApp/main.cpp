@@ -152,12 +152,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				string folderToSort = g_diskPath + "Sort";
 				GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
 				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
-				std::thread(Sort, filesToSort, g_diskPath, folderToSort).join();
+				std::thread(Sort, filesToSort, g_diskPath, folderToSort).join(); //std::ref?
 				std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
-				auto sortingTime = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - begin_time).count();
-				string strTime = to_string(sortingTime);
-				wstring wstrTime = L"Sorted in: " + s2ws(strTime) + L"ms";
-				MessageBox(hwnd, &wstrTime[0], L"Sorted", MB_OK);
+				ShowTimeDialog(hwnd, begin_time, end_time, L"Sorted in: ");
 				//Sort(filesToSort, g_diskPath, folderToSort);
 			}
 			else

@@ -4,23 +4,23 @@
 #include "StringOperations.h"
 #include "Combobox.h"
 
-void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc) 
-{
-	WNDCLASSEXW wc = { 0 };
-	wc.cbSize = sizeof(WNDCLASSEXW);
-	wc.lpfnWndProc = lpfnWndProc;
-	wc.hInstance = hInstance;
-	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
-	wc.lpszClassName = lpszClassName;
-	RegisterClassExW(&wc);
-}
-
-HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x, int y, int width, int height) 
-{
-	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, lpClassName, title,
-		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, x, y, width, height,
-		NULL, NULL, hInstance, (LPVOID)param);
-}
+//void RegisterDialogClass(HWND hwnd, HINSTANCE hInstance, LPCWSTR lpszClassName, WNDPROC lpfnWndProc) 
+//{
+//	WNDCLASSEXW wc = { 0 };
+//	wc.cbSize = sizeof(WNDCLASSEXW);
+//	wc.lpfnWndProc = lpfnWndProc;
+//	wc.hInstance = hInstance;
+//	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
+//	wc.lpszClassName = lpszClassName;
+//	RegisterClassExW(&wc);
+//}
+//
+//HWND CreateDialogBox(HWND hwndParent, HINSTANCE hInstance, LPCWSTR param, LPCWSTR lpClassName, LPCWSTR title, int x, int y, int width, int height) 
+//{
+//	return CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, lpClassName, title,
+//		WS_VISIBLE | WS_SYSMENU | WS_CAPTION, x, y, width, height,
+//		NULL, NULL, hInstance, (LPVOID)param);
+//}
 
 PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd)
 {
@@ -61,4 +61,12 @@ void OpenFileDialog(HWND hwnd)
 
 		OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
 	}
+}
+
+void ShowTimeDialog(HWND hwnd, std::chrono::steady_clock::time_point begin_time, std::chrono::steady_clock::time_point end_time, wstring wstrMessageBeginning)
+{
+	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - begin_time).count();
+	wstring wstrTime = to_wstring(time);
+	wstring wstrMessage = wstrMessageBeginning + wstrTime + L"ms";
+	MessageBox(hwnd, &wstrMessage[0], L"Sorted", MB_OK);
 }
