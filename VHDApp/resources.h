@@ -8,6 +8,7 @@
 #define ID_BUTTON_SORT 14
 #define ID_BUTTON_ENCRYPT 15
 #define ID_BUTTON_DECRYPT 16
+#define ID_BUTTON_DETACH_DISK 17
 
 #define IDM_DISK_NEW 50
 #define IDM_DISK_MOUNT 51
@@ -16,6 +17,7 @@
 #define IDM_SORT 54
 #define IDM_ENCRYPT 55
 #define IDM_DECRYPT 56
+#define IDM_DISK_DETACH 57
 
 #define IDC_STATIC 100
 #define IDD_NEWDISK 200
@@ -40,3 +42,9 @@
 #define IDD_DECRYPT 600
 #define ID_EDIT_DECRYPT_PASSWORD 601
 #define ID_BTN_DECRYPT 602
+
+enum Action
+{
+	ATTACH_DISK,
+	DETACH_DISK
+};

@@ -38,7 +38,7 @@ PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd)
 	return SHBrowseForFolder(&bi);
 }
 
-void OpenFileDialog(HWND hwnd)
+void OpenFileDialog(HWND hwnd, Action action = ATTACH_DISK)
 {
 	OPENFILENAME ofn;
 	TCHAR szFile[MAX_PATH];
@@ -59,7 +59,10 @@ void OpenFileDialog(HWND hwnd)
 	{
 		SetWindowText(hwnd, ofn.lpstrFile);
 
-		OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
+		if (action == ATTACH_DISK)
+			OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
+		if (action == DETACH_DISK)
+			OpenAndDetachVHD(ofn.lpstrFile);
 	}
 }
 

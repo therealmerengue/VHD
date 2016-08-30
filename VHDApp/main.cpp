@@ -3,7 +3,6 @@
 #include <commoncontrols.h>
 #include <string>
 
-#include <iomanip>
 #include <thread>
 #include <chrono>
 #include <ctime>
@@ -64,7 +63,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 {
 	static HWND hwndTreeView;
-	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt, hwndButtonDecrypt; //buttons left
+	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt, hwndButtonDecrypt, hwndButtonDetachDisk; //buttons left
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -101,6 +100,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonDecrypt = CreateWindowW(L"button", L"Decrypt",
 			WS_VISIBLE | WS_CHILD, 375, 170, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_DECRYPT, NULL, NULL);
+
+		hwndButtonDetachDisk = CreateWindowW(L"button", L"Detach disk",
+			WS_VISIBLE | WS_CHILD, 375, 200, 150, 25,
+			hwnd, (HMENU)ID_BUTTON_DETACH_DISK, NULL, NULL);
 
 		//File treeview - center
 
@@ -198,6 +201,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
+		if (LOWORD(wParam == ID_BUTTON_DETACH_DISK) || LOWORD(wParam == IDM_DISK_DETACH))
+		{
+			OpenFileDialog(hwnd, DETACH_DISK);
+		}
+
 		break;
 
 	case WM_NOTIFY:
@@ -269,6 +277,7 @@ void AddMenus(HWND hwnd)
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_CHOOSE, L"&Choose disk");
 	AppendMenuW(hMenuFile, MF_SEPARATOR, 0, NULL);
+	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_DETACH, L"&Detach disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_QUIT, L"&Quit");
 
 	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuAction, L"&Action");
