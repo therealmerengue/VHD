@@ -11,7 +11,6 @@
 
 using namespace std;
 
-//Wyœwietlnie plików w folderze
 bool GetFilesInDirectory(const char* path, std::vector<std::string>& files, std::vector<std::string>& dirs)
 {
 	DIR *dir;
@@ -103,7 +102,7 @@ void EncryptFiles(const vector<string>& files, const string& inputFolderPath, co
 			if (files[i][j] == '.')
 			{
 				if (files[i].substr(j + 1) == "txt")
-					CreateEncryptedFile(inputFolderPath + "\\" + files[i], outputFolderPath + "\\Enc" + files[i], password);
+					CreateEncryptedFile(inputFolderPath + "\\" + files[i], outputFolderPath + "\\Crypt_" + files[i], password);
 				
 				break;
 			}

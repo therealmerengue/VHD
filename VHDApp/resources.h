@@ -43,7 +43,7 @@
 #define ID_EDIT_DECRYPT_PASSWORD 601
 #define ID_BTN_DECRYPT 602
 
-enum Action
+enum OpenFileDialogAction
 {
 	ATTACH_DISK,
 	DETACH_DISK

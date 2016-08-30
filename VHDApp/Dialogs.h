@@ -38,7 +38,7 @@ PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd)
 	return SHBrowseForFolder(&bi);
 }
 
-void OpenFileDialog(HWND hwnd, Action action = ATTACH_DISK)
+void OpenFileDialog(HWND hwnd, OpenFileDialogAction action = ATTACH_DISK)
 {
 	OPENFILENAME ofn;
 	TCHAR szFile[MAX_PATH];
