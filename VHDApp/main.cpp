@@ -64,7 +64,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 {
 	static HWND hwndTreeView;
-	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt, hwndButtonDecrypt, hwndButtonDetachDisk; //buttons left
+	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt, hwndButtonDecrypt, hwndButtonDetachDisk; //buttons right
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -152,14 +152,32 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (!g_diskPath.empty())
 			{
+				LPNM_TREEVIEW pntv = (LPNM_TREEVIEW)lParam;
+				WCHAR buffer[128];
+				HTREEITEM selectedFolder = TreeView_GetSelection(hwndTreeView);
+				string folderToSort = GetFullNodePath(hwndTreeView, selectedFolder);
+
+				if (!selectedFolder)
+				{
+					MessageBox(hwnd, L"Choose a folder to sort from treeview and press Sort.", L"Error", MB_OK);
+					break;
+				}
+
+				if (IsDirectory(folderToSort.c_str()) == 0)
+				{
+					MessageBox(hwnd, L"Choose a directory, not a file.", L"Error", MB_OK);
+					break;
+				}
+
 				vector<string> filesToSort;
-				string folderToSort = g_diskPath + "Sort";
+					
 				GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
 				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
 				std::thread(Sort, filesToSort, g_diskPath, folderToSort).join(); //std::ref?
 				std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
 				ShowTimeDialog(hwnd, begin_time, end_time, L"Sorted in: ");
-				//Sort(filesToSort, g_diskPath, folderToSort);
+				//Sort(filesToSort, g_diskPath, folderToSort); 
+				
 			}
 			else
 			{

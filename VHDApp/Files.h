@@ -1,5 +1,7 @@
 #pragma once
 #include <Windows.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include <vector>
 #include <set>
@@ -10,6 +12,13 @@
 #include "Encryption.h"
 
 using namespace std;
+
+int IsDirectory(const char *path) {
+	struct stat statbuf;
+	if (stat(path, &statbuf) != 0)
+		return 0;
+	return S_ISDIR(statbuf.st_mode);
+}
 
 bool GetFilesInDirectory(const char* path, std::vector<std::string>& files, std::vector<std::string>& dirs)
 {
