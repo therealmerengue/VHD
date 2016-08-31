@@ -14,6 +14,13 @@
 
 using namespace std;
 
+int IsRegularFile(const char *path)
+{
+	struct stat path_stat;
+	stat(path, &path_stat);
+	return S_ISREG(path_stat.st_mode);
+}
+
 int IsDirectory(const char *path) {
 	struct stat statbuf;
 	if (stat(path, &statbuf) != 0)

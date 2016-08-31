@@ -195,6 +195,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (!g_diskPath.empty())
 			{
+				HTREEITEM selectedFile = TreeView_GetSelection(hwndTreeView);
+				string fileToEncrypt = GetFullNodePath(hwndTreeView, selectedFile);
+
+				if (!selectedFile)
+				{
+					MessageBox(hwnd, L"Choose a file to encrypt from treeview and press Encrypt.", L"Error", MB_OK);
+					break;
+				}
+
+				if (IsRegularFile(fileToEncrypt.c_str()) == 0)
+				{
+					MessageBox(hwnd, L"Choose a file, not a directory.", L"Error", MB_OK);
+					break;
+				}
+
+				if (fileToEncrypt.find(".txt") != fileToEncrypt.size() - 4)
+				{
+					MessageBox(hwnd, L"Choose a txt file.", L"Error", MB_OK);
+					break;
+				}
+
 				//encrypt
 				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc, (LPARAM)hwndTreeView);
 			}
@@ -223,12 +244,48 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_DECRYPT) || LOWORD(wParam == IDM_DECRYPT))
+		if (LOWORD(wParam == ID_BUTTON_DECRYPT))
+		{
+			if (!g_diskPath.empty())
+			{
+				HTREEITEM selectedFile = TreeView_GetSelection(hwndTreeView);
+				string fileToDecrypt = GetFullNodePath(hwndTreeView, selectedFile);
+
+				if (!selectedFile)
+				{
+					MessageBox(hwnd, L"Choose a file to decrypt from treeview and press Decrypt.", L"Error", MB_OK);
+					break;
+				}
+
+				if (IsRegularFile(fileToDecrypt.c_str()) == 0)
+				{
+					MessageBox(hwnd, L"Choose a file, not a directory.", L"Error", MB_OK);
+					break;
+				}
+
+				if (fileToDecrypt.find(".txt") != fileToDecrypt.size() - 4)
+				{
+					MessageBox(hwnd, L"Choose a txt file.", L"Error", MB_OK);
+					break;
+				}
+				//encrypt
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc, (LPARAM)hwndTreeView);
+			}
+			else
+			{
+				//show choose disk dialog
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+			}
+
+			break;
+		}
+
+		if (LOWORD(wParam == IDM_DECRYPT))
 		{
 			if (!g_diskPath.empty())
 			{
 				//encrypt
-				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc);
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc, NULL);
 			}
 			else
 			{

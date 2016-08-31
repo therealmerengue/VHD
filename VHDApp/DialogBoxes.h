@@ -259,27 +259,42 @@ INT_PTR CALLBACK EncryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 
 INT_PTR CALLBACK DecryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static HWND hwndEditPassword;
+	static HWND hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_DECRYPT_PASSWORD);
+	static HWND hwndTV;
+	string password = WindowTextToString(hwndEditPassword);
+	
 	switch (uMsg)
 	{
 	case WM_INITDIALOG:
-
+		hwndTV = (HWND)lParam;
+		CreateDirectory(s2ws(g_diskPath + "\\Decrypted").c_str(), NULL);
 		break;
 
 	case WM_COMMAND:
 
 		if (LOWORD(wParam == ID_BTN_DECRYPT))
 		{
-			vector<string> filesToDecrypt;
-			GetFilesInDirectory((g_diskPath + "Decrypt").c_str(), filesToDecrypt, vector<string>());
-			hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_DECRYPT_PASSWORD);
-			string password = WindowTextToString(hwndEditPassword);
-			CreateDirectory(s2ws(g_diskPath + "\\Decrypted").c_str(), NULL);
-			std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
-			EncryptFiles(filesToDecrypt, g_diskPath + "Decrypt", g_diskPath + "Decrypted", password);
-			std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
-			ShowTimeDialog(hwndDlg, begin_time, end_time, L"Decrypted in: ");
-			EndDialog(hwndDlg, ID_BTN_DECRYPT);
+			if (!hwndTV)
+			{
+				vector<string> filesToDecrypt;
+				GetFilesInDirectory((g_diskPath + "Decrypt").c_str(), filesToDecrypt, vector<string>());
+				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
+				EncryptFiles(filesToDecrypt, g_diskPath + "Decrypt", g_diskPath + "Decrypted", password);
+				std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+				ShowTimeDialog(hwndDlg, begin_time, end_time, L"Decrypted in: ");
+				EndDialog(hwndDlg, ID_BTN_DECRYPT);
+			}
+			else
+			{
+				HTREEITEM selectedFile = TreeView_GetSelection(hwndTV);
+				string fileToDecrypt = GetFullNodePath(hwndTV, selectedFile);
+				wstring fileName = GetItemText(hwndTV, selectedFile);
+				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
+				CreateEncryptedFile(fileToDecrypt, g_diskPath + "Decrypted" + "\\Crypt_" + toString(fileName), password);
+				std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+				ShowTimeDialog(hwndDlg, begin_time, end_time, L"Decrypted in: ");
+				EndDialog(hwndDlg, ID_BTN_DECRYPT);
+			}
 		}
 
 		break;
