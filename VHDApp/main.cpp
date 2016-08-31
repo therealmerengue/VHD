@@ -137,9 +137,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK) || LOWORD(wParam == IDM_DISK_CHOOSE))  //TODO : check if folders already exist on mounted disk
+		if (LOWORD(wParam == ID_BUTTON_CHOOSE_DISK) || LOWORD(wParam == IDM_DISK_CHOOSE))
 		{
-			DialogBox(g_hinst, MAKEINTRESOURCE(IDD_CHOOSEDISK), hwnd, (DLGPROC)ChooseDiskDialogProc, (LPARAM)folderPath);
+			DialogBox(g_hinst, MAKEINTRESOURCE(IDD_CHOOSEDISK), hwnd, (DLGPROC)ChooseDiskDialogProc);
 			break;
 		}
 
@@ -191,12 +191,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_ENCRYPT) || LOWORD(wParam == IDM_ENCRYPT))
+		if (LOWORD(wParam == ID_BUTTON_ENCRYPT))
 		{
 			if (!g_diskPath.empty())
 			{
 				//encrypt
-				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc);
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc, (LPARAM)hwndTreeView);
+			}
+			else
+			{
+				//show choose disk dialog
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+			}
+
+			break;
+		}
+
+		if (LOWORD(wParam == IDM_ENCRYPT))
+		{
+			if (!g_diskPath.empty())
+			{
+				//encrypt
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc, NULL);
 			}
 			else
 			{

@@ -199,27 +199,42 @@ INT_PTR CALLBACK NoFoldersDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 
 INT_PTR CALLBACK EncryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static HWND hwndEditPassword;
+	static HWND hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_ENCRYPT_PASSWORD);
+	static HWND hwndTV;
+	string password = WindowTextToString(hwndEditPassword);
+
 	switch (uMsg)
 	{
 	case WM_INITDIALOG:
-
+		hwndTV = (HWND)lParam;
+		CreateDirectory(s2ws(g_diskPath + "\\Encrypted").c_str(), NULL);
 		break;
 
 	case WM_COMMAND:
 
 		if (LOWORD(wParam == ID_BTN_ENCRYPT))
 		{
-			vector<string> filesToEncrypt;
-			GetFilesInDirectory((g_diskPath + "Encrypt").c_str(), filesToEncrypt, vector<string>());
-			hwndEditPassword = GetDlgItem(hwndDlg, ID_EDIT_ENCRYPT_PASSWORD);
-			string password = WindowTextToString(hwndEditPassword);
-			CreateDirectory(s2ws(g_diskPath + "\\Encrypted").c_str(), NULL);
-			std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
-			EncryptFiles(filesToEncrypt, g_diskPath + "Encrypt", g_diskPath + "Encrypted", password);
-			std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
-			ShowTimeDialog(hwndDlg, begin_time, end_time, L"Encrypted in: ");
-			EndDialog(hwndDlg, ID_BTN_ENCRYPT);
+			if (!hwndTV)
+			{
+				vector<string> filesToEncrypt;
+				GetFilesInDirectory((g_diskPath + "Encrypt").c_str(), filesToEncrypt, vector<string>()); 
+				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
+				EncryptFiles(filesToEncrypt, g_diskPath + "Encrypt", g_diskPath + "Encrypted", password);
+				std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+				ShowTimeDialog(hwndDlg, begin_time, end_time, L"Encrypted in: ");
+				EndDialog(hwndDlg, ID_BTN_ENCRYPT); 
+			}
+			else
+			{
+				HTREEITEM selectedFile = TreeView_GetSelection(hwndTV);
+				string fileToEncrypt = GetFullNodePath(hwndTV, selectedFile);
+				wstring fileName = GetItemText(hwndTV, selectedFile);
+				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
+				CreateEncryptedFile(fileToEncrypt, g_diskPath + "Encrypted" + "\\Crypt_" + toString(fileName), password);
+				std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+				ShowTimeDialog(hwndDlg, begin_time, end_time, L"Encrypted in: ");
+				EndDialog(hwndDlg, ID_BTN_ENCRYPT);
+			}
 		}
 
 		break;
