@@ -10,6 +10,7 @@
 #include <fstream>
 
 #include "Encryption.h"
+#include "Dialogs.h"
 
 using namespace std;
 
@@ -117,4 +118,14 @@ void EncryptFiles(const vector<string>& files, const string& inputFolderPath, co
 			}
 		}
 	}
+}
+
+void PerformSort(HWND hwnd, std::string folderToSort, std::string diskPath)
+{
+	vector<string> filesToSort;
+	GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
+	std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
+	std::thread(Sort, filesToSort, diskPath, folderToSort).join(); //std::ref?
+	std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+	ShowTimeDialog(hwnd, begin_time, end_time, L"Sorted in: ");
 }

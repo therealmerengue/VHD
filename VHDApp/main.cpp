@@ -148,12 +148,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hwnd);
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_SORT) || LOWORD(wParam == IDM_SORT)) 
+		if (LOWORD(wParam == ID_BUTTON_SORT)) 
 		{
 			if (!g_diskPath.empty())
 			{
-				LPNM_TREEVIEW pntv = (LPNM_TREEVIEW)lParam;
-				WCHAR buffer[128];
 				HTREEITEM selectedFolder = TreeView_GetSelection(hwndTreeView);
 				string folderToSort = GetFullNodePath(hwndTreeView, selectedFolder);
 
@@ -169,15 +167,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					break;
 				}
 
-				vector<string> filesToSort;
-					
-				GetFilesInDirectory(folderToSort.c_str(), filesToSort, vector<string>());
-				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
-				std::thread(Sort, filesToSort, g_diskPath, folderToSort).join(); //std::ref?
-				std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
-				ShowTimeDialog(hwnd, begin_time, end_time, L"Sorted in: ");
-				//Sort(filesToSort, g_diskPath, folderToSort); 
-				
+				PerformSort(hwnd, folderToSort, g_diskPath);
 			}
 			else
 			{
@@ -186,6 +176,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 
 			break;
+		}
+
+		if (LOWORD(wParam) == IDM_SORT)
+		{
+			if (!g_diskPath.empty())
+			{
+				PerformSort(hwnd, g_diskPath + "Sort", g_diskPath);
+			}
+			else
+			{
+				//show choose disk dialog
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+			}
 		}
 
 		if (LOWORD(wParam == ID_BUTTON_ENCRYPT) || LOWORD(wParam == IDM_ENCRYPT))
@@ -291,7 +294,7 @@ void AddMenus(HWND hwnd)
 	hMenuFile = CreateMenu();
 	hMenuAction = CreateMenu();
 
-	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuFile, L"&File");
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuFile, L"&Disks");
 
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_NEW, L"&New disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
@@ -300,7 +303,7 @@ void AddMenus(HWND hwnd)
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_DETACH, L"&Detach disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_QUIT, L"&Quit");
 
-	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuAction, L"&Action");
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuAction, L"&Disk Folders");
 	AppendMenuW(hMenuAction, MF_STRING, IDM_SORT, L"&Sort");
 	AppendMenuW(hMenuAction, MF_STRING, IDM_ENCRYPT, L"&Encrypt");
 	AppendMenuW(hMenuAction, MF_STRING, IDM_DECRYPT, L"&Decrypt");
