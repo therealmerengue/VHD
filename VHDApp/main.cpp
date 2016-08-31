@@ -21,8 +21,6 @@ name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #pragma comment(lib, "comctl32.lib")
 
-HANDLE hFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
-
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void AddMenus(HWND hwnd);
 
@@ -76,8 +74,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
 
-		//Buttons left
-
 		hwndButtonNewDisk = CreateWindowW(L"button", L"New disk",
 			WS_VISIBLE | WS_CHILD, 375, 20, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_NEW_DISK, NULL, NULL);
@@ -105,8 +101,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonDetachDisk = CreateWindowW(L"button", L"Detach disk",
 			WS_VISIBLE | WS_CHILD, 375, 200, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_DETACH_DISK, NULL, NULL);
-
-		//File treeview - center
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 30, 20, 335, 250);
 		AddItemsToTreeView(driveLetters, hwndTreeView);
@@ -171,8 +165,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				//show choose disk dialog
-				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc); //show choose disk dialog
 			}
 
 			break;
@@ -186,8 +179,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				//show choose disk dialog
-				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc); //show choose disk dialog
 			}
 		}
 
@@ -216,13 +208,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					break;
 				}
 
-				//encrypt
-				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc, (LPARAM)hwndTreeView);
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc, (LPARAM)hwndTreeView); //encrypt
 			}
 			else
 			{
-				//show choose disk dialog
-				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc); //show choose disk dialog
 			}
 
 			break;
@@ -232,13 +222,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (!g_diskPath.empty())
 			{
-				//encrypt
-				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc, NULL);
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ENCRYPT), hwnd, (DLGPROC)EncryptDialogProc, NULL); //encrypt
 			}
 			else
 			{
-				//show choose disk dialog
-				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc); //show choose disk dialog
 			}
 
 			break;
@@ -268,13 +256,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					MessageBox(hwnd, L"Choose a txt file.", L"Error", MB_OK);
 					break;
 				}
-				//encrypt
-				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc, (LPARAM)hwndTreeView);
+				
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc, (LPARAM)hwndTreeView); //encrypt
 			}
 			else
 			{
-				//show choose disk dialog
-				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc); //show choose disk dialog
 			}
 
 			break;
@@ -284,13 +271,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (!g_diskPath.empty())
 			{
-				//encrypt
-				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc, NULL);
+				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc, NULL); //encrypt
 			}
 			else
 			{
-				//show choose disk dialog
-				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc);
+				DialogBox(g_hinst, MAKEINTRESOURCE(IDD_NOFOLDERS), hwnd, (DLGPROC)NoFoldersDialogProc); //show choose disk dialog
 			}
 
 			break;
