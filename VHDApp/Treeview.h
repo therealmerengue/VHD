@@ -4,7 +4,6 @@
 #include "StringOperations.h"
 #include "resources.h"
 
-
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x = 0, int y = 0, int width = 100, int height = 100);
 HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel);
 HTREEITEM AddItemToParent(HWND hwndTree, LPWSTR text, HTREEITEM parent, int image = 1, int selectedImage = 1);
@@ -18,14 +17,8 @@ int AddIconToTree(HWND hwndTree, const char* strPath);
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width, int height)
 {
-	RECT rcClient;  // dimensions of client area 
 	HWND hwndTV;    // handle to tree-view control 
 
-					// Ensure that the common control DLL is loaded. 
-
-					// Get the dimensions of the parent window's client area, and create 
-					// the tree-view control. 
-	GetClientRect(hwndParent, &rcClient);
 	hwndTV = CreateWindowEx(0,
 		WC_TREEVIEW,
 		TEXT("Tree View"),
