@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include "StringOperations.h"
 #include "resources.h"
+#include "Files.h"
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x = 0, int y = 0, int width = 100, int height = 100);
 HTREEITEM AddItemToTreeView(HWND hwndTree, LPWSTR text, int nLevel);
@@ -14,6 +15,7 @@ void AddItemsToTreeView(const std::vector<string>& items, HWND hwndTreeView, int
 std::string GetFullNodePath(HWND hwndTV, HTREEITEM hItem);
 TVITEM GetSelectedNode(HWND hwndWindow, HWND hwndTV, LPNM_TREEVIEW& pntv, WCHAR* buffer);
 int AddIconToTree(HWND hwndTree, const char* strPath);
+void AddFilesAndDirsToTree(HWND hwndTV, HTREEITEM parent, const string& folderPath);
 
 HWND CreateATreeView(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width, int height)
 {
@@ -227,4 +229,23 @@ void SetImageList(HWND hwndTree)
 	HIMAGELIST himg;
 	if (SUCCEEDED(SHGetImageList(SHIL_SMALL, IID_IImageList, reinterpret_cast<void**>(&himg))))
 		SendMessage(hwndTree, TVM_SETIMAGELIST, (WPARAM)TVSIL_NORMAL, (LPARAM)himg);
+}
+
+void AddFilesAndDirsToTree(HWND hwndTV, HTREEITEM parent, const string& folderPath)
+{
+	std::vector<string> files;
+	std::vector<string> dirs;
+	GetFilesInDirectory(folderPath.c_str(), files, dirs);
+
+	for (size_t i = 0; i < files.size(); i++)
+	{
+		wstring wstr = s2ws(files[i]);
+		AddItemToParent(hwndTV, &wstr[0], parent);
+	}
+
+	for (size_t i = 0; i < dirs.size(); i++)
+	{
+		wstring wstr = s2ws(dirs[i]);
+		AddItemToParent(hwndTV, &wstr[0], parent, 3, 4);
+	}
 }

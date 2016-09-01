@@ -291,7 +291,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_NOTIFY:
 	{
 		HTREEITEM hitem;
-
 		LPNM_TREEVIEW pntv = (LPNM_TREEVIEW)lParam;
 
 		if (pntv->hdr.code == TVN_SELCHANGED)
@@ -302,21 +301,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (!TreeView_GetChild(hwndTreeView, item.hItem))
 			{
-				files.clear();
-				dirs.clear();
-				GetFilesInDirectory(fullNodePath.c_str(), files, dirs);
-
-				for (size_t i = 0; i < files.size(); i++)
-				{
-					wstring wstr = toWString(files[i]);
-					AddItemToParent(hwndTreeView, &wstr[0], item.hItem);
-				}
-
-				for (size_t i = 0; i < dirs.size(); i++)
-				{
-					wstring wstr = toWString(dirs[i]);
-					AddItemToParent(hwndTreeView, &wstr[0], item.hItem, 3, 4);
-				}
+				AddFilesAndDirsToTree(hwndTreeView, item.hItem, fullNodePath);
 			}
 		}
 
@@ -326,8 +311,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_SETFOCUS:
 		EnableWindow(hwnd, TRUE);
 		ShowWindow(hwnd, SW_RESTORE);
+
 		TreeView_DeleteAllItems(hwndTreeView);
 		AddItemsToTreeView(GetDriveLetters(), hwndTreeView);
+		if (!g_diskPath.empty())
+		{
+			auto diskNode = FindItem(hwndTreeView, s2ws(g_diskPath));
+			AddFilesAndDirsToTree(hwndTreeView, diskNode, g_diskPath);
+			TreeView_Expand(hwndTreeView, diskNode, TVM_EXPAND);
+		}
+
 		break;
 
 	case WM_CLOSE:
@@ -352,7 +345,7 @@ void AddMenus(HWND hwnd)
 	hMenuFile = CreateMenu();
 	hMenuAction = CreateMenu();
 
-	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuFile, L"&Disks");
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuFile, L"&Disk");
 
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_NEW, L"&New disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
