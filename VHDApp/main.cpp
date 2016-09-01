@@ -98,9 +98,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			WS_VISIBLE | WS_CHILD, 375, 170, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_DECRYPT, NULL, NULL);
 
-		hwndButtonDetachDisk = CreateWindowW(L"button", L"Detach disk",
+		/*hwndButtonDetachDisk = CreateWindowW(L"button", L"Detach disk",
 			WS_VISIBLE | WS_CHILD, 375, 200, 150, 25,
-			hwnd, (HMENU)ID_BUTTON_DETACH_DISK, NULL, NULL);
+			hwnd, (HMENU)ID_BUTTON_DETACH_DISK, NULL, NULL);*/
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 30, 20, 335, 250);
 		AddItemsToTreeView(driveLetters, hwndTreeView);
@@ -281,11 +281,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_DETACH_DISK) || LOWORD(wParam == IDM_DISK_DETACH))
+		/*if (LOWORD(wParam == ID_BUTTON_DETACH_DISK) || LOWORD(wParam == IDM_DISK_DETACH))
 		{
-			OpenFileDialog(hwnd, DETACH_DISK);
-			MessageBox(hwnd, L"Disk detached.", L"Message", MB_OK);
-		}
+			OpenFileDialog(hwndTreeView, DETACH_DISK);
+			TreeView_DeleteAllItems(hwndTreeView);
+			AddItemsToTreeView(GetDriveLetters(), hwndTreeView);
+		}*/
 
 		break;
 
@@ -346,7 +347,7 @@ void AddMenus(HWND hwnd)
 	hMenuFile = CreateMenu();
 	hMenuAction = CreateMenu();
 
-	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuFile, L"&Disk");
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuFile, L"&VHD");
 
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_NEW, L"&New disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
@@ -355,7 +356,7 @@ void AddMenus(HWND hwnd)
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_DETACH, L"&Detach disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_QUIT, L"&Quit");
 
-	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuAction, L"&Disk Folders");
+	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuAction, L"&Folders");
 	AppendMenuW(hMenuAction, MF_STRING, IDM_SORT, L"&Sort");
 	AppendMenuW(hMenuAction, MF_STRING, IDM_ENCRYPT, L"&Encrypt");
 	AppendMenuW(hMenuAction, MF_STRING, IDM_DECRYPT, L"&Decrypt");
