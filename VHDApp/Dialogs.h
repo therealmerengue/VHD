@@ -39,8 +39,6 @@ void OpenFileDialog(HWND hwnd, OpenFileDialogAction action = ATTACH_DISK)
 
 	if (GetOpenFileName(&ofn))
 	{
-		SetWindowText(hwnd, ofn.lpstrFile);
-
 		if (action == ATTACH_DISK)
 			OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
 		if (action == DETACH_DISK)

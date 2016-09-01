@@ -284,6 +284,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (LOWORD(wParam == ID_BUTTON_DETACH_DISK) || LOWORD(wParam == IDM_DISK_DETACH))
 		{
 			OpenFileDialog(hwnd, DETACH_DISK);
+			MessageBox(hwnd, L"Disk detached.", L"Message", MB_OK);
 		}
 
 		break;
