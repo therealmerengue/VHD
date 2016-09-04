@@ -156,6 +156,7 @@
     <ResourceCompile Include="ChooseDiskDialog.rc" />
     <ResourceCompile Include="DecryptDialog.rc" />
     <ResourceCompile Include="EncryptDialog.rc" />
+    <ResourceCompile Include="ExpandDiskDialog.rc" />
     <ResourceCompile Include="NewDiskDialog.rc" />
     <ResourceCompile Include="NoFoldersDialog.rc" />
   </ItemGroup>

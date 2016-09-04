@@ -2,6 +2,9 @@
 #include <Windows.h>
 #include "resources.h"
 #include "StringOperations.h"
+#include "Dialogs.h"
+#include "Treeview.h"
+#include "Combobox.h"
 
 using namespace std;
 
@@ -316,3 +319,6 @@ INT_PTR CALLBACK DecryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	}
 	return TRUE;
 }
+
+
+

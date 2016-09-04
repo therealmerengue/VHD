@@ -73,5 +73,8 @@
     <ResourceCompile Include="DecryptDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="ExpandDiskDialog.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

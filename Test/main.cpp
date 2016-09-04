@@ -4,33 +4,34 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
-#include <stdio.h>
-#include "dirent.h"
-#include "VHD.h"
-#include "Files.h"
 
-void CleanUp(HCRYPTKEY hKey, HCRYPTPROV hProv)
+using namespace std;
+
+class C
 {
-	// Destroy session key.
-	if (hKey != 0) CryptDestroyKey(hKey);
-	// Release provider handle.
-	if (hProv != 0) CryptReleaseContext(hProv, 0);
+public:
+	template <class T>
+	static string f(std::string x);
+};
+
+template <>
+string C::f<int>(std::string x)
+{
+	cout << x << endl;
+	return x;
+}
+
+template <>
+string C::f<double>(std::string x)
+{
+	cout << stod(x) + 5 << endl;
+	return x;
 }
 
 int main()
 {
-	HCRYPTPROV hProv = 0;
-	HCRYPTKEY hKey = 0;
-	// Get handle to user default provider.
-	if (!CryptAcquireContextA(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET)) {
-		printf("Error %x during CryptAcquireContext!\n", GetLastError());
-		CleanUp(hKey, hProv);
-	}
-	// Create block cipher session key.
-	if (!CryptGenKey(hProv, CALG_RC2, CRYPT_EXPORTABLE, &hKey)) {
-		printf("Error %x during CryptGenKey!\n", GetLastError());
-		CleanUp(hKey, hProv);
-	}
-
+	C::f<int>("8");
+	C::f<int>("7");
+	C::f<double>("10");
 	return 0;
 }

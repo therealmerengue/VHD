@@ -14,6 +14,8 @@
 
 using namespace std;
 
+
+
 int IsRegularFile(const char *path)
 {
 	struct stat path_stat;

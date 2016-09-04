@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by DecryptDialog.rc
+// Used by ExpandDiskDialog.rc
 //
 #define SW_HIDE                         0
 #define HIDE_WINDOW                     0
@@ -579,6 +579,7 @@
 #define LANG_JAPANESE                   0x11
 #define SUBLANG_ENGLISH_MALAYSIA        0x11
 #define SUBLANG_SPANISH_EL_SALVADOR     0x11
+#define ID_BUTTON_EXPAND_DISK           17
 #define VK_MENU                         0x12
 #define WM_QUIT                         0x0012
 #define HTBORDER                        18
@@ -718,6 +719,7 @@
 #define IDM_DECRYPT                     56
 #define WM_COMPAREITEM                  0x0039
 #define LANG_HINDI                      0x39
+#define IDM_DISK_EXPAND                 57
 #define LANG_MALTESE                    0x3a
 #define LANG_SAMI                       0x3b
 #define LANG_IRISH                      0x3c
@@ -1196,6 +1198,10 @@
 #define WM_NCMOUSELEAVE                 0x02A2
 #define WM_MOUSELEAVE                   0x02A3
 #define WM_WTSSESSION_CHANGE            0x02B1
+#define IDD_EXPANDDISK                  700
+#define ID_EDIT_EXPANDDISKSIZE          701
+#define ID_BTN_EXPAND_DISK              702
+#define ID_BTN_CANCEL_EXPAND            703
 #define WM_TABLET_FIRST                 0x02c0
 #define WM_TABLET_LAST                  0x02df
 #define WM_DPICHANGED                   0x02E0
