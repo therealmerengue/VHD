@@ -4,14 +4,7 @@
 #include "StringOperations.h"
 #include "Combobox.h"
 
-size_t GetFileSize(const std::string& filename) {
-	struct stat st;
-	if (stat(filename.c_str(), &st) != 0) {
-		return 0;
-	}
-	return st.st_size;
-}
-
+//TODO : remove expanding disk - doesn't work sometimes no idea why.
 INT_PTR CALLBACK ExpandDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -28,19 +21,23 @@ INT_PTR CALLBACK ExpandDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 			string strSize = WindowTextToString(hwndEditExpandSize);
 			if (!CheckIfStringContainsNumbersOnly(strSize, L"Enter a valid disk size.", hwndDlg, hwndEditExpandSize))
 				break;
-			int size = stoi(strSize);
+			int sizeEntered = stoi(strSize);
 			string strDiskFile = toString(wstring(diskFile));
-			int currentSize = GetFileSize(strDiskFile) / pow(1024, 2);
-			//MessageBox(hwndDlg, &toWString(std::to_string(currentSize))[0], L"yo", 0);
-			if (currentSize > size)
+
+			struct stat st;
+			stat(strDiskFile.c_str(), &st);
+			int currentSize = st.st_size / pow(1024, 2);
+
+			if (currentSize > sizeEntered)
 			{
 				MessageBox(hwndDlg, L"Entered size was smaller than current size.", L"Error", MB_OK);
+				SetWindowText(hwndEditExpandSize, L"");
 				break;
 			}
 
 			if (diskFile)
 			{
-				OpenAndExpandVHD(diskFile, size);
+				OpenAndExpandVHD(diskFile, sizeEntered);
 				EndDialog(hwndDlg, ID_BTN_EXPAND_DISK);
 			}
 		}
