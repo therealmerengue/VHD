@@ -47,7 +47,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	RegisterClassW(&wc);
 	hwnd = CreateWindowW(wc.lpszClassName, L"VHD App",
 		WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU,
-		100, 100, 575, 355, NULL, NULL, hInstance, NULL);
+		100, 100, 585, 355, NULL, NULL, hInstance, NULL);
 
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
