@@ -8,7 +8,6 @@
 #define ID_BUTTON_SORT 14
 #define ID_BUTTON_ENCRYPT 15
 #define ID_BUTTON_DECRYPT 16
-#define ID_BUTTON_EXPAND_DISK 17
 
 #define IDM_DISK_NEW 50
 #define IDM_DISK_MOUNT 51
@@ -17,7 +16,6 @@
 #define IDM_SORT 54
 #define IDM_ENCRYPT 55
 #define IDM_DECRYPT 56
-#define IDM_DISK_EXPAND 57
 
 #define IDC_STATIC 100
 #define IDD_NEWDISK 200

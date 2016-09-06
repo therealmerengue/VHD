@@ -65,7 +65,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hwndTreeView;
 	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt, hwndButtonDecrypt, hwndButtonDetachDisk; //buttons right
-	HWND hwndButtonExpand;
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -100,10 +99,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hwndButtonDecrypt = CreateWindowW(L"button", L"Decrypt",
 			WS_VISIBLE | WS_CHILD, 375, 170, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_DECRYPT, NULL, NULL);
-
-		hwndButtonExpand = CreateWindowW(L"button", L"Expand disk",
-			WS_VISIBLE | WS_CHILD, 375, 200, 150, 25,
-			hwnd, (HMENU)ID_BUTTON_EXPAND_DISK, NULL, NULL);
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 30, 20, 335, 250);
 		AddItemsToTreeView(driveLetters, hwndTreeView);
@@ -284,11 +279,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_EXPAND_DISK) || LOWORD(wParam == IDM_DISK_EXPAND))
-		{
-			OpenFileDialog(hwndTreeView, EXPAND_DISK);
-		}
-
 		break;
 
 	case WM_NOTIFY:
@@ -354,7 +344,6 @@ void AddMenus(HWND hwnd)
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_MOUNT, L"&Mount disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_CHOOSE, L"&Choose disk");
 	AppendMenuW(hMenuFile, MF_SEPARATOR, 0, NULL);
-	AppendMenuW(hMenuFile, MF_STRING, IDM_DISK_EXPAND, L"&Expand disk");
 	AppendMenuW(hMenuFile, MF_STRING, IDM_QUIT, L"&Quit");
 
 	AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenuAction, L"&Folders");

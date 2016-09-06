@@ -4,64 +4,6 @@
 #include "StringOperations.h"
 #include "Combobox.h"
 
-//TODO : remove expanding disk - doesn't work sometimes no idea why.
-INT_PTR CALLBACK ExpandDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch (uMsg)
-	{
-	case WM_INITDIALOG:
-		static HWND hwndEditExpandSize = GetDlgItem(hwndDlg, ID_EDIT_EXPANDDISKSIZE);
-		static LPCWSTR diskFile = (LPCWSTR)lParam;
-		EnumChildWindows(hwndDlg, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
-		break;
-
-	case WM_COMMAND:
-		if (LOWORD(wParam) == ID_BTN_EXPAND_DISK)
-		{
-			string strSize = WindowTextToString(hwndEditExpandSize);
-			if (!CheckIfStringContainsNumbersOnly(strSize, L"Enter a valid disk size.", hwndDlg, hwndEditExpandSize))
-				break;
-			int sizeEntered = stoi(strSize);
-			string strDiskFile = toString(wstring(diskFile));
-
-			struct stat st;
-			stat(strDiskFile.c_str(), &st);
-			int currentSize = st.st_size / pow(1024, 2);
-
-			if (currentSize > sizeEntered)
-			{
-				MessageBox(hwndDlg, L"Entered size was smaller than current size.", L"Error", MB_OK);
-				SetWindowText(hwndEditExpandSize, L"");
-				break;
-			}
-
-			if (diskFile)
-			{
-				OpenAndExpandVHD(diskFile, sizeEntered);
-				EndDialog(hwndDlg, ID_BTN_EXPAND_DISK);
-			}
-		}
-
-		break;
-
-	case WM_CLOSE:
-		EndDialog(hwndDlg, 0);
-		break;
-
-	case WM_QUIT:
-		EndDialog(hwndDlg, 0);
-		break;
-
-	case WM_DESTROY:
-		EndDialog(hwndDlg, 0);
-		break;
-
-	default:
-		return FALSE;
-	}
-	return TRUE;
-}
-
 PIDLIST_ABSOLUTE OpenFolderDialog(HWND hwnd)
 {
 	BROWSEINFO bi;
@@ -99,10 +41,6 @@ void OpenFileDialog(HWND hwnd, OpenFileDialogAction action = ATTACH_DISK)
 	{
 		if (action == ATTACH_DISK)
 			OpenAndAttachVHD2(ofn.lpstrFile, CountPhysicalDisks());
-		if (action == EXPAND_DISK)
-		{
-			DialogBoxParam(NULL, MAKEINTRESOURCE(IDD_EXPANDDISK), hwnd, (DLGPROC)ExpandDiskDialogProc, (LPARAM)ofn.lpstrFile);
-		}
 	}
 }
 
