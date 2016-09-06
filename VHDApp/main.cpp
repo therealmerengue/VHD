@@ -76,28 +76,36 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
 
+		CreateWindowW(L"Button", L"VHD Setup",
+			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+			375, 15, 170, 125, hwnd, (HMENU)0, g_hinst, NULL);
+
 		hwndButtonNewDisk = CreateWindowW(L"button", L"New disk",
-			WS_VISIBLE | WS_CHILD, 375, 20, 150, 25,
+			WS_VISIBLE | WS_CHILD, 385, 40, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_NEW_DISK, NULL, NULL);
 
 		hwndButtonMountDisk = CreateWindowW(L"button", L"Mount disk",
-			WS_VISIBLE | WS_CHILD, 375, 50, 150, 25,
+			WS_VISIBLE | WS_CHILD, 385, 70, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_MOUNT_DISK, NULL, NULL);
 
 		hwndButtonChooseDisk = CreateWindowW(L"button", L"Choose disk",
-			WS_VISIBLE | WS_CHILD, 375, 80, 150, 25,
+			WS_VISIBLE | WS_CHILD, 385, 100, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
 
+		CreateWindowW(L"Button", L"Select",
+			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+			375, 145, 170, 125, hwnd, (HMENU)0, g_hinst, NULL);
+
 		hwndButtonSort = CreateWindowW(L"button", L"Sort",
-			WS_VISIBLE | WS_CHILD, 375, 110, 150, 25,
+			WS_VISIBLE | WS_CHILD, 385, 170, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_SORT, NULL, NULL);
 
 		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
-			WS_VISIBLE | WS_CHILD, 375, 140, 150, 25,
+			WS_VISIBLE | WS_CHILD, 385, 200, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
 
 		hwndButtonDecrypt = CreateWindowW(L"button", L"Decrypt",
-			WS_VISIBLE | WS_CHILD, 375, 170, 150, 25,
+			WS_VISIBLE | WS_CHILD, 385, 230, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_DECRYPT, NULL, NULL);
 
 		hwndTreeView = CreateATreeView(g_hinst, hwnd, 30, 20, 335, 250);
