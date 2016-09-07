@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>rc;inc</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link />
@@ -137,38 +137,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Combobox.h" />
-    <ClInclude Include="DialogBoxes.h" />
-    <ClInclude Include="Encryption.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resources.h" />
-    <ClInclude Include="StringOperations.h" />
-    <ClInclude Include="Dialogs.h" />
-    <ClInclude Include="dirent.h" />
-    <ClInclude Include="Files.h" />
-    <ClInclude Include="Treeview.h" />
-    <ClInclude Include="VHD.h" />
-    <ClInclude Include="Visuals.h" />
+    <ClInclude Include="inc\Combobox.h" />
+    <ClInclude Include="inc\DialogBoxes.h" />
+    <ClInclude Include="inc\Dialogs.h" />
+    <ClInclude Include="inc\dirent.h" />
+    <ClInclude Include="inc\Encryption.h" />
+    <ClInclude Include="inc\Files.h" />
+    <ClInclude Include="inc\StringOperations.h" />
+    <ClInclude Include="inc\Treeview.h" />
+    <ClInclude Include="inc\VHD.h" />
+    <ClInclude Include="inc\Visuals.h" />
+    <ClInclude Include="rc\resource.h" />
+    <ClInclude Include="rc\resources.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ChooseDiskDialog.rc" />
-    <ResourceCompile Include="DecryptDialog.rc" />
-    <ResourceCompile Include="EncryptDialog.rc" />
-    <ResourceCompile Include="ExpandDiskDialog.rc" />
-    <ResourceCompile Include="NewDiskDialog.rc" />
-    <ResourceCompile Include="NoFoldersDialog.rc" />
+    <ResourceCompile Include="rc\ChooseDiskDialog.rc" />
+    <ResourceCompile Include="rc\DecryptDialog.rc" />
+    <ResourceCompile Include="rc\EncryptDialog.rc" />
+    <ResourceCompile Include="rc\ExpandDiskDialog.rc" />
+    <ResourceCompile Include="rc\NewDiskDialog.rc" />
+    <ResourceCompile Include="rc\NoFoldersDialog.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Combobox.cpp" />
-    <ClCompile Include="DialogBoxes.cpp" />
-    <ClCompile Include="Dialogs.cpp" />
-    <ClCompile Include="Encryption.cpp" />
-    <ClCompile Include="Files.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="StringOperations.cpp" />
-    <ClCompile Include="Treeview.cpp" />
-    <ClCompile Include="VHD.cpp" />
-    <ClCompile Include="Visuals.cpp" />
+    <ClCompile Include="src\Combobox.cpp" />
+    <ClCompile Include="src\DialogBoxes.cpp" />
+    <ClCompile Include="src\Dialogs.cpp" />
+    <ClCompile Include="src\Encryption.cpp" />
+    <ClCompile Include="src\Files.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\StringOperations.cpp" />
+    <ClCompile Include="src\Treeview.cpp" />
+    <ClCompile Include="src\VHD.cpp" />
+    <ClCompile Include="src\Visuals.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

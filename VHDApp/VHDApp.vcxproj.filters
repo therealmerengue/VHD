@@ -15,92 +15,92 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dirent.h">
+    <ClInclude Include="inc\Combobox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VHD.h">
+    <ClInclude Include="inc\DialogBoxes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Treeview.h">
+    <ClInclude Include="inc\Dialogs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Files.h">
+    <ClInclude Include="inc\dirent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Visuals.h">
+    <ClInclude Include="inc\Encryption.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dialogs.h">
+    <ClInclude Include="inc\Files.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Combobox.h">
+    <ClInclude Include="inc\StringOperations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StringOperations.h">
+    <ClInclude Include="inc\Treeview.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DialogBoxes.h">
+    <ClInclude Include="inc\VHD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resources.h">
+    <ClInclude Include="inc\Visuals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="rc\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Encryption.h">
+    <ClInclude Include="rc\resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="NewDiskDialog.rc">
+    <ResourceCompile Include="rc\ChooseDiskDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="ChooseDiskDialog.rc">
+    <ResourceCompile Include="rc\DecryptDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="NoFoldersDialog.rc">
+    <ResourceCompile Include="rc\EncryptDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="EncryptDialog.rc">
+    <ResourceCompile Include="rc\ExpandDiskDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="DecryptDialog.rc">
+    <ResourceCompile Include="rc\NewDiskDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="ExpandDiskDialog.rc">
+    <ResourceCompile Include="rc\NoFoldersDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Combobox.cpp">
+    <ClCompile Include="src\Combobox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DialogBoxes.cpp">
+    <ClCompile Include="src\DialogBoxes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dialogs.cpp">
+    <ClCompile Include="src\Dialogs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Encryption.cpp">
+    <ClCompile Include="src\Encryption.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Files.cpp">
+    <ClCompile Include="src\Files.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StringOperations.cpp">
+    <ClCompile Include="src\StringOperations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Treeview.cpp">
+    <ClCompile Include="src\Treeview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VHD.cpp">
+    <ClCompile Include="src\VHD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Visuals.cpp">
+    <ClCompile Include="src\Visuals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
