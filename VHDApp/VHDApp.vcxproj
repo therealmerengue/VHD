@@ -143,12 +143,12 @@
     <ClInclude Include="inc\dirent.h" />
     <ClInclude Include="inc\Encryption.h" />
     <ClInclude Include="inc\Files.h" />
+    <ClInclude Include="inc\resource.h" />
+    <ClInclude Include="inc\resources.h" />
     <ClInclude Include="inc\StringOperations.h" />
     <ClInclude Include="inc\Treeview.h" />
     <ClInclude Include="inc\VHD.h" />
     <ClInclude Include="inc\Visuals.h" />
-    <ClInclude Include="rc\resource.h" />
-    <ClInclude Include="rc\resources.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="rc\ChooseDiskDialog.rc" />
