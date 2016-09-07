@@ -1,7 +1,9 @@
 #pragma once
 #include <Windows.h>
 #include <chrono>
+#include <string>
 #include <CommCtrl.h>
+
 #include "resources.h"
 #include "StringOperations.h"
 #include "Dialogs.h"
@@ -11,9 +13,6 @@
 #include "Files.h"
 #include "Visuals.h"
 #include "VHD.h"
-#include "Treeview.h"
-
-#include <string>
 
 using namespace std;
 

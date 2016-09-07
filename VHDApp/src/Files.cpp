@@ -1,7 +1,6 @@
 #include <Windows.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
 #include <vector>
 #include <set>
 #include <string>

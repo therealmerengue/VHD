@@ -3,6 +3,7 @@
 #include <CommCtrl.h>
 #include <CommonControls.h>
 #include <vector>
+
 #include "StringOperations.h"
 #include "resources.h"
 #include "Files.h"

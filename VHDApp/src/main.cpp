@@ -2,7 +2,6 @@
 #include <ShlObj.h>
 #include <commoncontrols.h>
 #include <string>
-
 #include <thread>
 #include <chrono>
 #include <ctime>

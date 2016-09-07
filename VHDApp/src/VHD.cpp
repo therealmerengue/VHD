@@ -5,7 +5,6 @@
 #include <virtdisk.h>
 #include <commctrl.h>
 #include <comdef.h>
-
 #include <set>
 #include <string>
 #include <iostream>
@@ -13,6 +12,7 @@
 #include <vector>
 #include <Setupapi.h>
 #include <Ntddstor.h>
+
 #include "dirent.h"
 #include "StringOperations.h"
 #include "VHD.h"

@@ -3,6 +3,7 @@
 #include <shtypes.h>
 #include <Shlobj.h>
 #include <chrono>
+
 #include "Visuals.h"
 #include "StringOperations.h"
 #include "Combobox.h"
