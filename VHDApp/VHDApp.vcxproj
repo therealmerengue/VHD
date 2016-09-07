@@ -143,6 +143,7 @@
     <ClInclude Include="inc\dirent.h" />
     <ClInclude Include="inc\Encryption.h" />
     <ClInclude Include="inc\Files.h" />
+    <ClInclude Include="inc\MainWindow.h" />
     <ClInclude Include="inc\resource.h" />
     <ClInclude Include="inc\resources.h" />
     <ClInclude Include="inc\StringOperations.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="src\Encryption.cpp" />
     <ClCompile Include="src\Files.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainWindow.cpp" />
     <ClCompile Include="src\StringOperations.cpp" />
     <ClCompile Include="src\Treeview.cpp" />
     <ClCompile Include="src\VHD.cpp" />
