@@ -1,10 +1,10 @@
 #pragma once
 
-extern std::string g_diskPath;
-extern HINSTANCE g_hinst;
-
 namespace DialogProc
 {
+	extern std::string g_diskPath;
+	extern HINSTANCE g_hinst;
+
 	bool SetupDiskCreation(HWND hwndDlg, std::wstring& wstrFullDiskPath, int& size);
 
 	INT_PTR CALLBACK NewDiskDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);

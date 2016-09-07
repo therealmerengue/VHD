@@ -20,11 +20,11 @@ using namespace VHD;
 using namespace Visual;
 using namespace File;
 
-std::string g_diskPath;
-HINSTANCE g_hinst;
-
 namespace DialogProc
 {
+	std::string g_diskPath;
+	HINSTANCE g_hinst;
+
 	bool SetupDiskCreation(HWND hwndDlg, wstring& wstrFullDiskPath, int& size)
 	{
 		HWND hwndEditDiskName = GetDlgItem(hwndDlg, ID_EDIT_DISKNAME);
