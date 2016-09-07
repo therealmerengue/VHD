@@ -237,7 +237,6 @@ namespace DialogProc
 					GetFilesInDirectory((g_diskPath + "Encrypt").c_str(), filesToEncrypt, vector<string>());
 					std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
 					string password = WindowTextToString(hwndEditPassword);
-					MessageBox(hwndDlg, &toWString(password)[0], L"Suh dude", 0);
 					EncryptFiles(filesToEncrypt, g_diskPath + "Encrypt", g_diskPath + "Encrypted", password);
 					std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
 					Dialog::ShowTimeDialog(hwndDlg, begin_time, end_time, L"Encrypted in: ");
@@ -250,7 +249,6 @@ namespace DialogProc
 					wstring fileName = Treeview::GetItemText(hwndTV, selectedFile);
 					std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
 					string password = WindowTextToString(hwndEditPassword);
-					MessageBox(hwndDlg, &toWString(password)[0], L"Suh dude", 0);
 					CreateEncryptedFile(fileToEncrypt, g_diskPath + "Encrypted" + "\\Crypt_" + toString(fileName), password);
 					std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
 					Dialog::ShowTimeDialog(hwndDlg, begin_time, end_time, L"Encrypted in: ");
