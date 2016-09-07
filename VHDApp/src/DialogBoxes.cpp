@@ -240,8 +240,8 @@ INT_PTR CALLBACK EncryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			else
 			{
 				HTREEITEM selectedFile = TreeView_GetSelection(hwndTV);
-				string fileToEncrypt = GetFullNodePath(hwndTV, selectedFile);
-				wstring fileName = GetItemText(hwndTV, selectedFile);
+				string fileToEncrypt = Treeview::GetFullNodePath(hwndTV, selectedFile);
+				wstring fileName = Treeview::GetItemText(hwndTV, selectedFile);
 				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
 				string password = WindowTextToString(hwndEditPassword);
 				MessageBox(hwndDlg, &toWString(password)[0], L"Suh dude", 0);
@@ -303,8 +303,8 @@ INT_PTR CALLBACK DecryptDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			else
 			{
 				HTREEITEM selectedFile = TreeView_GetSelection(hwndTV);
-				string fileToDecrypt = GetFullNodePath(hwndTV, selectedFile);
-				wstring fileName = GetItemText(hwndTV, selectedFile);
+				string fileToDecrypt = Treeview::GetFullNodePath(hwndTV, selectedFile);
+				wstring fileName = Treeview::GetItemText(hwndTV, selectedFile);
 				std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
 				string password = WindowTextToString(hwndEditPassword);
 				CreateEncryptedFile(fileToDecrypt, g_diskPath + "Decrypted" + "\\Crypt_" + toString(fileName), password);

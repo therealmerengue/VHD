@@ -5,6 +5,7 @@
 #include <thread>
 #include <chrono>
 #include <ctime>
+#include <memory>
 
 #include "VHD.h"
 #include "Treeview.h"
@@ -23,6 +24,8 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void AddMenus(HWND hwnd);
+
+std::unique_ptr<Treeview> tv;
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) 
@@ -69,7 +72,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_CREATE:
-
+	{
 		CenterWindow(hwnd);
 		AddMenus(hwnd);
 
@@ -105,21 +108,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			WS_VISIBLE | WS_CHILD, 385, 230, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_DECRYPT, NULL, NULL);
 
-		hwndTreeView = CreateATreeView(g_hinst, hwnd, 30, 20, 335, 250);
-		AddItemsToTreeView(driveLetters, hwndTreeView);
-		SetImageList(hwndTreeView);
+		tv.reset(new Treeview(g_hinst, hwnd, 30, 20, 335, 250));
+
+		tv->AddItemsToTreeView(driveLetters);
+		tv->SetImageList();
+		hwndTreeView = tv->GetHandle();
 
 		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
 		break;
+	}
 
 	case WM_COMMAND:
-
+	{
 		if (LOWORD(wParam) == IDM_DISK_NEW || LOWORD(wParam == ID_BUTTON_NEW_DISK))
 		{
 			wchar_t folderPath[MAX_PATH + 1];
 			auto pidl = OpenFolderDialog(hwnd);
-			if (pidl) 
+			if (pidl)
 			{
 				SHGetPathFromIDList(pidl, folderPath);
 				SetWindowText(hwnd, folderPath);
@@ -145,12 +151,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hwnd);
 		}
 
-		if (LOWORD(wParam == ID_BUTTON_SORT)) 
+		if (LOWORD(wParam == ID_BUTTON_SORT))
 		{
 			if (!g_diskPath.empty())
 			{
 				HTREEITEM selectedFolder = TreeView_GetSelection(hwndTreeView);
-				string folderToSort = GetFullNodePath(hwndTreeView, selectedFolder);
+				string folderToSort = tv->GetFullNodePath(hwndTreeView, selectedFolder);
 
 				if (!selectedFolder)
 				{
@@ -191,7 +197,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (!g_diskPath.empty())
 			{
 				HTREEITEM selectedFile = TreeView_GetSelection(hwndTreeView);
-				string fileToEncrypt = GetFullNodePath(hwndTreeView, selectedFile);
+				string fileToEncrypt = tv->GetFullNodePath(hwndTreeView, selectedFile);
 
 				if (!selectedFile)
 				{
@@ -240,7 +246,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (!g_diskPath.empty())
 			{
 				HTREEITEM selectedFile = TreeView_GetSelection(hwndTreeView);
-				string fileToDecrypt = GetFullNodePath(hwndTreeView, selectedFile);
+				string fileToDecrypt = tv->GetFullNodePath(hwndTreeView, selectedFile);
 
 				if (!selectedFile)
 				{
@@ -259,7 +265,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					MessageBox(hwnd, L"Choose a txt file.", L"Error", MB_OK);
 					break;
 				}
-				
+
 				DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_DECRYPT), hwnd, (DLGPROC)DecryptDialogProc, (LPARAM)hwndTreeView); //encrypt
 			}
 			else
@@ -285,7 +291,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 
 		break;
-
+	}
 	case WM_NOTIFY:
 	{
 		LPNM_TREEVIEW pntv = (LPNM_TREEVIEW)lParam;
@@ -293,12 +299,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (pntv->hdr.code == TVN_SELCHANGED)
 		{
 			WCHAR buffer[128];
-			TVITEM item = GetSelectedNode(hwnd, hwndTreeView, pntv, buffer);
-			std::string fullNodePath = GetFullNodePath(hwndTreeView, item.hItem);
+			TVITEM item = tv->GetSelectedNode(hwnd, pntv, buffer);
+			std::string fullNodePath = tv->GetFullNodePath(hwndTreeView, item.hItem);
 
 			if (!TreeView_GetChild(hwndTreeView, item.hItem))
 			{
-				AddFilesAndDirsToTree(hwndTreeView, item.hItem, fullNodePath);
+				tv->AddFilesAndDirsToTree(item.hItem, fullNodePath);
 			}
 		}
 
@@ -306,28 +312,36 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 
 	case WM_SETFOCUS:
+	{
 		EnableWindow(hwnd, TRUE);
 		ShowWindow(hwnd, SW_RESTORE);
 
 		TreeView_DeleteAllItems(hwndTreeView);
-		AddItemsToTreeView(GetDriveLetters(), hwndTreeView);
-		if (!g_diskPath.empty())
+
+		if (tv)
 		{
-			auto diskNode = FindItem(hwndTreeView, s2ws(g_diskPath));
-			AddFilesAndDirsToTree(hwndTreeView, diskNode, g_diskPath);
-			TreeView_Expand(hwndTreeView, diskNode, TVM_EXPAND);
+			tv->AddItemsToTreeView(GetDriveLetters());
+			if (!g_diskPath.empty())
+			{
+				auto diskNode = tv->FindItem(s2ws(g_diskPath));
+				tv->AddFilesAndDirsToTree(diskNode, g_diskPath);
+				TreeView_Expand(hwndTreeView, diskNode, TVM_EXPAND);
+			}
 		}
 
 		break;
-
+	}
 	case WM_CLOSE:
+	{
 		DestroyWindow(hwnd);
 		break;
-
+	}
 	case WM_DESTROY:
+	{
 		DestroyWindow(hwnd);
 		PostQuitMessage(0);
 		break;
+	}
 	}
 
 	return DefWindowProcW(hwnd, msg, wParam, lParam);
