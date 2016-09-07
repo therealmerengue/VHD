@@ -12,7 +12,8 @@
 #include "Files.h"
 #include "Dialogs.h"
 #include "Combobox.h"
-
+#include "Visuals.h"
+#include "StringOperations.h"
 #include "resources.h"
 #include "DialogBoxes.h"
 
@@ -23,8 +24,6 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void AddMenus(HWND hwnd);
-
-//TODO : cleanup UI
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PWSTR pCmdLine, int nCmdShow) 

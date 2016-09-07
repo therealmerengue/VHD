@@ -136,7 +136,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Combobox.cpp" />
+    <ClCompile Include="DialogBoxes.cpp" />
+    <ClCompile Include="Dialogs.cpp" />
+    <ClCompile Include="Encryption.cpp" />
+    <ClCompile Include="Files.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="StringOperations.cpp" />
+    <ClCompile Include="Treeview.cpp" />
+    <ClCompile Include="VHD.cpp" />
+    <ClCompile Include="Visuals.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Combobox.h" />
