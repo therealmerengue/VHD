@@ -18,19 +18,10 @@
     <ClInclude Include="inc\Combobox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\DialogBoxes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Dialogs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\dirent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\Encryption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Files.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\StringOperations.h">
@@ -42,9 +33,6 @@
     <ClInclude Include="inc\VHD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Visuals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -52,6 +40,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\MainWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\File.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\DialogProc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Dialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Visual.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -79,16 +79,7 @@
     <ClCompile Include="src\Combobox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\DialogBoxes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Dialogs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Encryption.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Files.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
@@ -103,10 +94,19 @@
     <ClCompile Include="src\VHD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Visuals.cpp">
+    <ClCompile Include="src\MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MainWindow.cpp">
+    <ClCompile Include="src\File.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DialogProc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Visual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

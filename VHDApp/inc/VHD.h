@@ -29,10 +29,13 @@ using namespace std;
         cout << failedApi << " failed at " << failedLine << " : Error Code - " << error << endl;    \
     }
 
-int CountPhysicalDisks();
+namespace VHD
+{
+	int CountPhysicalDisks();
 
-void PrintErrorMessage(ULONG ErrorId);
+	void PrintErrorMessage(ULONG ErrorId);
 
-BOOL CreateVHD_Fixed(PCWSTR pszVhdPath, ULONG sizeInMB);
+	BOOL CreateVHD_Fixed(PCWSTR pszVhdPath, ULONG sizeInMB);
 
-BOOL OpenAndAttachVHD2(PCWSTR pszVhdPath, int diskIndex);
+	BOOL OpenAndAttachVHD2(PCWSTR pszVhdPath, int diskIndex);
+}

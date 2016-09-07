@@ -6,7 +6,7 @@
 
 #include "StringOperations.h"
 #include "resources.h"
-#include "Files.h"
+#include "File.h"
 #include "Treeview.h"
 
 Treeview::Treeview(HINSTANCE hInstance, HWND hwndParent, int x, int y, int width, int height)
@@ -189,13 +189,13 @@ TVITEM Treeview::GetSelectedNode(HWND hwndWindow, LPNM_TREEVIEW& pntv, WCHAR* bu
 
 std::string Treeview::GetFullNodePath(HWND hTV, HTREEITEM hItem)
 {
-	std::string fullPath = "\\" + toString(GetItemText(hTV, hItem));
+	std::string fullPath = "\\" + String::toString(GetItemText(hTV, hItem));
 	HTREEITEM hItemParent = TreeView_GetParent(hTV, hItem);
 	bool isVolume = true;
 
 	while (hItemParent != NULL && hItemParent != TVI_ROOT)
 	{
-		fullPath.insert(0, "\\" + toString(GetItemText(hTV, hItemParent)));
+		fullPath.insert(0, "\\" + String::toString(GetItemText(hTV, hItemParent)));
 		hItemParent = TreeView_GetParent(hTV, hItemParent);
 		isVolume = false;
 	}
@@ -216,17 +216,17 @@ void Treeview::AddFilesAndDirsToTree(HTREEITEM parent, const string& folderPath)
 {
 	std::vector<string> files;
 	std::vector<string> dirs;
-	GetFilesInDirectory(folderPath.c_str(), files, dirs);
+	File::GetFilesInDirectory(folderPath.c_str(), files, dirs);
 
 	for (size_t i = 0; i < files.size(); i++)
 	{
-		wstring wstr = s2ws(files[i]);
+		wstring wstr = String::s2ws(files[i]);
 		this->AddItemToParent(&wstr[0], parent);
 	}
 
 	for (size_t i = 0; i < dirs.size(); i++)
 	{
-		wstring wstr = s2ws(dirs[i]);
+		wstring wstr = String::s2ws(dirs[i]);
 		this->AddItemToParent(&wstr[0], parent, 3, 4);
 	}
 }

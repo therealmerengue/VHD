@@ -135,18 +135,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="inc\Combobox.h" />
-    <ClInclude Include="inc\DialogBoxes.h" />
-    <ClInclude Include="inc\Dialogs.h" />
+    <ClInclude Include="inc\DialogProc.h" />
+    <ClInclude Include="inc\Dialog.h" />
     <ClInclude Include="inc\dirent.h" />
     <ClInclude Include="inc\Encryption.h" />
-    <ClInclude Include="inc\Files.h" />
+    <ClInclude Include="inc\File.h" />
     <ClInclude Include="inc\MainWindow.h" />
     <ClInclude Include="inc\resource.h" />
     <ClInclude Include="inc\resources.h" />
     <ClInclude Include="inc\StringOperations.h" />
     <ClInclude Include="inc\Treeview.h" />
     <ClInclude Include="inc\VHD.h" />
-    <ClInclude Include="inc\Visuals.h" />
+    <ClInclude Include="inc\Visual.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="rc\ChooseDiskDialog.rc" />
@@ -158,16 +158,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Combobox.cpp" />
-    <ClCompile Include="src\DialogBoxes.cpp" />
-    <ClCompile Include="src\Dialogs.cpp" />
+    <ClCompile Include="src\DialogProc.cpp" />
+    <ClCompile Include="src\Dialog.cpp" />
     <ClCompile Include="src\Encryption.cpp" />
-    <ClCompile Include="src\Files.cpp" />
+    <ClCompile Include="src\File.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
     <ClCompile Include="src\StringOperations.cpp" />
     <ClCompile Include="src\Treeview.cpp" />
     <ClCompile Include="src\VHD.cpp" />
-    <ClCompile Include="src\Visuals.cpp" />
+    <ClCompile Include="src\Visual.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,16 +9,18 @@
 
 #include "VHD.h"
 #include "Treeview.h"
-#include "Files.h"
-#include "Dialogs.h"
+#include "File.h"
+#include "Dialog.h"
 #include "Combobox.h"
-#include "Visuals.h"
+#include "Visual.h"
 #include "StringOperations.h"
 #include "resources.h"
-#include "DialogBoxes.h"
+#include "DialogProc.h"
 #include "MainWindow.h"
 
 using namespace std;
+using namespace File;
+using namespace DialogProc;
 
 MainWindow::MainWindow(HINSTANCE hInstance)
 {
@@ -57,7 +59,7 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 	{
 	case WM_CREATE:
 	{
-		CenterWindow(hwnd);
+		Visual::CenterWindow(hwnd);
 		AddMenus(hwnd);
 
 		CreateWindowW(L"Button", L"VHD Setup",
@@ -98,7 +100,7 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		tv->SetImageList();
 		hwndTreeView = tv->GetHandle();
 
-		EnumChildWindows(hwnd, (WNDENUMPROC)SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
+		EnumChildWindows(hwnd, (WNDENUMPROC)Visual::SetFont, (LPARAM)GetStockObject(DEFAULT_GUI_FONT));
 
 		break;
 	}
@@ -108,7 +110,7 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 		if (LOWORD(wParam) == IDM_DISK_NEW || LOWORD(wParam == ID_BUTTON_NEW_DISK))
 		{
 			wchar_t folderPath[MAX_PATH + 1];
-			auto pidl = OpenFolderDialog(hwnd);
+			auto pidl = Dialog::OpenFolderDialog(hwnd);
 			if (pidl)
 			{
 				SHGetPathFromIDList(pidl, folderPath);
@@ -120,7 +122,7 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
 		if (LOWORD(wParam) == IDM_DISK_MOUNT || LOWORD(wParam == ID_BUTTON_MOUNT_DISK))
 		{
-			OpenFileDialog(hwnd);
+			Dialog::OpenFileDialog(hwnd);
 			break;
 		}
 
@@ -307,7 +309,7 @@ LRESULT CALLBACK MainWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 			tv->AddItemsToTreeView(GetDriveLetters());
 			if (!g_diskPath.empty())
 			{
-				auto diskNode = tv->FindItem(s2ws(g_diskPath));
+				auto diskNode = tv->FindItem(String::s2ws(g_diskPath));
 				tv->AddFilesAndDirsToTree(diskNode, g_diskPath);
 				TreeView_Expand(hwndTreeView, diskNode, TVM_EXPAND);
 			}

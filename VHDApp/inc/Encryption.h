@@ -12,14 +12,13 @@
 
 using namespace std;
 
-/*
-Acquire key container handle
-*/
-HCRYPTPROV GetCryptContainer(LPCWSTR keyContainer);
+namespace Encryption
+{
+	HCRYPTPROV GetCryptContainer(LPCWSTR keyContainer); //Acquire key container handle
 
-HCRYPTHASH CreateHashObj(HCRYPTPROV hCryptProv, const char * szPassword);
+	HCRYPTHASH CreateHashObj(HCRYPTPROV hCryptProv, const char* szPassword);
 
-// Derive a session key from the hash object. 
-HCRYPTKEY GetDeriveKey(HCRYPTPROV hCryptProv, HCRYPTHASH hHash);
+	HCRYPTKEY GetDeriveKey(HCRYPTPROV hCryptProv, HCRYPTHASH hHash); // Derive a session key from the hash object. 
 
-string Encrypt(const char* password, const char* toEncrypt);
+	string Encrypt(const char* password, const char* toEncrypt);
+}

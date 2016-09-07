@@ -9,13 +9,13 @@
 
 #include "VHD.h"
 #include "Treeview.h"
-#include "Files.h"
-#include "Dialogs.h"
+#include "File.h"
+#include "Dialog.h"
 #include "Combobox.h"
-#include "Visuals.h"
+#include "Visual.h"
 #include "StringOperations.h"
 #include "resources.h"
-#include "DialogBoxes.h"
+#include "DialogProc.h"
 
 #include "MainWindow.h"
 
