@@ -151,7 +151,7 @@ string Encrypt(const char* password, const char* toEncrypt)
 		exit(1); // exit if failed to get session key
 
 				 // determine input data length
-	int len = strlen(toEncrypt);
+	size_t len = strlen(toEncrypt);
 
 	// Determine the block size. If a block cipher is used, 
 	// it must have room for an extra block. 

@@ -62,7 +62,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 {
 	static HWND hwndTreeView;
-	HWND hwndButtonNewDisk, hwndButtonMountDisk, hwndButtonChooseDisk, hwndButtonSort, hwndButtonEncrypt, hwndButtonDecrypt, hwndButtonDetachDisk; //buttons right
 	std::vector<string> driveLetters = GetDriveLetters();
 	std::vector<string> files;
 	std::vector<string> dirs;
@@ -78,15 +77,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
 			375, 15, 170, 125, hwnd, (HMENU)0, g_hinst, NULL);
 
-		hwndButtonNewDisk = CreateWindowW(L"button", L"New disk",
+		CreateWindowW(L"button", L"New disk",
 			WS_VISIBLE | WS_CHILD, 385, 40, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_NEW_DISK, NULL, NULL);
 
-		hwndButtonMountDisk = CreateWindowW(L"button", L"Mount disk",
+		CreateWindowW(L"button", L"Mount disk",
 			WS_VISIBLE | WS_CHILD, 385, 70, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_MOUNT_DISK, NULL, NULL);
 
-		hwndButtonChooseDisk = CreateWindowW(L"button", L"Choose disk",
+		CreateWindowW(L"button", L"Choose disk",
 			WS_VISIBLE | WS_CHILD, 385, 100, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_CHOOSE_DISK, NULL, NULL);
 
@@ -94,15 +93,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
 			375, 145, 170, 125, hwnd, (HMENU)0, g_hinst, NULL);
 
-		hwndButtonSort = CreateWindowW(L"button", L"Sort",
+		CreateWindowW(L"button", L"Sort",
 			WS_VISIBLE | WS_CHILD, 385, 170, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_SORT, NULL, NULL);
 
-		hwndButtonEncrypt = CreateWindowW(L"button", L"Encrypt",
+		CreateWindowW(L"button", L"Encrypt",
 			WS_VISIBLE | WS_CHILD, 385, 200, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_ENCRYPT, NULL, NULL);
 
-		hwndButtonDecrypt = CreateWindowW(L"button", L"Decrypt",
+		CreateWindowW(L"button", L"Decrypt",
 			WS_VISIBLE | WS_CHILD, 385, 230, 150, 25,
 			hwnd, (HMENU)ID_BUTTON_DECRYPT, NULL, NULL);
 
@@ -289,7 +288,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case WM_NOTIFY:
 	{
-		HTREEITEM hitem;
 		LPNM_TREEVIEW pntv = (LPNM_TREEVIEW)lParam;
 
 		if (pntv->hdr.code == TVN_SELCHANGED)

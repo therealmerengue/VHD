@@ -35,18 +35,23 @@ bool GetFilesInDirectory(const char* path, std::vector<std::string>& files, std:
 {
 	DIR *dir;
 	struct dirent *ent;
-	if ((dir = opendir(path)) != NULL) {
+	if ((dir = opendir(path)) != NULL) 
+	{
 		/* print all the files and directories within directory */
-		while ((ent = readdir(dir)) != NULL) {
+		while ((ent = readdir(dir)) != NULL) 
+		{
 			if (ent->d_type == DT_DIR && ent->d_name[0] != '.' && ent->d_name[0] != '$')
 				dirs.push_back(ent->d_name);
 			else if (ent->d_type == DT_REG && ent->d_name[0] != '.' && ent->d_name[0] != '$')
 				files.push_back(ent->d_name);
 		}
+
 		closedir(dir);
+
+		return EXIT_SUCCESS;
 	}
-	else {
-		/* could not open directory */
+	else // could not open directory
+	{
 		return EXIT_FAILURE;
 	}
 }
@@ -58,7 +63,7 @@ void Sort(const std::vector<std::string>& files, const std::string& diskPath, co
 
 	for (int i = 0; i < files.size(); i++)
 	{
-		for (int j = files[i].length() - 1; j >= 0; j--)
+		for (size_t j = files[i].length() - 1; j >= 0; j--)
 		{
 			if (files[i][j] == '.')
 			{
@@ -115,9 +120,9 @@ void CreateEncryptedFile(const string& inputPath, const string& outputPath, cons
 
 void EncryptFiles(const vector<string>& files, const string& inputFolderPath, const string& outputFolderPath, const string& password)
 {
-	for (int i = 0; i < files.size(); i++)
+	for (size_t i = 0; i < files.size(); i++)
 	{
-		for (int j = files[i].length() - 1; j >= 0; j--)
+		for (size_t j = files[i].length() - 1; j >= 0; j--)
 		{
 			if (files[i][j] == '.')
 			{

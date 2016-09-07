@@ -239,14 +239,6 @@ BOOL OpenAndAttachVHD2(PCWSTR pszVhdPath, int diskIndex)
 			bRet = FALSE;
 		}
 
-
-		/////////////////////////////////////////
-		/////////////////////////////////////////
-		/////////////////////////////////////////
-
-		std::wstring MountPointTemp = s2ws("Q:\\");
-		std::wstring VolumeNameTemp = s2ws("\\?\PHYSICALDRIVE1 vhdname");
-
 		BOOL bResult = FALSE;     // generic results flag   
 		HANDLE hDevice;               // handle to the drive to be examined  
 		DWORD junk = 0;                   // discard results 
@@ -306,11 +298,6 @@ BOOL OpenAndAttachVHD2(PCWSTR pszVhdPath, int diskIndex)
 			return -1;
 		}
 		SecureZeroMemory(pdg, dwDriverLayoutInfoExLen);
-		// set RewritePartition=true in every partition to force rewrite.   
-		// 	for (int item = 0; item < 4; item++){
-		// 		pdg->PartitionEntry[item].RewritePartition = 1;
-		// 		pdg->PartitionEntry[item].PartitionNumber = 0;
-		// 	}
 
 		pdg->PartitionStyle = PARTITION_STYLE_MBR;
 		pdg->PartitionCount = 1;
