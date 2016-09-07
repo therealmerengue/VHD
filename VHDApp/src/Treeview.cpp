@@ -9,7 +9,7 @@
 #include "Files.h"
 #include "Treeview.h"
 
-Treeview::Treeview(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width, int height)
+Treeview::Treeview(HINSTANCE hInstance, HWND hwndParent, int x, int y, int width, int height)
 {
 	this->hTV = CreateWindowEx(0,
 		WC_TREEVIEW,
@@ -21,7 +21,7 @@ Treeview::Treeview(HINSTANCE g_hinst, HWND hwndParent, int x, int y, int width, 
 		height,
 		hwndParent,
 		(HMENU)ID_TREEVIEW,
-		g_hinst,
+		hInstance,
 		NULL);
 }
 
@@ -203,18 +203,6 @@ std::string Treeview::GetFullNodePath(HWND hTV, HTREEITEM hItem)
 	fullPath = fullPath.erase(0, 1); //slashes suck
 
 	return isVolume ? fullPath : fullPath.erase(2, 1); //really bad
-}
-
-int Treeview::AddIconToTree(const char* strPath)
-{
-	SHFILEINFO sfi;
-	memset(&sfi, 0, sizeof(sfi));
-	string str = string(strPath);
-
-	// SHGFI_SYSICONINDEX will return the icon's index within the shell image list
-	SHGetFileInfo(&toWString(str)[0], FILE_ATTRIBUTE_NORMAL, &sfi, sizeof(sfi),
-		SHGFI_SYSICONINDEX | SHGFI_USEFILEATTRIBUTES);
-	return sfi.iIcon;
 }
 
 void Treeview::SetImageList()

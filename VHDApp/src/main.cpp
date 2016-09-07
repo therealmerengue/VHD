@@ -24,14 +24,10 @@ name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #pragma comment(lib, "comctl32.lib")
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-	PWSTR pCmdLine, int nCmdShow) 
-{
-	MSG  msg;
-	
-	unique_ptr<MainWindow> mw(new MainWindow(hInstance));
-
-	mw->ProcessMessage();
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) 
+{	
+	MainWindow mw(hInstance);
+	mw.ProcessMessage();
 
 	return 0;
 }
