@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
-#include <winioctl.h> //magic trick :D
+#include <winioctl.h>
 #include <initguid.h>
 #include <virtdisk.h>
 #include <commctrl.h>
@@ -41,6 +41,7 @@ namespace VHD
 		// present in the system and have an enabled disk device
 		// interface.
 		//
+
 		diskClassDevices = SetupDiGetClassDevs(&diskClassDeviceInterfaceGuid,
 			NULL,
 			NULL,
@@ -108,16 +109,13 @@ namespace VHD
 			CloseHandle(disk);
 			disk = INVALID_HANDLE_VALUE;
 
-			/*cout << deviceInterfaceDetailData->DevicePath << endl;
-			cout << "\\\\?\\PhysicalDrive" << diskNumber.DeviceNumber << endl;
-			cout << endl;*/
 			firstFreeIndex++;
 		}
+
 		CHK(ERROR_NO_MORE_ITEMS == GetLastError(),
 			"SetupDiEnumDeviceInterfaces");
 
 		END_ERROR_CHK();
-
 
 		if (INVALID_HANDLE_VALUE != diskClassDevices) {
 			SetupDiDestroyDeviceInfoList(diskClassDevices);
@@ -245,7 +243,7 @@ namespace VHD
 			HANDLE hDevice;               // handle to the drive to be examined  
 			DWORD junk = 0;                   // discard results 
 
-											  //Tu jest zmienione:
+			//Tu jest zmienione:
 			string sDiskIndex = std::to_string(diskIndex);
 			string deviceName = "\\\\.\\PhysicalDrive" + sDiskIndex;
 			std::wstring stemp = String::s2ws(deviceName);
@@ -263,9 +261,6 @@ namespace VHD
 			{
 				std::cout << "Cos nie dziala w hDevice \n";
 			}
-
-			cout << SetVolumeMountPoint(L"H:\\", dName) << endl;
-			cout << GetLastError() << endl;
 
 			CREATE_DISK dsk;
 			dsk.PartitionStyle = PARTITION_STYLE_MBR;

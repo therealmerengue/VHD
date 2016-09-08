@@ -338,6 +338,3 @@ namespace DialogProc
 		return TRUE;
 	}
 }
-
-
-
