@@ -145,6 +145,8 @@ namespace DialogProc
 				wstring wstrDecryptFolderPath = toWString(strDecryptFolderPath);
 				CreateDirectory(&wstrDecryptFolderPath[0], NULL);
 
+				SetVolumeLabel(&toWString(diskPath)[0], L"VHDApp");
+
 				g_diskPath = diskPath;
 
 				EndDialog(hwndDlg, ID_BTN_CREATE_FOLDERS);
