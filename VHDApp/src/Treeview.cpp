@@ -103,7 +103,6 @@ HTREEITEM Treeview::AddItemToTreeView(LPWSTR text, int nLevel)
 	TVINSERTSTRUCT tvins;
 	static HTREEITEM hPrev = (HTREEITEM)TVI_FIRST;
 	static HTREEITEM hRootItem = NULL;
-	//tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_PARAM;
 	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIS_STATEIMAGEMASK | TVIF_PARAM;
 	tvi.iImage = 7;
 	tvi.iSelectedImage = tvi.iImage;
@@ -200,9 +199,9 @@ std::string Treeview::GetFullNodePath(HWND hTV, HTREEITEM hItem)
 		isVolume = false;
 	}
 
-	fullPath = fullPath.erase(0, 1); //slashes suck
+	fullPath = fullPath.erase(0, 1);
 
-	return isVolume ? fullPath : fullPath.erase(2, 1); //really bad
+	return isVolume ? fullPath : fullPath.erase(2, 1);
 }
 
 void Treeview::SetImageList()

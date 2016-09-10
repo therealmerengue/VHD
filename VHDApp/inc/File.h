@@ -5,9 +5,9 @@ using namespace std;
 
 namespace File
 {
-	int IsRegularFile(const char *path);
+	int IsRegularFile(const char* path);
 
-	int IsDirectory(const char *path);
+	int IsDirectory(const char* path);
 
 	bool GetFilesInDirectory(const char* path, std::vector<std::string>& files, std::vector<std::string>& dirs);
 
